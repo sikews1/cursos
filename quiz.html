@@ -18,29 +18,29 @@
         .module-selector button {
             padding: 10px 20px;
             border-radius: 25px;
-            border: 2px solid #2e3650;
+            border: 2px solid rgba(255,255,255,0.08);
             background: transparent;
-            color: #9ba3be;
+            color: #a1a1aa;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 600;
             transition: all 0.3s;
         }
 
-        .module-selector button:hover { border-color: #ff6b4a; color: #ff6b4a; }
-        .module-selector button.active { background: #ff6b4a; border-color: #ff6b4a; color: #fff; }
+        .module-selector button:hover { border-color: #f97316; color: #f97316; }
+        .module-selector button.active { background: #f97316; border-color: #f97316; color: #fff; }
 
         /* Question card */
         .question-card {
-            background: #1c2130;
+            background: #131316;
             border-radius: 16px;
             padding: 30px;
             margin-bottom: 20px;
-            border: 1px solid #2e3650;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
         .question-counter {
-            color: #ff6b4a;
+            color: #f97316;
             font-size: 0.85rem;
             font-weight: 700;
             margin-bottom: 5px;
@@ -52,8 +52,8 @@
             border-radius: 12px;
             font-size: 0.7rem;
             font-weight: 600;
-            background: rgba(93, 173, 226, 0.2);
-            color: #5fa8f5;
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
             margin-bottom: 15px;
         }
 
@@ -71,8 +71,8 @@
             padding: 14px 18px;
             margin-bottom: 10px;
             border-radius: 10px;
-            border: 2px solid #2e3650;
-            background: #141820;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: #09090b;
             cursor: pointer;
             transition: all 0.3s;
             font-size: 0.95rem;
@@ -81,53 +81,53 @@
             gap: 12px;
         }
 
-        .options li:hover { border-color: #5fa8f5; background: rgba(93, 173, 226, 0.05); }
+        .options li:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
 
         .options li .letter {
             min-width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #2e3650;
+            background: rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 0.85rem;
-            color: #9ba3be;
+            color: #a1a1aa;
             transition: all 0.3s;
         }
 
-        .options li:hover .letter { background: #5fa8f5; color: #fff; }
+        .options li:hover .letter { background: #3b82f6; color: #fff; }
 
         .options li.correct {
-            border-color: #34d399;
-            background: rgba(39, 174, 96, 0.1);
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
         }
-        .options li.correct .letter { background: #34d399; color: #fff; }
+        .options li.correct .letter { background: #22c55e; color: #fff; }
 
         .options li.wrong {
-            border-color: #f87171;
-            background: rgba(231, 76, 60, 0.1);
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
         }
-        .options li.wrong .letter { background: #f87171; color: #fff; }
+        .options li.wrong .letter { background: #ef4444; color: #fff; }
 
         .options li.disabled { pointer-events: none; opacity: 0.6; }
         .options li.correct.disabled, .options li.wrong.disabled { opacity: 1; }
 
         /* Explanation */
         .explanation {
-            background: rgba(93, 173, 226, 0.1);
-            border-left: 3px solid #5fa8f5;
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
             padding: 15px 18px;
             border-radius: 0 10px 10px 0;
             margin-top: 18px;
             display: none;
             font-size: 0.92rem;
-            color: #9ba3be;
+            color: #a1a1aa;
             line-height: 1.6;
         }
 
-        .explanation strong { color: #5fa8f5; }
+        .explanation strong { color: #3b82f6; }
 
         .explanation.show { display: block; animation: fadeIn 0.3s ease; }
 
@@ -152,12 +152,12 @@
             margin-bottom: 10px;
         }
 
-        .score-number.pass { color: #34d399; }
-        .score-number.fail { color: #f87171; }
+        .score-number.pass { color: #22c55e; }
+        .score-number.fail { color: #ef4444; }
 
         .score-text {
             font-size: 1.1rem;
-            color: #9ba3be;
+            color: #a1a1aa;
             margin-bottom: 25px;
         }
 
@@ -179,14 +179,14 @@
 
         .score-detail .label {
             font-size: 0.8rem;
-            color: #9ba3be;
+            color: #a1a1aa;
         }
 
         /* Progress bar */
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: #2e3650;
+            background: rgba(255,255,255,0.08);
             border-radius: 3px;
             margin-bottom: 25px;
             overflow: hidden;
@@ -194,27 +194,27 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ff6b4a, #5fa8f5);
+            background: linear-gradient(90deg, #f97316, #3b82f6);
             border-radius: 3px;
             transition: width 0.3s;
         }
 
         /* Review section */
         .review-item {
-            background: #1c2130;
+            background: #131316;
             border-radius: 10px;
             padding: 18px;
             margin-bottom: 12px;
             border-left: 4px solid;
         }
 
-        .review-item.review-correct { border-color: #34d399; }
-        .review-item.review-wrong { border-color: #f87171; }
+        .review-item.review-correct { border-color: #22c55e; }
+        .review-item.review-wrong { border-color: #ef4444; }
 
         .review-question { color: #fff; font-weight: 600; margin-bottom: 8px; }
-        .review-answer { font-size: 0.9rem; color: #9ba3be; }
-        .review-answer .correct-ans { color: #34d399; }
-        .review-answer .wrong-ans { color: #f87171; text-decoration: line-through; }
+        .review-answer { font-size: 0.9rem; color: #a1a1aa; }
+        .review-answer .correct-ans { color: #22c55e; }
+        .review-answer .wrong-ans { color: #ef4444; text-decoration: line-through; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -254,7 +254,7 @@
 
     <div class="quiz-nav" id="quizNav">
         <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">Anterior</button>
-        <span id="questionNum" style="color: #9ba3be; font-size: 0.9rem;"></span>
+        <span id="questionNum" style="color: #a1a1aa; font-size: 0.9rem;"></span>
         <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Siguiente</button>
     </div>
 </div>
@@ -624,9 +624,9 @@ function showScore() {
         <div class="score-number ${passed ? 'pass' : 'fail'}">${pct}%</div>
         <div class="score-text">${passed ? '!Aprobado! Buen trabajo' : 'Necesitas repasar un poco mas. !Tu puedes!'}</div>
         <div class="score-details">
-            <div class="score-detail"><div class="number" style="color: #34d399">${correct}</div><div class="label">Correctas</div></div>
-            <div class="score-detail"><div class="number" style="color: #f87171">${total - correct}</div><div class="label">Incorrectas</div></div>
-            <div class="score-detail"><div class="number" style="color: #5fa8f5">${total}</div><div class="label">Total</div></div>
+            <div class="score-detail"><div class="number" style="color: #22c55e">${correct}</div><div class="label">Correctas</div></div>
+            <div class="score-detail"><div class="number" style="color: #ef4444">${total - correct}</div><div class="label">Incorrectas</div></div>
+            <div class="score-detail"><div class="number" style="color: #3b82f6">${total}</div><div class="label">Total</div></div>
         </div>
         <button class="btn btn-primary" onclick="filterQuestions('all')" style="margin-right:10px">Repetir quiz</button>
         <button class="btn btn-secondary" onclick="document.getElementById('reviewSection').style.display='block'">Ver repaso de errores</button>

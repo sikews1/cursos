@@ -9,17 +9,17 @@
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #141820;
-            color: #edf0f7;
+            background: #09090b;
+            color: #fafafa;
             line-height: 1.6;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #1a1f35 0%, #1e2745 50%, #1c2e4a 100%);
+            background: linear-gradient(135deg, #09090b 0%, #131316 50%, #1a1a1f 100%);
             padding: 40px 20px;
             text-align: center;
-            border-bottom: 3px solid #ff6b4a;
+            border-bottom: 3px solid #f97316;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -31,10 +31,10 @@
             margin-bottom: 8px;
         }
 
-        .header h1 span { color: #ff6b4a; }
+        .header h1 span { color: #f97316; }
 
         .header p {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.95rem;
         }
 
@@ -49,15 +49,15 @@
             width: 100%;
             padding: 12px 20px 12px 45px;
             border-radius: 25px;
-            border: 2px solid #2e3650;
-            background: #1c2130;
-            color: #edf0f7;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: #131316;
+            color: #fafafa;
             font-size: 1rem;
             outline: none;
             transition: border-color 0.3s;
         }
 
-        .search-container input:focus { border-color: #ff6b4a; }
+        .search-container input:focus { border-color: #f97316; }
 
         .search-container svg {
             position: absolute;
@@ -66,7 +66,7 @@
             transform: translateY(-50%);
             width: 18px;
             height: 18px;
-            stroke: #9ba3be;
+            stroke: #a1a1aa;
             fill: none;
             stroke-width: 2;
             stroke-linecap: round;
@@ -80,7 +80,7 @@
             gap: 8px;
             padding: 20px;
             flex-wrap: wrap;
-            background: #141820;
+            background: #09090b;
             position: sticky;
             top: 140px;
             z-index: 99;
@@ -89,17 +89,17 @@
         .nav button {
             padding: 10px 20px;
             border-radius: 25px;
-            border: 2px solid #2e3650;
+            border: 2px solid rgba(255,255,255,0.08);
             background: transparent;
-            color: #9ba3be;
+            color: #a1a1aa;
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: 600;
             transition: all 0.3s;
         }
 
-        .nav button:hover { border-color: #ff6b4a; color: #ff6b4a; }
-        .nav button.active { background: #ff6b4a; border-color: #ff6b4a; color: #fff; }
+        .nav button:hover { border-color: #f97316; color: #f97316; }
+        .nav button.active { background: #f97316; border-color: #f97316; color: #fff; }
 
         /* Main content */
         .container {
@@ -118,18 +118,18 @@
 
         .section-title {
             font-size: 1.5rem;
-            color: #ff6b4a;
+            color: #f97316;
             margin-bottom: 8px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #232940;
+            border-bottom: 2px solid #1a1a1f;
         }
 
         .section-subtitle {
             font-size: 1.1rem;
-            color: #5fa8f5;
+            color: #3b82f6;
             margin: 25px 0 15px;
             padding-left: 10px;
-            border-left: 3px solid #5fa8f5;
+            border-left: 3px solid #3b82f6;
         }
 
         /* Cards */
@@ -140,18 +140,18 @@
         }
 
         .card {
-            background: #1c2130;
+            background: #131316;
             border-radius: 12px;
             padding: 20px;
-            border: 1px solid #2e3650;
+            border: 1px solid rgba(255,255,255,0.08);
             transition: all 0.3s;
             cursor: default;
         }
 
         .card:hover {
-            border-color: #ff6b4a;
+            border-color: #f97316;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.15);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.15);
         }
 
         .card .term {
@@ -163,34 +163,34 @@
 
         .card .term-en {
             font-size: 0.8rem;
-            color: #ff6b4a;
+            color: #f97316;
             font-weight: 600;
             margin-bottom: 10px;
             display: inline-block;
-            background: rgba(233, 69, 96, 0.15);
+            background: rgba(249, 115, 22, 0.15);
             padding: 2px 10px;
             border-radius: 12px;
         }
 
         .card .term-es {
             font-size: 0.8rem;
-            color: #5fa8f5;
+            color: #3b82f6;
             font-weight: 600;
             margin-bottom: 10px;
             display: inline-block;
-            background: rgba(93, 173, 226, 0.15);
+            background: rgba(59, 130, 246, 0.15);
             padding: 2px 10px;
             border-radius: 12px;
             margin-left: 5px;
         }
 
         .card .desc {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.92rem;
             line-height: 1.6;
         }
 
-        .card .desc strong { color: #fbbf24; }
+        .card .desc strong { color: #eab308; }
 
         .card .tag {
             display: inline-block;
@@ -201,9 +201,9 @@
             font-weight: 600;
         }
 
-        .tag-crowdstrike { background: rgba(233, 69, 96, 0.2); color: #ff6b4a; }
-        .tag-importante { background: rgba(245, 200, 66, 0.2); color: #fbbf24; }
-        .tag-basico { background: rgba(93, 173, 226, 0.2); color: #5fa8f5; }
+        .tag-crowdstrike { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .tag-importante { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        .tag-basico { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
 
         /* Threat actors table */
         .actors-grid {
@@ -213,10 +213,10 @@
         }
 
         .actor-card {
-            background: #1c2130;
+            background: #131316;
             border-radius: 12px;
             padding: 18px;
-            border: 1px solid #2e3650;
+            border: 1px solid rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
             gap: 15px;
@@ -224,7 +224,7 @@
         }
 
         .actor-card:hover {
-            border-color: #ff6b4a;
+            border-color: #f97316;
             transform: translateY(-2px);
         }
 
@@ -241,23 +241,23 @@
         }
 
         .actor-info .actor-country {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.85rem;
         }
 
         .actor-info .actor-example {
-            color: #ff6b4a;
+            color: #f97316;
             font-size: 0.8rem;
             margin-top: 4px;
         }
 
         /* Progress tracker */
         .progress-section {
-            background: #1c2130;
+            background: #131316;
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 30px;
-            border: 1px solid #2e3650;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
         .progress-title {
@@ -276,8 +276,8 @@
             align-items: center;
             gap: 12px;
             font-size: 0.9rem;
-            background: #141820;
-            border: 1px solid #2e3650;
+            background: #09090b;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
         .module-list li .status {
@@ -287,35 +287,35 @@
         }
 
         .module-list li .module-name { flex: 1; }
-        .module-list li .module-time { color: #9ba3be; font-size: 0.8rem; }
+        .module-list li .module-time { color: #a1a1aa; font-size: 0.8rem; }
 
         /* Key concept callout */
         .callout {
-            background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(93, 173, 226, 0.1));
-            border: 1px solid #ff6b4a;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(59, 130, 246, 0.1));
+            border: 1px solid #f97316;
             border-radius: 12px;
             padding: 20px;
             margin: 20px 0;
         }
 
         .callout h3 {
-            color: #ff6b4a;
+            color: #f97316;
             margin-bottom: 8px;
             font-size: 1rem;
         }
 
         .callout p {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.92rem;
         }
 
         /* Module summaries */
         .module-summary {
-            background: #1c2130;
+            background: #131316;
             border-radius: 16px;
             padding: 30px;
             margin-bottom: 25px;
-            border: 1px solid #2e3650;
+            border: 1px solid rgba(255,255,255,0.08);
             position: relative;
             overflow: hidden;
         }
@@ -329,9 +329,9 @@
             height: 4px;
         }
 
-        .module-summary.completed::before { background: linear-gradient(90deg, #34d399, #34d399); }
-        .module-summary.in-progress::before { background: linear-gradient(90deg, #fbbf24, #fbbf24); }
-        .module-summary.not-started::before { background: linear-gradient(90deg, #6b7394, #9ba3be); }
+        .module-summary.completed::before { background: linear-gradient(90deg, #22c55e, #22c55e); }
+        .module-summary.in-progress::before { background: linear-gradient(90deg, #eab308, #eab308); }
+        .module-summary.not-started::before { background: linear-gradient(90deg, #52525b, #a1a1aa); }
 
         .module-header {
             display: flex;
@@ -350,9 +350,9 @@
             letter-spacing: 0.5px;
         }
 
-        .badge-completed { background: rgba(39, 174, 96, 0.2); color: #34d399; }
-        .badge-progress { background: rgba(243, 156, 18, 0.2); color: #fbbf24; }
-        .badge-not-started { background: rgba(127, 140, 141, 0.2); color: #9ba3be; }
+        .badge-completed { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .badge-progress { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        .badge-not-started { background: rgba(82, 82, 91, 0.2); color: #a1a1aa; }
 
         .module-summary h3 {
             font-size: 1.3rem;
@@ -361,22 +361,22 @@
         }
 
         .module-meta {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.85rem;
             margin-bottom: 15px;
         }
 
         .module-objective {
-            background: rgba(93, 173, 226, 0.1);
-            border-left: 3px solid #5fa8f5;
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
             padding: 12px 16px;
             border-radius: 0 8px 8px 0;
             margin-bottom: 18px;
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.92rem;
         }
 
-        .module-objective strong { color: #5fa8f5; }
+        .module-objective strong { color: #3b82f6; }
 
         .key-points {
             list-style: none;
@@ -386,25 +386,25 @@
         .key-points li {
             padding: 10px 15px;
             margin-bottom: 8px;
-            background: #141820;
+            background: #09090b;
             border-radius: 8px;
-            border-left: 3px solid #ff6b4a;
-            color: #9ba3be;
+            border-left: 3px solid #f97316;
+            color: #a1a1aa;
             font-size: 0.92rem;
             line-height: 1.6;
         }
 
         .key-points li strong { color: #fff; }
-        .key-points li em { color: #fbbf24; font-style: normal; }
+        .key-points li em { color: #eab308; font-style: normal; }
 
         .exam-tip {
-            background: linear-gradient(135deg, rgba(245, 200, 66, 0.1), rgba(233, 69, 96, 0.1));
-            border: 1px solid rgba(245, 200, 66, 0.3);
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(249, 115, 22, 0.1));
+            border: 1px solid rgba(234, 179, 8, 0.3);
             border-radius: 10px;
             padding: 15px 18px;
             margin-top: 18px;
             font-size: 0.88rem;
-            color: #9ba3be;
+            color: #a1a1aa;
         }
 
         .exam-tip::before {
@@ -412,7 +412,7 @@
             display: block;
             font-size: 0.7rem;
             font-weight: 700;
-            color: #fbbf24;
+            color: #eab308;
             letter-spacing: 1px;
             margin-bottom: 6px;
         }
@@ -421,7 +421,7 @@
         .no-results {
             text-align: center;
             padding: 40px;
-            color: #9ba3be;
+            color: #a1a1aa;
             display: none;
         }
 
@@ -429,9 +429,9 @@
         .footer {
             text-align: center;
             padding: 30px;
-            color: #6b7394;
+            color: #52525b;
             font-size: 0.8rem;
-            border-top: 1px solid #232940;
+            border-top: 1px solid #1a1a1f;
             margin-top: 40px;
         }
 
@@ -489,7 +489,7 @@
     <!-- INICIO -->
     <div class="section active" id="inicio">
         <div class="callout" style="cursor:pointer" onclick="window.location.href='modulos.html'">
-            <h3 style="display:flex;align-items:center;justify-content:space-between;">Ver modulos del curso <span style="font-size:0.8rem;color:#5fa8f5;">Ir a Modulos &#9654;</span></h3>
+            <h3 style="display:flex;align-items:center;justify-content:space-between;">Ver modulos del curso <span style="font-size:0.8rem;color:#3b82f6;">Ir a Modulos &#9654;</span></h3>
             <p>Consulta el resumen, vocabulario y progreso de cada modulo en la <strong>pagina de Modulos</strong>.</p>
         </div>
 
@@ -498,7 +498,7 @@
             <p><strong>CrowdStrike se diferencia por enfocarse en IOAs (Indicators of Attack)</strong> en lugar de solo IOCs (Indicators of Compromise). Esto significa que detecta ataques por su <strong>comportamiento en tiempo real</strong>, no solo comparando con firmas conocidas. Este concepto aparece constantemente en todos los modulos.</p>
         </div>
 
-        <p style="color: #9ba3be; text-align: center; margin-top: 20px;">Usa las pestanas de arriba o el buscador para explorar los terminos</p>
+        <p style="color: #a1a1aa; text-align: center; margin-top: 20px;">Usa las pestanas de arriba o el buscador para explorar los terminos</p>
     </div>
 
     <!-- AMENAZAS -->
@@ -1006,7 +1006,7 @@
     <!-- THREAT ACTORS -->
     <div class="section" id="actors">
         <h2 class="section-title">Threat Actors - Nombres de CrowdStrike</h2>
-        <p style="color: #9ba3be; margin-bottom: 20px;">CrowdStrike nombra a los grupos de atacantes con animales segun su pais de origen:</p>
+        <p style="color: #a1a1aa; margin-bottom: 20px;">CrowdStrike nombra a los grupos de atacantes con animales segun su pais de origen:</p>
         <div class="actors-grid">
             <div class="actor-card" data-search="bear oso rusia fancy cozy">
                 <div class="actor-emoji">&#x1F43B;</div>

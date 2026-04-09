@@ -13,21 +13,21 @@
         }
 
         .scenario-card {
-            background: #1c2130;
+            background: #131316;
             border-radius: 14px;
             padding: 25px;
-            border: 1px solid #2e3650;
+            border: 1px solid rgba(255,255,255,0.08);
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .scenario-card:hover {
-            border-color: #ff6b4a;
+            border-color: #f97316;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.15);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.15);
         }
 
-        .scenario-card.active { border-color: #ff6b4a; }
+        .scenario-card.active { border-color: #f97316; }
 
         .scenario-header {
             display: flex;
@@ -57,12 +57,12 @@
             text-transform: uppercase;
         }
 
-        .diff-easy { background: rgba(39, 174, 96, 0.2); color: #34d399; }
-        .diff-medium { background: rgba(243, 156, 18, 0.2); color: #fbbf24; }
-        .diff-hard { background: rgba(233, 69, 96, 0.2); color: #ff6b4a; }
+        .diff-easy { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .diff-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        .diff-hard { background: rgba(249, 115, 22, 0.2); color: #f97316; }
 
         .scenario-desc {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.9rem;
             margin-bottom: 10px;
         }
@@ -77,8 +77,8 @@
             padding: 3px 10px;
             border-radius: 10px;
             font-size: 0.7rem;
-            background: rgba(93, 173, 226, 0.15);
-            color: #5fa8f5;
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
         }
 
         /* Scenario detail */
@@ -89,44 +89,44 @@
         .scenario-detail.active { display: block; }
 
         .situation-box {
-            background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(93, 173, 226, 0.05));
-            border: 1px solid rgba(233, 69, 96, 0.3);
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(249, 115, 22, 0.3);
             border-radius: 14px;
             padding: 25px;
             margin-bottom: 25px;
         }
 
         .situation-box h3 {
-            color: #ff6b4a;
+            color: #f97316;
             margin-bottom: 12px;
             font-size: 1.1rem;
         }
 
         .situation-box p {
-            color: #edf0f7;
+            color: #fafafa;
             line-height: 1.7;
             font-size: 0.95rem;
         }
 
         .situation-box .alert-info {
-            background: #141820;
+            background: #09090b;
             border-radius: 8px;
             padding: 12px 16px;
             margin-top: 15px;
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 0.85rem;
-            color: #fbbf24;
-            border-left: 3px solid #fbbf24;
+            color: #eab308;
+            border-left: 3px solid #eab308;
         }
 
         /* Steps */
         .steps-container { margin-bottom: 25px; }
 
         .step {
-            background: #1c2130;
+            background: #131316;
             border-radius: 12px;
             margin-bottom: 12px;
-            border: 1px solid #2e3650;
+            border: 1px solid rgba(255,255,255,0.08);
             overflow: hidden;
         }
 
@@ -139,13 +139,13 @@
             transition: background 0.2s;
         }
 
-        .step-header:hover { background: rgba(93, 173, 226, 0.05); }
+        .step-header:hover { background: rgba(59, 130, 246, 0.05); }
 
         .step-number {
             min-width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: #ff6b4a;
+            background: #f97316;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -162,7 +162,7 @@
         }
 
         .step-toggle {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 1.2rem;
             transition: transform 0.3s;
         }
@@ -182,37 +182,37 @@
         }
 
         .step-content p {
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.92rem;
             line-height: 1.7;
             margin-bottom: 10px;
         }
 
-        .step-content strong { color: #5fa8f5; }
-        .step-content em { color: #fbbf24; font-style: normal; }
+        .step-content strong { color: #3b82f6; }
+        .step-content em { color: #eab308; font-style: normal; }
 
         .step-content .console-path {
-            background: #141820;
+            background: #09090b;
             padding: 8px 14px;
             border-radius: 6px;
             font-family: 'Consolas', monospace;
             font-size: 0.82rem;
-            color: #ff6b4a;
+            color: #f97316;
             display: inline-block;
             margin: 5px 0;
         }
 
         /* Learning box */
         .learning-box {
-            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(93, 173, 226, 0.05));
-            border: 1px solid rgba(39, 174, 96, 0.3);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(34, 197, 94, 0.3);
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
         }
 
         .learning-box h4 {
-            color: #34d399;
+            color: #22c55e;
             margin-bottom: 10px;
             font-size: 0.95rem;
         }
@@ -224,7 +224,7 @@
 
         .learning-box li {
             padding: 6px 0;
-            color: #9ba3be;
+            color: #a1a1aa;
             font-size: 0.88rem;
             padding-left: 20px;
             position: relative;
@@ -234,14 +234,14 @@
             content: '\2713';
             position: absolute;
             left: 0;
-            color: #34d399;
+            color: #22c55e;
         }
 
         .back-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #ff6b4a;
+            color: #f97316;
             cursor: pointer;
             font-weight: 600;
             margin-bottom: 20px;
@@ -502,7 +502,7 @@ function showScenario(idx) {
             <h3>La situacion</h3>
             ${s.situation}
         </div>
-        <h3 style="color: #ff6b4a; margin-bottom: 15px;">¿Que haces? (haz clic en cada paso para ver la solucion)</h3>
+        <h3 style="color: #f97316; margin-bottom: 15px;">¿Que haces? (haz clic en cada paso para ver la solucion)</h3>
         <div class="steps-container">${stepsHtml}</div>
         <div class="learning-box">
             <h4>Lo que aprendes de este escenario</h4>
