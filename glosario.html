@@ -179,6 +179,17 @@
         /* No results */
         .no-results { text-align: center; padding: 60px 20px; color: var(--text-muted); display: none; }
 
+        /* Language hint */
+        .lang-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed var(--border-subtle);
+            line-height: 1.5;
+        }
+
         @media (max-width: 640px) {
             .cards { grid-template-columns: 1fr; }
             .actors-grid { grid-template-columns: 1fr; }
@@ -199,24 +210,24 @@
 
 <div class="header">
     <h1><span>CrowdStrike</span> Falcon Administrator</h1>
-    <p>Glosario de Ciberseguridad - Curso de Certificacion</p>
+    <p data-es="Glosario de Ciberseguridad - Curso de Certificacion" data-en="Cybersecurity Glossary - Certification Course">Glosario de Ciberseguridad - Curso de Certificacion</p>
     <div class="search-container">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" placeholder="Buscar termino..." autocomplete="off">
+        <input type="text" id="searchInput" data-placeholder-es="Buscar termino..." data-placeholder-en="Search term..." placeholder="Buscar termino..." autocomplete="off">
     </div>
 </div>
 
 <div class="nav" id="nav">
-    <button class="active" data-tab="inicio">Inicio</button>
-    <button data-tab="amenazas">Amenazas</button>
-    <button data-tab="deteccion">Deteccion</button>
-    <button data-tab="herramientas">Herramientas</button>
-    <button data-tab="conceptos">Conceptos Generales</button>
+    <button class="active" data-tab="inicio" data-es="Inicio" data-en="Home">Inicio</button>
+    <button data-tab="amenazas" data-es="Amenazas" data-en="Threats">Amenazas</button>
+    <button data-tab="deteccion" data-es="Deteccion" data-en="Detection">Deteccion</button>
+    <button data-tab="herramientas" data-es="Herramientas" data-en="Tools">Herramientas</button>
+    <button data-tab="conceptos" data-es="Conceptos Generales" data-en="General Concepts">Conceptos Generales</button>
     <button data-tab="falcon">Falcon Platform</button>
-    <button data-tab="modulos">Modulos Falcon</button>
-    <button data-tab="gestion">Gestion Falcon</button>
-    <button data-tab="alertas">Alertas</button>
-    <button data-tab="red">Red & Sistemas</button>
+    <button data-tab="modulos" data-es="Modulos Falcon" data-en="Falcon Modules">Modulos Falcon</button>
+    <button data-tab="gestion" data-es="Gestion Falcon" data-en="Falcon Management">Gestion Falcon</button>
+    <button data-tab="alertas" data-es="Alertas" data-en="Alerts">Alertas</button>
+    <button data-tab="red" data-es="Red & Sistemas" data-en="Network & Systems">Red & Sistemas</button>
     <button data-tab="actors">Threat Actors</button>
 </div>
 
@@ -224,90 +235,112 @@
 
     <!-- NO RESULTS -->
     <div class="no-results" id="noResults">
-        <p style="font-size: 1.5rem; margin-bottom: 10px;">No se encontraron resultados</p>
-        <p>Intenta con otro termino de busqueda</p>
+        <p style="font-size: 1.5rem; margin-bottom: 10px;" data-es="No se encontraron resultados" data-en="No results found">No se encontraron resultados</p>
+        <p data-es="Intenta con otro termino de busqueda" data-en="Try a different search term">Intenta con otro termino de busqueda</p>
     </div>
 
     <!-- INICIO -->
     <div class="section active" id="inicio">
         <div class="callout" style="cursor:pointer" onclick="window.location.href='modulos.html'">
-            <h3 style="display:flex;align-items:center;justify-content:space-between;">Ver modulos del curso <span style="font-size:0.8rem;color: var(--blue);">Ir a Modulos &#9654;</span></h3>
-            <p>Consulta el resumen, vocabulario y progreso de cada modulo en la <strong>pagina de Modulos</strong>.</p>
+            <h3 style="display:flex;align-items:center;justify-content:space-between;" data-es="Ver modulos del curso" data-en="View course modules"><span data-es="Ver modulos del curso" data-en="View course modules">Ver modulos del curso</span> <span style="font-size:0.8rem;color: var(--blue);" data-es="Ir a Modulos &#9654;" data-en="Go to Modules &#9654;">Ir a Modulos &#9654;</span></h3>
+            <p data-es="Consulta el resumen, vocabulario y progreso de cada modulo en la <strong>pagina de Modulos</strong>." data-en="Check the summary, vocabulary and progress for each module on the <strong>Modules page</strong>.">Consulta el resumen, vocabulario y progreso de cada modulo en la <strong>pagina de Modulos</strong>.</p>
         </div>
 
         <div class="callout">
-            <h3>Concepto clave del curso</h3>
-            <p><strong>CrowdStrike se diferencia por enfocarse en IOAs (Indicators of Attack)</strong> en lugar de solo IOCs (Indicators of Compromise). Esto significa que detecta ataques por su <strong>comportamiento en tiempo real</strong>, no solo comparando con firmas conocidas. Este concepto aparece constantemente en todos los modulos.</p>
+            <h3 data-es="Concepto clave del curso" data-en="Key course concept">Concepto clave del curso</h3>
+            <p data-es="<strong>CrowdStrike se diferencia por enfocarse en IOAs (Indicators of Attack)</strong> en lugar de solo IOCs (Indicators of Compromise). Esto significa que detecta ataques por su <strong>comportamiento en tiempo real</strong>, no solo comparando con firmas conocidas. Este concepto aparece constantemente en todos los modulos." data-en="<strong>CrowdStrike differentiates itself by focusing on IOAs (Indicators of Attack)</strong> instead of just IOCs (Indicators of Compromise). This means it detects attacks by their <strong>real-time behavior</strong>, not just by comparing against known signatures. This concept appears constantly throughout all modules."><strong>CrowdStrike se diferencia por enfocarse en IOAs (Indicators of Attack)</strong> en lugar de solo IOCs (Indicators of Compromise). Esto significa que detecta ataques por su <strong>comportamiento en tiempo real</strong>, no solo comparando con firmas conocidas. Este concepto aparece constantemente en todos los modulos.</p>
         </div>
 
-        <p style="color: var(--text-secondary); text-align: center; margin-top: 20px;">Usa las pestanas de arriba o el buscador para explorar los terminos</p>
+        <p style="color: var(--text-secondary); text-align: center; margin-top: 20px;" data-es="Usa las pestanas de arriba o el buscador para explorar los terminos" data-en="Use the tabs above or the search bar to explore terms">Usa las pestanas de arriba o el buscador para explorar los terminos</p>
     </div>
 
     <!-- AMENAZAS -->
     <div class="section" id="amenazas">
-        <h2 class="section-title">Amenazas y Ataques</h2>
+        <h2 class="section-title" data-es="Amenazas y Ataques" data-en="Threats and Attacks">Amenazas y Ataques</h2>
         <div class="cards">
-            <div class="card" data-search="malware software malicioso virus troyano">
+            <div class="card" data-search="malware software malicioso virus troyano"
+                 data-desc-es="Cualquier programa disenado para hacer dano: virus, troyanos, ransomware, spyware, etc. Es el termino paraguas para todo lo &quot;malo&quot;."
+                 data-desc-en="Any software designed to cause harm: viruses, trojans, ransomware, spyware, etc. It is the umbrella term for everything malicious.">
                 <div class="term">Malware</div>
                 <span class="term-es">Software malicioso</span>
                 <div class="desc">Cualquier programa disenado para hacer dano: virus, troyanos, ransomware, spyware, etc. Es el termino paraguas para todo lo "malo".</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="ransomware secuestro datos cifrado rescate">
+            <div class="card" data-search="ransomware secuestro datos cifrado rescate"
+                 data-desc-es="<strong>Cifra tus archivos y pide un rescate</strong> (generalmente en criptomonedas) para devolvertelos. Es una de las amenazas mas comunes y daninas actualmente. Grupos como WIZARD SPIDER son conocidos por esto."
+                 data-desc-en="<strong>Encrypts your files and demands a ransom</strong> (usually in cryptocurrency) to return them. It is one of the most common and damaging threats today. Groups like WIZARD SPIDER are known for this.">
                 <div class="term">Ransomware</div>
                 <span class="term-es">Secuestro de datos</span>
                 <div class="desc"><strong>Cifra tus archivos y pide un rescate</strong> (generalmente en criptomonedas) para devolvertelos. Es una de las amenazas mas comunes y daninas actualmente. Grupos como WIZARD SPIDER son conocidos por esto.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="phishing suplantacion pesca correo falso">
+            <div class="card" data-search="phishing suplantacion pesca correo falso"
+                 data-desc-es="Correos o webs falsas que imitan ser legitimas para <strong>robarte credenciales o datos</strong>. Es el vector de ataque mas comun. El &quot;spear phishing&quot; es phishing dirigido a una persona concreta."
+                 data-desc-en="Fake emails or websites that impersonate legitimate ones to <strong>steal your credentials or data</strong>. It is the most common attack vector. &quot;Spear phishing&quot; is phishing targeted at a specific person.">
                 <div class="term">Phishing</div>
                 <span class="term-es">Suplantacion / Pesca</span>
                 <div class="desc">Correos o webs falsas que imitan ser legitimas para <strong>robarte credenciales o datos</strong>. Es el vector de ataque mas comun. El "spear phishing" es phishing dirigido a una persona concreta.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="exploit explotacion vulnerabilidad aprovecha">
+            <div class="card" data-search="exploit explotacion vulnerabilidad aprovecha"
+                 data-desc-es="Codigo o tecnica que <strong>aprovecha una vulnerabilidad conocida</strong> en un software para ejecutar acciones no autorizadas."
+                 data-desc-en="Code or technique that <strong>exploits a known vulnerability</strong> in software to execute unauthorized actions.">
                 <div class="term">Exploit</div>
                 <span class="term-es">Explotacion</span>
                 <div class="desc">Codigo o tecnica que <strong>aprovecha una vulnerabilidad conocida</strong> en un software para ejecutar acciones no autorizadas.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="zero day dia cero vulnerabilidad desconocida sin parche">
+            <div class="card" data-search="zero day dia cero vulnerabilidad desconocida sin parche"
+                 data-desc-es="Vulnerabilidad que <strong>nadie conocia hasta ahora</strong>. No tiene parche todavia. Es la mas peligrosa porque no hay defensa preparada. Se llama &quot;dia cero&quot; porque los defensores han tenido cero dias para prepararse."
+                 data-desc-en="A vulnerability that <strong>nobody knew about until now</strong>. It has no patch yet. It is the most dangerous because there is no prepared defense. It is called &quot;zero-day&quot; because defenders have had zero days to prepare.">
                 <div class="term">Zero-day</div>
                 <span class="term-es">Dia cero</span>
                 <div class="desc">Vulnerabilidad que <strong>nadie conocia hasta ahora</strong>. No tiene parche todavia. Es la mas peligrosa porque no hay defensa preparada. Se llama "dia cero" porque los defensores han tenido cero dias para prepararse.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="lateral movement movimiento lateral red propagacion">
+            <div class="card" data-search="lateral movement movimiento lateral red propagacion"
+                 data-desc-es="Cuando un atacante <strong>ya entro a un equipo y se mueve a otros</strong> dentro de la red. Usa credenciales robadas, vulnerabilidades de red, etc. CrowdStrike es muy bueno detectando esto."
+                 data-desc-en="When an attacker <strong>has already entered a machine and moves to others</strong> within the network. Uses stolen credentials, network vulnerabilities, etc. CrowdStrike excels at detecting this.">
                 <div class="term">Lateral Movement</div>
                 <span class="term-es">Movimiento lateral</span>
                 <div class="desc">Cuando un atacante <strong>ya entro a un equipo y se mueve a otros</strong> dentro de la red. Usa credenciales robadas, vulnerabilidades de red, etc. CrowdStrike es muy bueno detectando esto.</div>
                 <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
             </div>
-            <div class="card" data-search="privilege escalation escalada privilegios administrador">
+            <div class="card" data-search="privilege escalation escalada privilegios administrador"
+                 data-desc-es="El atacante <strong>consigue permisos de administrador</strong> partiendo de un usuario normal. Es un paso critico en casi todos los ataques avanzados."
+                 data-desc-en="The attacker <strong>gains administrator privileges</strong> starting from a normal user. It is a critical step in almost all advanced attacks.">
                 <div class="term">Privilege Escalation</div>
                 <span class="term-es">Escalada de privilegios</span>
                 <div class="desc">El atacante <strong>consigue permisos de administrador</strong> partiendo de un usuario normal. Es un paso critico en casi todos los ataques avanzados.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="brute force fuerza bruta contrasena password">
+            <div class="card" data-search="brute force fuerza bruta contrasena password"
+                 data-desc-es="Probar <strong>miles de combinaciones de contrasenas</strong> hasta dar con la correcta. Herramientas como Hydra automatizan esto."
+                 data-desc-en="Trying <strong>thousands of password combinations</strong> until finding the correct one. Tools like Hydra automate this.">
                 <div class="term">Brute Force</div>
                 <span class="term-es">Fuerza bruta</span>
                 <div class="desc">Probar <strong>miles de combinaciones de contrasenas</strong> hasta dar con la correcta. Herramientas como Hydra automatizan esto.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="social engineering ingenieria social manipulacion personas">
+            <div class="card" data-search="social engineering ingenieria social manipulacion personas"
+                 data-desc-es="<strong>Manipular a personas</strong> (no maquinas) para que revelen informacion o hagan algo peligroso. El phishing es un tipo de ingenieria social."
+                 data-desc-en="<strong>Manipulating people</strong> (not machines) into revealing information or doing something dangerous. Phishing is a type of social engineering.">
                 <div class="term">Social Engineering</div>
                 <span class="term-es">Ingenieria social</span>
                 <div class="desc"><strong>Manipular a personas</strong> (no maquinas) para que revelen informacion o hagan algo peligroso. El phishing es un tipo de ingenieria social.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="supply chain attack cadena suministro proveedor">
+            <div class="card" data-search="supply chain attack cadena suministro proveedor"
+                 data-desc-es="Atacar un <strong>proveedor de software para infectar a todos sus clientes</strong> de golpe. Ejemplo famoso: el ataque a SolarWinds en 2020."
+                 data-desc-en="Attacking a <strong>software provider to infect all its customers</strong> at once. Famous example: the SolarWinds attack in 2020.">
                 <div class="term">Supply Chain Attack</div>
                 <span class="term-es">Ataque a la cadena de suministro</span>
                 <div class="desc">Atacar un <strong>proveedor de software para infectar a todos sus clientes</strong> de golpe. Ejemplo famoso: el ataque a SolarWinds en 2020.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="fileless attack ataque sin archivos memoria">
+            <div class="card" data-search="fileless attack ataque sin archivos memoria"
+                 data-desc-es="Ataque que <strong>no deja archivos en disco</strong>, se ejecuta directamente en memoria. Los antivirus clasicos no lo detectan. <strong>CrowdStrike si, gracias a su enfoque en IOAs (comportamiento).</strong>"
+                 data-desc-en="An attack that <strong>leaves no files on disk</strong>, running directly in memory. Traditional antivirus cannot detect it. <strong>CrowdStrike can, thanks to its IOA (behavior-based) approach.</strong>">
                 <div class="term">Fileless Attack</div>
                 <span class="term-es">Ataque sin archivos</span>
                 <div class="desc">Ataque que <strong>no deja archivos en disco</strong>, se ejecuta directamente en memoria. Los antivirus clasicos no lo detectan. <strong>CrowdStrike si, gracias a su enfoque en IOAs (comportamiento).</strong></div>
@@ -318,57 +351,74 @@
 
     <!-- DETECCION -->
     <div class="section" id="deteccion">
-        <h2 class="section-title">Indicadores y Deteccion</h2>
+        <h2 class="section-title" data-es="Indicadores y Deteccion" data-en="Indicators and Detection">Indicadores y Deteccion</h2>
 
         <div class="callout">
-            <h3>IOC vs IOA - La diferencia clave</h3>
-            <p><strong>IOC = "Ya me robaron"</strong> (miras las huellas que dejo el ladron). <strong>IOA = "Me estan robando ahora"</strong> (ves al ladron en accion). CrowdStrike apuesta por IOA porque detecta ataques nuevos que no tienen IOCs conocidos.</p>
+            <h3 data-es="IOC vs IOA - La diferencia clave" data-en="IOC vs IOA - The key difference">IOC vs IOA - La diferencia clave</h3>
+            <p data-es="<strong>IOC = &quot;Ya me robaron&quot;</strong> (miras las huellas que dejo el ladron). <strong>IOA = &quot;Me estan robando ahora&quot;</strong> (ves al ladron en accion). CrowdStrike apuesta por IOA porque detecta ataques nuevos que no tienen IOCs conocidos."
+               data-en="<strong>IOC = &quot;I've already been robbed&quot;</strong> (you look at the footprints left by the thief). <strong>IOA = &quot;I'm being robbed right now&quot;</strong> (you see the thief in action). CrowdStrike bets on IOA because it detects new attacks that have no known IOCs."><strong>IOC = "Ya me robaron"</strong> (miras las huellas que dejo el ladron). <strong>IOA = "Me estan robando ahora"</strong> (ves al ladron en accion). CrowdStrike apuesta por IOA porque detecta ataques nuevos que no tienen IOCs conocidos.</p>
         </div>
 
         <div class="cards">
-            <div class="card" data-search="ioc indicator compromise indicador compromiso hash ip dominio">
+            <div class="card" data-search="ioc indicator compromise indicador compromiso hash ip dominio"
+                 data-desc-es="<strong>Evidencia de que ya ocurrio un ataque</strong>: un hash de archivo malicioso, una IP sospechosa, un dominio conocido como malicioso. Es <strong>reactivo</strong> (mira el pasado). Como las huellas que deja un ladron despues de robar."
+                 data-desc-en="<strong>Evidence that an attack has already occurred</strong>: a malicious file hash, a suspicious IP, a domain known to be malicious. It is <strong>reactive</strong> (looks at the past). Like the footprints a thief leaves after robbing.">
                 <div class="term">IOC - Indicator of Compromise</div>
                 <span class="term-es">Indicador de compromiso</span>
                 <div class="desc"><strong>Evidencia de que ya ocurrio un ataque</strong>: un hash de archivo malicioso, una IP sospechosa, un dominio conocido como malicioso. Es <strong>reactivo</strong> (mira el pasado). Como las huellas que deja un ladron despues de robar.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="ioa indicator attack indicador ataque comportamiento">
+            <div class="card" data-search="ioa indicator attack indicador ataque comportamiento"
+                 data-desc-es="Patron de comportamiento que indica que <strong>un ataque esta ocurriendo AHORA</strong>, sin importar que herramienta use el atacante. Es <strong>proactivo</strong> (mira el presente). <strong>CrowdStrike se enfoca mucho en IOAs.</strong>"
+                 data-desc-en="A behavior pattern indicating that <strong>an attack is happening RIGHT NOW</strong>, regardless of which tool the attacker uses. It is <strong>proactive</strong> (looks at the present). <strong>CrowdStrike focuses heavily on IOAs.</strong>">
                 <div class="term">IOA - Indicator of Attack</div>
                 <span class="term-es">Indicador de ataque</span>
                 <div class="desc">Patron de comportamiento que indica que <strong>un ataque esta ocurriendo AHORA</strong>, sin importar que herramienta use el atacante. Es <strong>proactivo</strong> (mira el presente). <strong>CrowdStrike se enfoca mucho en IOAs.</strong></div>
                 <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
             </div>
-            <div class="card" data-search="ttp tactics techniques procedures tacticas tecnicas procedimientos mitre">
+            <div class="card" data-search="ttp tactics techniques procedures tacticas tecnicas procedimientos mitre"
+                 data-desc-es="La forma en que un atacante opera. <strong>Tactica</strong> = el &quot;que&quot; quiere lograr. <strong>Tecnica</strong> = el &quot;como&quot; lo hace. <strong>Procedimiento</strong> = los pasos concretos. MITRE ATT&amp;CK los cataloga todos."
+                 data-desc-en="The way an attacker operates. <strong>Tactic</strong> = the &quot;what&quot; they want to achieve. <strong>Technique</strong> = the &quot;how&quot; they do it. <strong>Procedure</strong> = the concrete steps. MITRE ATT&amp;CK catalogs them all.">
                 <div class="term">TTP - Tactics, Techniques, Procedures</div>
                 <span class="term-es">Tacticas, Tecnicas y Procedimientos</span>
                 <div class="desc">La forma en que un atacante opera. <strong>Tactica</strong> = el "que" quiere lograr. <strong>Tecnica</strong> = el "como" lo hace. <strong>Procedimiento</strong> = los pasos concretos. MITRE ATT&CK los cataloga todos.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="mitre att&ck attack framework base datos tecnicas">
+            <div class="card" data-search="mitre att&ck attack framework base datos tecnicas"
+                 data-desc-es="<strong>Base de datos publica que clasifica TODAS las tecnicas conocidas de ataque.</strong> CrowdStrike mapea sus detecciones a este framework. Es el &quot;diccionario universal&quot; de ciberataques."
+                 data-desc-en="<strong>Public database that classifies ALL known attack techniques.</strong> CrowdStrike maps its detections to this framework. It is the &quot;universal dictionary&quot; of cyberattacks.">
                 <div class="term">MITRE ATT&CK</div>
                 <span class="term-es">Framework MITRE ATT&CK</span>
                 <div class="desc"><strong>Base de datos publica que clasifica TODAS las tecnicas conocidas de ataque.</strong> CrowdStrike mapea sus detecciones a este framework. Es el "diccionario universal" de ciberataques.</div>
                 <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
             </div>
-            <div class="card" data-search="threat intelligence inteligencia amenazas informacion atacantes">
+            <div class="card" data-search="threat intelligence inteligencia amenazas informacion atacantes"
+                 data-desc-es="<strong>Informacion recopilada sobre atacantes</strong>: quienes son, que buscan, como operan. CrowdStrike tiene un equipo dedicado y es lider en esto."
+                 data-desc-en="<strong>Information gathered about attackers</strong>: who they are, what they seek, how they operate. CrowdStrike has a dedicated team and is a leader in this area.">
                 <div class="term">Threat Intelligence</div>
                 <span class="term-es">Inteligencia de amenazas</span>
                 <div class="desc"><strong>Informacion recopilada sobre atacantes</strong>: quienes son, que buscan, como operan. CrowdStrike tiene un equipo dedicado y es lider en esto.</div>
                 <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
             </div>
-            <div class="card" data-search="threat actor actor amenaza grupo atacante adversario">
+            <div class="card" data-search="threat actor actor amenaza grupo atacante adversario"
+                 data-desc-es="Grupo o individuo que realiza ciberataques. <strong>CrowdStrike les pone nombres de animales</strong> segun su pais de origen (BEAR = Rusia, PANDA = China, etc.)."
+                 data-desc-en="A group or individual that carries out cyberattacks. <strong>CrowdStrike names them after animals</strong> based on their country of origin (BEAR = Russia, PANDA = China, etc.).">
                 <div class="term">Threat Actor</div>
                 <span class="term-es">Actor de amenaza</span>
                 <div class="desc">Grupo o individuo que realiza ciberataques. <strong>CrowdStrike les pone nombres de animales</strong> segun su pais de origen (BEAR = Rusia, PANDA = China, etc.).</div>
                 <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
             </div>
-            <div class="card" data-search="false positive falso positivo alerta incorrecta">
+            <div class="card" data-search="false positive falso positivo alerta incorrecta"
+                 data-desc-es="Alerta que dice que algo es malicioso <strong>cuando en realidad es legitimo</strong>. Hay que minimizarlos para no perder tiempo investigando cosas que no son amenazas reales."
+                 data-desc-en="An alert that says something is malicious <strong>when it is actually legitimate</strong>. They must be minimized to avoid wasting time investigating things that are not real threats.">
                 <div class="term">False Positive</div>
                 <span class="term-es">Falso positivo</span>
                 <div class="desc">Alerta que dice que algo es malicioso <strong>cuando en realidad es legitimo</strong>. Hay que minimizarlos para no perder tiempo investigando cosas que no son amenazas reales.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="true positive verdadero positivo alerta correcta">
+            <div class="card" data-search="true positive verdadero positivo alerta correcta"
+                 data-desc-es="Alerta correcta: <strong>realmente habia algo malicioso</strong>. Es lo que quieres que tus herramientas detecten."
+                 data-desc-en="A correct alert: <strong>there really was something malicious</strong>. This is what you want your tools to detect.">
                 <div class="term">True Positive</div>
                 <span class="term-es">Verdadero positivo</span>
                 <div class="desc">Alerta correcta: <strong>realmente habia algo malicioso</strong>. Es lo que quieres que tus herramientas detecten.</div>
@@ -379,62 +429,80 @@
 
     <!-- HERRAMIENTAS -->
     <div class="section" id="herramientas">
-        <h2 class="section-title">Herramientas y Tecnologias de Seguridad</h2>
+        <h2 class="section-title" data-es="Herramientas y Tecnologias de Seguridad" data-en="Security Tools and Technologies">Herramientas y Tecnologias de Seguridad</h2>
         <div class="cards">
-            <div class="card" data-search="edr endpoint detection response deteccion respuesta">
+            <div class="card" data-search="edr endpoint detection response deteccion respuesta"
+                 data-desc-es="Software que <strong>monitoriza lo que pasa en cada equipo</strong>, detecta amenazas y permite responder. <strong>CrowdStrike Falcon ES un EDR (y mucho mas).</strong>"
+                 data-desc-en="Software that <strong>monitors what happens on each device</strong>, detects threats and allows response. <strong>CrowdStrike Falcon IS an EDR (and much more).</strong>">
                 <div class="term">EDR</div>
                 <span class="term-en">Endpoint Detection & Response</span>
                 <span class="term-es">Deteccion y respuesta en endpoints</span>
                 <div class="desc">Software que <strong>monitoriza lo que pasa en cada equipo</strong>, detecta amenazas y permite responder. <strong>CrowdStrike Falcon ES un EDR (y mucho mas).</strong></div>
                 <span class="tag tag-crowdstrike">CrowdStrike es esto</span>
             </div>
-            <div class="card" data-search="xdr extended detection response extendida">
+            <div class="card" data-search="xdr extended detection response extendida"
+                 data-desc-es="Como EDR pero <strong>ampliado</strong>: no solo mira endpoints sino tambien red, cloud, email, identidad... todo junto y correlacionado."
+                 data-desc-en="Like EDR but <strong>extended</strong>: it does not just look at endpoints but also network, cloud, email, identity... all together and correlated.">
                 <div class="term">XDR</div>
                 <span class="term-en">Extended Detection & Response</span>
                 <span class="term-es">Deteccion y respuesta extendida</span>
                 <div class="desc">Como EDR pero <strong>ampliado</strong>: no solo mira endpoints sino tambien red, cloud, email, identidad... todo junto y correlacionado.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="siem security information event management gestion eventos logs">
+            <div class="card" data-search="siem security information event management gestion eventos logs"
+                 data-desc-es="Herramienta que <strong>recopila logs de muchas fuentes y los correlaciona</strong> para detectar amenazas. Ejemplos: Splunk, QRadar, Microsoft Sentinel."
+                 data-desc-en="A tool that <strong>collects logs from many sources and correlates them</strong> to detect threats. Examples: Splunk, QRadar, Microsoft Sentinel.">
                 <div class="term">SIEM</div>
                 <span class="term-en">Security Information & Event Management</span>
                 <span class="term-es">Gestion de eventos de seguridad</span>
                 <div class="desc">Herramienta que <strong>recopila logs de muchas fuentes y los correlaciona</strong> para detectar amenazas. Ejemplos: Splunk, QRadar, Microsoft Sentinel.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="soar security orchestration automation response automatizacion">
+            <div class="card" data-search="soar security orchestration automation response automatizacion"
+                 data-desc-es="Herramienta que <strong>automatiza respuestas ante incidentes</strong>. Ej: si detecta malware, automaticamente aisla el equipo. <strong>CrowdStrike tiene Falcon Fusion SOAR.</strong>"
+                 data-desc-en="A tool that <strong>automates incident responses</strong>. E.g.: if it detects malware, it automatically isolates the device. <strong>CrowdStrike has Falcon Fusion SOAR.</strong>">
                 <div class="term">SOAR</div>
                 <span class="term-en">Security Orchestration, Automation & Response</span>
                 <span class="term-es">Orquestacion y automatizacion</span>
                 <div class="desc">Herramienta que <strong>automatiza respuestas ante incidentes</strong>. Ej: si detecta malware, automaticamente aisla el equipo. <strong>CrowdStrike tiene Falcon Fusion SOAR.</strong></div>
                 <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
             </div>
-            <div class="card" data-search="firewall cortafuegos trafico red filtrar bloquear">
+            <div class="card" data-search="firewall cortafuegos trafico red filtrar bloquear"
+                 data-desc-es="<strong>Filtra el trafico de red</strong>, permite o bloquea conexiones segun reglas definidas. Puede ser de red (hardware) o de host (software en el equipo)."
+                 data-desc-en="<strong>Filters network traffic</strong>, allowing or blocking connections based on defined rules. Can be network-based (hardware) or host-based (software on the device).">
                 <div class="term">Firewall</div>
                 <span class="term-es">Cortafuegos</span>
                 <div class="desc"><strong>Filtra el trafico de red</strong>, permite o bloquea conexiones segun reglas definidas. Puede ser de red (hardware) o de host (software en el equipo).</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="antivirus av firmas signatures clasico">
+            <div class="card" data-search="antivirus av firmas signatures clasico"
+                 data-desc-es="Software clasico que detecta malware <strong>comparando con una base de datos de firmas conocidas</strong>. Es mas limitado que un EDR porque solo detecta lo que ya conoce."
+                 data-desc-en="Traditional software that detects malware by <strong>comparing against a database of known signatures</strong>. It is more limited than an EDR because it only detects what it already knows.">
                 <div class="term">Antivirus (AV)</div>
                 <span class="term-es">Antivirus clasico</span>
                 <div class="desc">Software clasico que detecta malware <strong>comparando con una base de datos de firmas conocidas</strong>. Es mas limitado que un EDR porque solo detecta lo que ya conoce.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="ngav next gen antivirus nueva generacion machine learning">
+            <div class="card" data-search="ngav next gen antivirus nueva generacion machine learning"
+                 data-desc-es="Antivirus moderno que usa <strong>machine learning y analisis de comportamiento</strong>, no solo firmas. Detecta amenazas desconocidas. <strong>CrowdStrike Falcon Prevent es un NGAV.</strong>"
+                 data-desc-en="Modern antivirus that uses <strong>machine learning and behavior analysis</strong>, not just signatures. It detects unknown threats. <strong>CrowdStrike Falcon Prevent is an NGAV.</strong>">
                 <div class="term">NGAV</div>
                 <span class="term-en">Next-Gen Antivirus</span>
                 <span class="term-es">Antivirus de nueva generacion</span>
                 <div class="desc">Antivirus moderno que usa <strong>machine learning y analisis de comportamiento</strong>, no solo firmas. Detecta amenazas desconocidas. <strong>CrowdStrike Falcon Prevent es un NGAV.</strong></div>
                 <span class="tag tag-crowdstrike">CrowdStrike incluye esto</span>
             </div>
-            <div class="card" data-search="sandbox caja arena entorno aislado ejecutar sospechoso">
+            <div class="card" data-search="sandbox caja arena entorno aislado ejecutar sospechoso"
+                 data-desc-es="Entorno aislado donde se <strong>ejecuta un archivo sospechoso para ver que hace</strong> sin riesgo para el sistema real. CrowdStrike tiene Falcon Sandbox."
+                 data-desc-en="An isolated environment where a <strong>suspicious file is executed to see what it does</strong> without risk to the real system. CrowdStrike has Falcon Sandbox.">
                 <div class="term">Sandbox</div>
                 <span class="term-es">Caja de arena</span>
                 <div class="desc">Entorno aislado donde se <strong>ejecuta un archivo sospechoso para ver que hace</strong> sin riesgo para el sistema real. CrowdStrike tiene Falcon Sandbox.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="dlp data loss prevention prevencion perdida datos">
+            <div class="card" data-search="dlp data loss prevention prevencion perdida datos"
+                 data-desc-es="Herramientas que <strong>evitan que datos sensibles salgan de la organizacion</strong> por email, USB, cloud, etc."
+                 data-desc-en="Tools that <strong>prevent sensitive data from leaving the organization</strong> via email, USB, cloud, etc.">
                 <div class="term">DLP</div>
                 <span class="term-en">Data Loss Prevention</span>
                 <span class="term-es">Prevencion de perdida de datos</span>
@@ -446,51 +514,67 @@
 
     <!-- CONCEPTOS GENERALES -->
     <div class="section" id="conceptos">
-        <h2 class="section-title">Conceptos Generales</h2>
+        <h2 class="section-title" data-es="Conceptos Generales" data-en="General Concepts">Conceptos Generales</h2>
         <div class="cards">
-            <div class="card" data-search="endpoint punto final equipo dispositivo pc servidor">
+            <div class="card" data-search="endpoint punto final equipo dispositivo pc servidor"
+                 data-desc-es="Cualquier dispositivo que se conecta a la red: <strong>PC, portatil, servidor, movil</strong>. Es lo que CrowdStrike protege. Cada endpoint tiene un sensor instalado."
+                 data-desc-en="Any device that connects to the network: <strong>PC, laptop, server, mobile</strong>. This is what CrowdStrike protects. Each endpoint has a sensor installed.">
                 <div class="term">Endpoint</div>
                 <span class="term-es">Punto final / Equipo</span>
                 <div class="desc">Cualquier dispositivo que se conecta a la red: <strong>PC, portatil, servidor, movil</strong>. Es lo que CrowdStrike protege. Cada endpoint tiene un sensor instalado.</div>
                 <span class="tag tag-crowdstrike">Concepto fundamental</span>
             </div>
-            <div class="card" data-search="cloud native nativo nube disenado">
+            <div class="card" data-search="cloud native nativo nube disenado"
+                 data-desc-es="Disenado para funcionar en la nube <strong>desde el principio</strong> (no adaptado despues). <strong>CrowdStrike Falcon es cloud-native</strong>, no necesitas servidores propios."
+                 data-desc-en="Designed to work in the cloud <strong>from the ground up</strong> (not adapted later). <strong>CrowdStrike Falcon is cloud-native</strong>, you don't need your own servers.">
                 <div class="term">Cloud-native</div>
                 <span class="term-es">Nativo en la nube</span>
                 <div class="desc">Disenado para funcionar en la nube <strong>desde el principio</strong> (no adaptado despues). <strong>CrowdStrike Falcon es cloud-native</strong>, no necesitas servidores propios.</div>
                 <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
             </div>
-            <div class="card" data-search="on premises on-prem local instalaciones servidor propio">
+            <div class="card" data-search="on premises on-prem local instalaciones servidor propio"
+                 data-desc-es="Software que se instala en <strong>tus propios servidores</strong>, no en la nube. CrowdStrike NO es on-premises (es cloud)."
+                 data-desc-en="Software installed on <strong>your own servers</strong>, not in the cloud. CrowdStrike is NOT on-premises (it is cloud-based).">
                 <div class="term">On-premises</div>
                 <span class="term-es">En local / En las instalaciones</span>
                 <div class="desc">Software que se instala en <strong>tus propios servidores</strong>, no en la nube. CrowdStrike NO es on-premises (es cloud).</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="vulnerability vulnerabilidad debilidad sistema fallo">
+            <div class="card" data-search="vulnerability vulnerabilidad debilidad sistema fallo"
+                 data-desc-es="<strong>Debilidad en un sistema</strong> que un atacante podria aprovechar. Se clasifican con puntuacion CVSS (0-10, siendo 10 la mas critica)."
+                 data-desc-en="A <strong>weakness in a system</strong> that an attacker could exploit. They are classified with a CVSS score (0-10, with 10 being the most critical).">
                 <div class="term">Vulnerability</div>
                 <span class="term-es">Vulnerabilidad</span>
                 <div class="desc"><strong>Debilidad en un sistema</strong> que un atacante podria aprovechar. Se clasifican con puntuacion CVSS (0-10, siendo 10 la mas critica).</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="patch parche actualizacion correccion">
+            <div class="card" data-search="patch parche actualizacion correccion"
+                 data-desc-es="<strong>Actualizacion que corrige una vulnerabilidad</strong> o bug. Aplicar parches a tiempo es una de las defensas mas basicas e importantes."
+                 data-desc-en="An <strong>update that fixes a vulnerability</strong> or bug. Applying patches on time is one of the most basic and important defenses.">
                 <div class="term">Patch</div>
                 <span class="term-es">Parche</span>
                 <div class="desc"><strong>Actualizacion que corrige una vulnerabilidad</strong> o bug. Aplicar parches a tiempo es una de las defensas mas basicas e importantes.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="compliance cumplimiento normativo regulacion gdpr pci">
+            <div class="card" data-search="compliance cumplimiento normativo regulacion gdpr pci"
+                 data-desc-es="Cumplir con <strong>regulaciones de seguridad</strong> como GDPR (datos personales en Europa), PCI-DSS (datos de tarjetas), HIPAA (datos medicos), etc."
+                 data-desc-en="Complying with <strong>security regulations</strong> such as GDPR (personal data in Europe), PCI-DSS (card data), HIPAA (medical data), etc.">
                 <div class="term">Compliance</div>
                 <span class="term-es">Cumplimiento normativo</span>
                 <div class="desc">Cumplir con <strong>regulaciones de seguridad</strong> como GDPR (datos personales en Europa), PCI-DSS (datos de tarjetas), HIPAA (datos medicos), etc.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="remediation remediacion solucion corregir arreglar">
+            <div class="card" data-search="remediation remediacion solucion corregir arreglar"
+                 data-desc-es="Las <strong>acciones que tomas para solucionar</strong> un problema de seguridad: parchear, aislar, eliminar malware, cambiar credenciales, etc."
+                 data-desc-en="The <strong>actions you take to fix</strong> a security problem: patching, isolating, removing malware, changing credentials, etc.">
                 <div class="term">Remediation</div>
                 <span class="term-es">Remediacion</span>
                 <div class="desc">Las <strong>acciones que tomas para solucionar</strong> un problema de seguridad: parchear, aislar, eliminar malware, cambiar credenciales, etc.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="quarantine cuarentena aislar archivo sospechoso">
+            <div class="card" data-search="quarantine cuarentena aislar archivo sospechoso"
+                 data-desc-es="<strong>Aislar un archivo sospechoso</strong> para que no pueda ejecutarse ni hacer dano. CrowdStrike puede poner archivos en cuarentena automaticamente."
+                 data-desc-en="<strong>Isolating a suspicious file</strong> so it cannot execute or cause harm. CrowdStrike can quarantine files automatically.">
                 <div class="term">Quarantine</div>
                 <span class="term-es">Cuarentena</span>
                 <div class="desc"><strong>Aislar un archivo sospechoso</strong> para que no pueda ejecutarse ni hacer dano. CrowdStrike puede poner archivos en cuarentena automaticamente.</div>
@@ -501,34 +585,46 @@
 
     <!-- FALCON PLATFORM -->
     <div class="section" id="falcon">
-        <h2 class="section-title">CrowdStrike Falcon - La Plataforma</h2>
+        <h2 class="section-title" data-es="CrowdStrike Falcon - La Plataforma" data-en="CrowdStrike Falcon - The Platform">CrowdStrike Falcon - La Plataforma</h2>
         <div class="cards">
-            <div class="card" data-search="crowdstrike falcon plataforma seguridad cloud">
+            <div class="card" data-search="crowdstrike falcon plataforma seguridad cloud"
+                 data-desc-es="La <strong>plataforma completa de ciberseguridad</strong> de CrowdStrike. Es cloud-native: todo se gestiona desde la nube, el sensor es ligero y no necesita servidores locales."
+                 data-desc-en="CrowdStrike's <strong>complete cybersecurity platform</strong>. It is cloud-native: everything is managed from the cloud, the sensor is lightweight and requires no local servers.">
                 <div class="term">CrowdStrike Falcon</div>
                 <div class="desc">La <strong>plataforma completa de ciberseguridad</strong> de CrowdStrike. Es cloud-native: todo se gestiona desde la nube, el sensor es ligero y no necesita servidores locales.</div>
                 <span class="tag tag-crowdstrike">La plataforma</span>
             </div>
-            <div class="card" data-search="falcon console consola interfaz web panel control gestion">
+            <div class="card" data-search="falcon console consola interfaz web panel control gestion"
+                 data-desc-es="La <strong>interfaz web donde gestionas todo</strong>: ves alertas, configuras politicas, gestionas equipos, investigas incidentes. Es tu panel de control diario como administrador."
+                 data-desc-en="The <strong>web interface where you manage everything</strong>: view alerts, configure policies, manage devices, investigate incidents. It is your daily control panel as an administrator.">
                 <div class="term">Falcon Console</div>
                 <div class="desc">La <strong>interfaz web donde gestionas todo</strong>: ves alertas, configuras politicas, gestionas equipos, investigas incidentes. Es tu panel de control diario como administrador.</div>
                 <span class="tag tag-crowdstrike">Tu herramienta diaria</span>
             </div>
-            <div class="card" data-search="falcon sensor agente ligero instala endpoint recopila datos">
+            <div class="card" data-search="falcon sensor agente ligero instala endpoint recopila datos"
+                 data-desc-es="El <strong>agente ligero que se instala en cada endpoint</strong> (PC, servidor). Recopila datos de todo lo que pasa en el equipo y los envia a la nube de CrowdStrike. No necesita actualizaciones de firmas porque la inteligencia esta en la nube."
+                 data-desc-en="The <strong>lightweight agent installed on each endpoint</strong> (PC, server). It collects data on everything happening on the device and sends it to the CrowdStrike cloud. It does not need signature updates because the intelligence is in the cloud.">
                 <div class="term">Falcon Sensor</div>
                 <div class="desc">El <strong>agente ligero que se instala en cada endpoint</strong> (PC, servidor). Recopila datos de todo lo que pasa en el equipo y los envia a la nube de CrowdStrike. No necesita actualizaciones de firmas porque la inteligencia esta en la nube.</div>
                 <span class="tag tag-crowdstrike">Componente fundamental</span>
             </div>
-            <div class="card" data-search="cid customer id identificador cliente instalacion">
+            <div class="card" data-search="cid customer id identificador cliente instalacion"
+                 data-desc-es="Tu <strong>identificador unico como cliente</strong> de CrowdStrike. Lo necesitas para instalar sensores - es como la &quot;llave&quot; que conecta tus equipos con tu cuenta de CrowdStrike."
+                 data-desc-en="Your <strong>unique customer identifier</strong> in CrowdStrike. You need it to install sensors - it is like the &quot;key&quot; that connects your devices to your CrowdStrike account.">
                 <div class="term">CID - Customer ID</div>
                 <div class="desc">Tu <strong>identificador unico como cliente</strong> de CrowdStrike. Lo necesitas para instalar sensores - es como la "llave" que conecta tus equipos con tu cuenta de CrowdStrike.</div>
                 <span class="tag tag-crowdstrike">Necesario para instalar</span>
             </div>
-            <div class="card" data-search="falcon cloud nube infraestructura procesamiento ia">
+            <div class="card" data-search="falcon cloud nube infraestructura procesamiento ia"
+                 data-desc-es="La <strong>infraestructura en la nube</strong> de CrowdStrike donde se procesan todos los datos y se ejecuta la IA de deteccion. Tu sensor envia datos aqui."
+                 data-desc-en="CrowdStrike's <strong>cloud infrastructure</strong> where all data is processed and the detection AI runs. Your sensor sends data here.">
                 <div class="term">Falcon Cloud</div>
                 <div class="desc">La <strong>infraestructura en la nube</strong> de CrowdStrike donde se procesan todos los datos y se ejecuta la IA de deteccion. Tu sensor envia datos aqui.</div>
                 <span class="tag tag-crowdstrike">Infraestructura</span>
             </div>
-            <div class="card" data-search="threat graph base datos masiva correlacion eventos tiempo real">
+            <div class="card" data-search="threat graph base datos masiva correlacion eventos tiempo real"
+                 data-desc-es="La <strong>base de datos masiva de CrowdStrike</strong> que correlaciona eventos de TODOS sus clientes en tiempo real. Procesa billones de eventos por semana. Si un ataque se ve en un cliente, todos los demas se protegen automaticamente."
+                 data-desc-en="CrowdStrike's <strong>massive database</strong> that correlates events from ALL its customers in real time. It processes trillions of events per week. If an attack is seen at one customer, all others are automatically protected.">
                 <div class="term">Threat Graph</div>
                 <div class="desc">La <strong>base de datos masiva de CrowdStrike</strong> que correlaciona eventos de TODOS sus clientes en tiempo real. Procesa billones de eventos por semana. Si un ataque se ve en un cliente, todos los demas se protegen automaticamente.</div>
                 <span class="tag tag-crowdstrike">Ventaja competitiva</span>
@@ -538,54 +634,74 @@
 
     <!-- MODULOS FALCON -->
     <div class="section" id="modulos">
-        <h2 class="section-title">Modulos de Falcon</h2>
+        <h2 class="section-title" data-es="Modulos de Falcon" data-en="Falcon Modules">Modulos de Falcon</h2>
         <div class="cards">
-            <div class="card" data-search="falcon prevent ngav antivirus bloqueo malware prevencion">
+            <div class="card" data-search="falcon prevent ngav antivirus bloqueo malware prevencion"
+                 data-desc-es="Modulo de <strong>NGAV (antivirus de nueva generacion)</strong>. Bloquea malware y ataques conocidos y desconocidos usando machine learning e IOAs. Es la primera linea de defensa."
+                 data-desc-en="<strong>NGAV (Next-Generation Antivirus)</strong> module. Blocks known and unknown malware and attacks using machine learning and IOAs. It is the first line of defense.">
                 <div class="term">Falcon Prevent</div>
                 <div class="desc">Modulo de <strong>NGAV (antivirus de nueva generacion)</strong>. Bloquea malware y ataques conocidos y desconocidos usando machine learning e IOAs. Es la primera linea de defensa.</div>
                 <span class="tag tag-crowdstrike">NGAV</span>
             </div>
-            <div class="card" data-search="falcon insight edr visibilidad endpoint investigar incidentes">
+            <div class="card" data-search="falcon insight edr visibilidad endpoint investigar incidentes"
+                 data-desc-es="Modulo de <strong>EDR</strong>. Proporciona visibilidad completa de lo que pasa en cada endpoint. Permite <strong>investigar y responder a incidentes</strong> con detalle: ver procesos, conexiones, archivos modificados, etc."
+                 data-desc-en="<strong>EDR</strong> module. Provides complete visibility into what happens on each endpoint. Allows you to <strong>investigate and respond to incidents</strong> in detail: view processes, connections, modified files, etc.">
                 <div class="term">Falcon Insight</div>
                 <div class="desc">Modulo de <strong>EDR</strong>. Proporciona visibilidad completa de lo que pasa en cada endpoint. Permite <strong>investigar y responder a incidentes</strong> con detalle: ver procesos, conexiones, archivos modificados, etc.</div>
                 <span class="tag tag-crowdstrike">EDR</span>
             </div>
-            <div class="card" data-search="falcon overwatch threat hunting equipo humano 24/7 busqueda">
+            <div class="card" data-search="falcon overwatch threat hunting equipo humano 24/7 busqueda"
+                 data-desc-es="<strong>Equipo humano de CrowdStrike</strong> que hace threat hunting 24/7. Son analistas expertos que buscan amenazas activamente que las maquinas podrian no detectar. Es un servicio premium."
+                 data-desc-en="<strong>CrowdStrike's human team</strong> that does threat hunting 24/7. They are expert analysts who actively search for threats that machines might not detect. It is a premium service.">
                 <div class="term">Falcon OverWatch</div>
                 <div class="desc"><strong>Equipo humano de CrowdStrike</strong> que hace threat hunting 24/7. Son analistas expertos que buscan amenazas activamente que las maquinas podrian no detectar. Es un servicio premium.</div>
                 <span class="tag tag-crowdstrike">Servicio humano</span>
             </div>
-            <div class="card" data-search="falcon discover higiene ti aplicaciones cuentas activos inventario">
+            <div class="card" data-search="falcon discover higiene ti aplicaciones cuentas activos inventario"
+                 data-desc-es="Modulo de <strong>higiene de TI</strong>. Te muestra que aplicaciones, cuentas de usuario y activos tienes en tu red. Ayuda a mantener un inventario actualizado y detectar shadow IT."
+                 data-desc-en="<strong>IT hygiene</strong> module. Shows you what applications, user accounts and assets are on your network. Helps maintain an updated inventory and detect shadow IT.">
                 <div class="term">Falcon Discover</div>
                 <div class="desc">Modulo de <strong>higiene de TI</strong>. Te muestra que aplicaciones, cuentas de usuario y activos tienes en tu red. Ayuda a mantener un inventario actualizado y detectar shadow IT.</div>
                 <span class="tag tag-crowdstrike">Visibilidad</span>
             </div>
-            <div class="card" data-search="falcon spotlight vulnerabilidades gestion escaneo sin escaneo">
+            <div class="card" data-search="falcon spotlight vulnerabilidades gestion escaneo sin escaneo"
+                 data-desc-es="<strong>Gestion de vulnerabilidades sin necesidad de escaneos.</strong> Usa los datos que el sensor ya recopila para identificar vulnerabilidades en el software instalado. Sin escaneos extra = sin impacto en rendimiento."
+                 data-desc-en="<strong>Vulnerability management without the need for scans.</strong> Uses data the sensor already collects to identify vulnerabilities in installed software. No extra scans = no performance impact.">
                 <div class="term">Falcon Spotlight</div>
                 <div class="desc"><strong>Gestion de vulnerabilidades sin necesidad de escaneos.</strong> Usa los datos que el sensor ya recopila para identificar vulnerabilidades en el software instalado. Sin escaneos extra = sin impacto en rendimiento.</div>
                 <span class="tag tag-crowdstrike">Vulnerabilidades</span>
             </div>
-            <div class="card" data-search="falcon fusion soar automatizacion flujos trabajo respuesta automatica">
+            <div class="card" data-search="falcon fusion soar automatizacion flujos trabajo respuesta automatica"
+                 data-desc-es="<strong>Motor de automatizacion</strong>. Permite crear flujos de trabajo automaticos: &quot;si pasa X, haz Y&quot;. Ejemplo: si se detecta ransomware, aislar el equipo y notificar al equipo de seguridad automaticamente."
+                 data-desc-en="<strong>Automation engine</strong>. Allows you to create automated workflows: &quot;if X happens, do Y&quot;. Example: if ransomware is detected, isolate the device and notify the security team automatically.">
                 <div class="term">Falcon Fusion (SOAR)</div>
                 <div class="desc"><strong>Motor de automatizacion</strong>. Permite crear flujos de trabajo automaticos: "si pasa X, haz Y". Ejemplo: si se detecta ransomware, aislar el equipo y notificar al equipo de seguridad automaticamente.</div>
                 <span class="tag tag-crowdstrike">Automatizacion</span>
             </div>
-            <div class="card" data-search="falcon identity protection identidad credenciales active directory">
+            <div class="card" data-search="falcon identity protection identidad credenciales active directory"
+                 data-desc-es="<strong>Proteccion de identidades y credenciales.</strong> Detecta ataques a Active Directory, uso de credenciales robadas, movimiento lateral basado en identidad, etc."
+                 data-desc-en="<strong>Identity and credential protection.</strong> Detects attacks on Active Directory, use of stolen credentials, identity-based lateral movement, etc.">
                 <div class="term">Falcon Identity Protection</div>
                 <div class="desc"><strong>Proteccion de identidades y credenciales.</strong> Detecta ataques a Active Directory, uso de credenciales robadas, movimiento lateral basado en identidad, etc.</div>
                 <span class="tag tag-crowdstrike">Identidad</span>
             </div>
-            <div class="card" data-search="falcon mobile movil ios android proteccion dispositivos">
+            <div class="card" data-search="falcon mobile movil ios android proteccion dispositivos"
+                 data-desc-es="<strong>Proteccion para dispositivos moviles</strong> (iOS y Android). Extiende la visibilidad y proteccion de Falcon a smartphones y tablets corporativos."
+                 data-desc-en="<strong>Protection for mobile devices</strong> (iOS and Android). Extends Falcon's visibility and protection to corporate smartphones and tablets.">
                 <div class="term">Falcon for Mobile</div>
                 <div class="desc"><strong>Proteccion para dispositivos moviles</strong> (iOS y Android). Extiende la visibilidad y proteccion de Falcon a smartphones y tablets corporativos.</div>
                 <span class="tag tag-crowdstrike">Movil</span>
             </div>
-            <div class="card" data-search="falcon firewall management cortafuegos gestion host windows">
+            <div class="card" data-search="falcon firewall management cortafuegos gestion host windows"
+                 data-desc-es="Gestion del <strong>firewall del host</strong> (Windows Firewall) desde la consola de Falcon. Permite crear y gestionar reglas de firewall de forma centralizada."
+                 data-desc-en="Management of the <strong>host firewall</strong> (Windows Firewall) from the Falcon console. Allows you to create and manage firewall rules centrally.">
                 <div class="term">Falcon Firewall Management</div>
                 <div class="desc">Gestion del <strong>firewall del host</strong> (Windows Firewall) desde la consola de Falcon. Permite crear y gestionar reglas de firewall de forma centralizada.</div>
                 <span class="tag tag-crowdstrike">Firewall</span>
             </div>
-            <div class="card" data-search="falcon device control usb perifericos control dispositivos">
+            <div class="card" data-search="falcon device control usb perifericos control dispositivos"
+                 data-desc-es="<strong>Control de dispositivos USB y perifericos.</strong> Puedes definir politicas para permitir, bloquear o limitar el uso de USBs, discos externos, etc."
+                 data-desc-en="<strong>USB and peripheral device control.</strong> You can define policies to allow, block or limit the use of USBs, external drives, etc.">
                 <div class="term">Falcon Device Control</div>
                 <div class="desc"><strong>Control de dispositivos USB y perifericos.</strong> Puedes definir politicas para permitir, bloquear o limitar el uso de USBs, discos externos, etc.</div>
                 <span class="tag tag-crowdstrike">USB</span>
@@ -595,49 +711,67 @@
 
     <!-- GESTION FALCON -->
     <div class="section" id="gestion">
-        <h2 class="section-title">Gestion y Configuracion de Falcon</h2>
+        <h2 class="section-title" data-es="Gestion y Configuracion de Falcon" data-en="Falcon Management and Configuration">Gestion y Configuracion de Falcon</h2>
         <div class="cards">
-            <div class="card" data-search="host endpoint equipo sensor instalado consola">
+            <div class="card" data-search="host endpoint equipo sensor instalado consola"
+                 data-desc-es="Un <strong>equipo donde esta instalado el sensor</strong> de CrowdStrike. Cada host aparece en la consola con su nombre, IP, sistema operativo, ultimo check-in, etc."
+                 data-desc-en="A <strong>device where the CrowdStrike sensor is installed</strong>. Each host appears in the console with its name, IP, operating system, last check-in, etc.">
                 <div class="term">Host / Endpoint</div>
                 <div class="desc">Un <strong>equipo donde esta instalado el sensor</strong> de CrowdStrike. Cada host aparece en la consola con su nombre, IP, sistema operativo, ultimo check-in, etc.</div>
                 <span class="tag tag-crowdstrike">Gestion</span>
             </div>
-            <div class="card" data-search="host group grupo equipos agrupacion politicas estatico dinamico">
+            <div class="card" data-search="host group grupo equipos agrupacion politicas estatico dinamico"
+                 data-desc-es="<strong>Agrupacion de equipos.</strong> Sirve para aplicar diferentes politicas a diferentes grupos. Pueden ser <strong>estaticos</strong> (anadir equipos manualmente) o <strong>dinamicos</strong> (se llenan automaticamente segun reglas como SO, dominio, etc.)."
+                 data-desc-en="<strong>Grouping of devices.</strong> Used to apply different policies to different groups. Can be <strong>static</strong> (add devices manually) or <strong>dynamic</strong> (auto-filled based on rules like OS, domain, etc.).">
                 <div class="term">Host Group</div>
                 <div class="desc"><strong>Agrupacion de equipos.</strong> Sirve para aplicar diferentes politicas a diferentes grupos. Pueden ser <strong>estaticos</strong> (anadir equipos manualmente) o <strong>dinamicos</strong> (se llenan automaticamente segun reglas como SO, dominio, etc.).</div>
                 <span class="tag tag-crowdstrike">Gestion</span>
             </div>
-            <div class="card" data-search="prevention policy politica prevencion bloqueo amenazas configuracion">
+            <div class="card" data-search="prevention policy politica prevencion bloqueo amenazas configuracion"
+                 data-desc-es="Politica que define <strong>que amenazas bloquea automaticamente</strong> Falcon y como responde. Puedes tener politicas agresivas para servidores criticos y mas permisivas para equipos de desarrollo."
+                 data-desc-en="Policy that defines <strong>which threats Falcon automatically blocks</strong> and how it responds. You can have aggressive policies for critical servers and more permissive ones for development machines.">
                 <div class="term">Prevention Policy</div>
                 <div class="desc">Politica que define <strong>que amenazas bloquea automaticamente</strong> Falcon y como responde. Puedes tener politicas agresivas para servidores criticos y mas permisivas para equipos de desarrollo.</div>
                 <span class="tag tag-crowdstrike">Configuracion clave</span>
             </div>
-            <div class="card" data-search="detection policy politica deteccion alertar comportamiento">
+            <div class="card" data-search="detection policy politica deteccion alertar comportamiento"
+                 data-desc-es="Politica que define <strong>que comportamientos debe detectar y alertar</strong> (sin necesariamente bloquear). Controla la sensibilidad de las detecciones."
+                 data-desc-en="Policy that defines <strong>which behaviors to detect and alert on</strong> (without necessarily blocking). Controls detection sensitivity.">
                 <div class="term">Detection Policy</div>
                 <div class="desc">Politica que define <strong>que comportamientos debe detectar y alertar</strong> (sin necesariamente bloquear). Controla la sensibilidad de las detecciones.</div>
                 <span class="tag tag-crowdstrike">Configuracion</span>
             </div>
-            <div class="card" data-search="response policy politica respuesta acciones aislar remoto">
+            <div class="card" data-search="response policy politica respuesta acciones aislar remoto"
+                 data-desc-es="Politica que define <strong>que acciones de respuesta estan disponibles</strong>: si se puede aislar un equipo remotamente, si se pueden ejecutar scripts, etc."
+                 data-desc-en="Policy that defines <strong>which response actions are available</strong>: whether a device can be isolated remotely, whether scripts can be run, etc.">
                 <div class="term">Response Policy</div>
                 <div class="desc">Politica que define <strong>que acciones de respuesta estan disponibles</strong>: si se puede aislar un equipo remotamente, si se pueden ejecutar scripts, etc.</div>
                 <span class="tag tag-crowdstrike">Configuracion</span>
             </div>
-            <div class="card" data-search="sensor update policy politica actualizacion sensor version">
+            <div class="card" data-search="sensor update policy politica actualizacion sensor version"
+                 data-desc-es="Politica que controla <strong>como y cuando se actualizan los sensores</strong> en los endpoints. Puedes definir ventanas de mantenimiento, versiones especificas, etc."
+                 data-desc-en="Policy that controls <strong>how and when sensors are updated</strong> on endpoints. You can define maintenance windows, specific versions, etc.">
                 <div class="term">Sensor Update Policy</div>
                 <div class="desc">Politica que controla <strong>como y cuando se actualizan los sensores</strong> en los endpoints. Puedes definir ventanas de mantenimiento, versiones especificas, etc.</div>
                 <span class="tag tag-crowdstrike">Configuracion</span>
             </div>
-            <div class="card" data-search="exclusion excluir ignorar falso positivo software legitimo">
+            <div class="card" data-search="exclusion excluir ignorar falso positivo software legitimo"
+                 data-desc-es="Regla para que Falcon <strong>ignore ciertos archivos, carpetas o procesos</strong>. Se usa cuando hay falsos positivos con software legitimo. Cuidado: no abuses o crearas puntos ciegos."
+                 data-desc-en="A rule for Falcon to <strong>ignore certain files, folders or processes</strong>. Used when there are false positives with legitimate software. Be careful: overusing exclusions creates blind spots.">
                 <div class="term">Exclusion</div>
                 <div class="desc">Regla para que Falcon <strong>ignore ciertos archivos, carpetas o procesos</strong>. Se usa cuando hay falsos positivos con software legitimo. Cuidado: no abuses o crearas puntos ciegos.</div>
                 <span class="tag tag-crowdstrike">Configuracion</span>
             </div>
-            <div class="card" data-search="containment network containment aislar equipo red comprometido">
+            <div class="card" data-search="containment network containment aislar equipo red comprometido"
+                 data-desc-es="<strong>Aislar un equipo de la red</strong> para que no pueda comunicarse con nada excepto con la nube de CrowdStrike. Se usa cuando un equipo esta comprometido. Es como ponerle una burbuja al equipo infectado."
+                 data-desc-en="<strong>Isolating a device from the network</strong> so it cannot communicate with anything except the CrowdStrike cloud. Used when a device is compromised. It is like putting the infected device in a bubble.">
                 <div class="term">Network Containment</div>
                 <div class="desc"><strong>Aislar un equipo de la red</strong> para que no pueda comunicarse con nada excepto con la nube de CrowdStrike. Se usa cuando un equipo esta comprometido. Es como ponerle una burbuja al equipo infectado.</div>
                 <span class="tag tag-crowdstrike">Respuesta a incidentes</span>
             </div>
-            <div class="card" data-search="rtr real time response acceso remoto comandos scripts investigar">
+            <div class="card" data-search="rtr real time response acceso remoto comandos scripts investigar"
+                 data-desc-es="<strong>Acceso remoto al equipo desde la consola.</strong> Permite ejecutar comandos, recopilar archivos, matar procesos, ver registros... Como un SSH/RDP pero a traves de CrowdStrike. Muy potente para investigar incidentes."
+                 data-desc-en="<strong>Remote access to the device from the console.</strong> Allows you to run commands, collect files, kill processes, view logs... Like SSH/RDP but through CrowdStrike. Very powerful for investigating incidents.">
                 <div class="term">Real Time Response (RTR)</div>
                 <div class="desc"><strong>Acceso remoto al equipo desde la consola.</strong> Permite ejecutar comandos, recopilar archivos, matar procesos, ver registros... Como un SSH/RDP pero a traves de CrowdStrike. Muy potente para investigar incidentes.</div>
                 <span class="tag tag-crowdstrike">Herramienta potente</span>
@@ -647,29 +781,39 @@
 
     <!-- ALERTAS -->
     <div class="section" id="alertas">
-        <h2 class="section-title">Alertas y Detecciones en Falcon</h2>
+        <h2 class="section-title" data-es="Alertas y Detecciones en Falcon" data-en="Alerts and Detections in Falcon">Alertas y Detecciones en Falcon</h2>
         <div class="cards">
-            <div class="card" data-search="detection alerta deteccion actividad sospechosa maliciosa">
+            <div class="card" data-search="detection alerta deteccion actividad sospechosa maliciosa"
+                 data-desc-es="<strong>Alerta que Falcon genera</strong> cuando detecta actividad sospechosa o maliciosa en un endpoint. Cada deteccion tiene severidad, detalle del proceso, y mapeo a MITRE ATT&amp;CK."
+                 data-desc-en="<strong>Alert that Falcon generates</strong> when it detects suspicious or malicious activity on an endpoint. Each detection has severity, process detail, and MITRE ATT&amp;CK mapping.">
                 <div class="term">Detection</div>
                 <div class="desc"><strong>Alerta que Falcon genera</strong> cuando detecta actividad sospechosa o maliciosa en un endpoint. Cada deteccion tiene severidad, detalle del proceso, y mapeo a MITRE ATT&CK.</div>
                 <span class="tag tag-crowdstrike">Trabajo diario</span>
             </div>
-            <div class="card" data-search="severity severidad gravedad critical high medium low informational">
+            <div class="card" data-search="severity severidad gravedad critical high medium low informational"
+                 data-desc-es="Nivel de gravedad: <strong>Informational</strong> (info) → <strong>Low</strong> (baja) → <strong>Medium</strong> (media) → <strong>High</strong> (alta) → <strong>Critical</strong> (critica). Prioriza siempre Critical y High."
+                 data-desc-en="Severity level: <strong>Informational</strong> → <strong>Low</strong> → <strong>Medium</strong> → <strong>High</strong> → <strong>Critical</strong>. Always prioritize Critical and High.">
                 <div class="term">Severity</div>
                 <div class="desc">Nivel de gravedad: <strong>Informational</strong> (info) → <strong>Low</strong> (baja) → <strong>Medium</strong> (media) → <strong>High</strong> (alta) → <strong>Critical</strong> (critica). Prioriza siempre Critical y High.</div>
                 <span class="tag tag-crowdstrike">Priorizacion</span>
             </div>
-            <div class="card" data-search="tactic technique tactica tecnica mitre ataque tipo">
+            <div class="card" data-search="tactic technique tactica tecnica mitre ataque tipo"
+                 data-desc-es="Referencia al framework MITRE ATT&amp;CK dentro de la deteccion. Te dice <strong>QUE tipo de ataque se detecto</strong> (ej: &quot;Execution&quot; = se ejecuto algo, &quot;Persistence&quot; = intento de persistir)."
+                 data-desc-en="Reference to the MITRE ATT&amp;CK framework within the detection. It tells you <strong>WHAT type of attack was detected</strong> (e.g.: &quot;Execution&quot; = something was executed, &quot;Persistence&quot; = attempt to persist).">
                 <div class="term">Tactic / Technique</div>
                 <div class="desc">Referencia al framework MITRE ATT&CK dentro de la deteccion. Te dice <strong>QUE tipo de ataque se detecto</strong> (ej: "Execution" = se ejecuto algo, "Persistence" = intento de persistir).</div>
                 <span class="tag tag-crowdstrike">Investigacion</span>
             </div>
-            <div class="card" data-search="process tree arbol procesos cadena padre hijo investigar">
+            <div class="card" data-search="process tree arbol procesos cadena padre hijo investigar"
+                 data-desc-es="Vista que muestra la <strong>cadena de procesos: que proceso lanzo que otro</strong>. Ej: el usuario abrio Word → Word lanzo PowerShell → PowerShell descargo malware. Muy util para investigar."
+                 data-desc-en="A view that shows the <strong>chain of processes: which process launched which other</strong>. E.g.: the user opened Word → Word launched PowerShell → PowerShell downloaded malware. Very useful for investigation.">
                 <div class="term">Process Tree</div>
                 <div class="desc">Vista que muestra la <strong>cadena de procesos: que proceso lanzo que otro</strong>. Ej: el usuario abrio Word → Word lanzo PowerShell → PowerShell descargo malware. Muy util para investigar.</div>
                 <span class="tag tag-crowdstrike">Investigacion</span>
             </div>
-            <div class="card" data-search="status estado deteccion new in progress true false positive closed">
+            <div class="card" data-search="status estado deteccion new in progress true false positive closed"
+                 data-desc-es="Estado de la deteccion: <strong>New</strong> (nueva, sin revisar) → <strong>In Progress</strong> (investigando) → <strong>True/False Positive</strong> (confirmada o descartada) → <strong>Closed</strong> (cerrada)."
+                 data-desc-en="Detection status: <strong>New</strong> (not yet reviewed) → <strong>In Progress</strong> (investigating) → <strong>True/False Positive</strong> (confirmed or dismissed) → <strong>Closed</strong>.">
                 <div class="term">Detection Status</div>
                 <div class="desc">Estado de la deteccion: <strong>New</strong> (nueva, sin revisar) → <strong>In Progress</strong> (investigando) → <strong>True/False Positive</strong> (confirmada o descartada) → <strong>Closed</strong> (cerrada).</div>
                 <span class="tag tag-crowdstrike">Flujo de trabajo</span>
@@ -679,64 +823,84 @@
 
     <!-- RED Y SISTEMAS -->
     <div class="section" id="red">
-        <h2 class="section-title">Red y Sistemas</h2>
+        <h2 class="section-title" data-es="Red y Sistemas" data-en="Network and Systems">Red y Sistemas</h2>
         <div class="cards">
-            <div class="card" data-search="ip address direccion ip identificador dispositivo red">
+            <div class="card" data-search="ip address direccion ip identificador dispositivo red"
+                 data-desc-es="Numero que <strong>identifica a un dispositivo en la red</strong> (ej: 192.168.1.100 para red local, 8.8.8.8 para internet). Cada equipo en Falcon muestra su IP."
+                 data-desc-en="A number that <strong>identifies a device on the network</strong> (e.g.: 192.168.1.100 for local network, 8.8.8.8 for internet). Each device in Falcon shows its IP.">
                 <div class="term">IP Address</div>
                 <span class="term-es">Direccion IP</span>
                 <div class="desc">Numero que <strong>identifica a un dispositivo en la red</strong> (ej: 192.168.1.100 para red local, 8.8.8.8 para internet). Cada equipo en Falcon muestra su IP.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="dns domain name system nombres dominio traduccion">
+            <div class="card" data-search="dns domain name system nombres dominio traduccion"
+                 data-desc-es="<strong>Traduce nombres (google.com) a direcciones IP.</strong> Los atacantes a menudo usan DNS para comunicarse con sus servidores de comando y control (C2)."
+                 data-desc-en="<strong>Translates names (google.com) to IP addresses.</strong> Attackers often use DNS to communicate with their command and control (C2) servers.">
                 <div class="term">DNS</div>
                 <span class="term-en">Domain Name System</span>
                 <span class="term-es">Sistema de nombres de dominio</span>
                 <div class="desc"><strong>Traduce nombres (google.com) a direcciones IP.</strong> Los atacantes a menudo usan DNS para comunicarse con sus servidores de comando y control (C2).</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="port puerto servicio 80 443 22 3389 rdp ssh">
+            <div class="card" data-search="port puerto servicio 80 443 22 3389 rdp ssh"
+                 data-desc-es="Numero que identifica un servicio: <strong>80</strong> = web, <strong>443</strong> = web segura (HTTPS), <strong>22</strong> = SSH, <strong>3389</strong> = RDP (escritorio remoto), <strong>445</strong> = SMB (compartir archivos Windows)."
+                 data-desc-en="A number that identifies a service: <strong>80</strong> = web, <strong>443</strong> = secure web (HTTPS), <strong>22</strong> = SSH, <strong>3389</strong> = RDP (remote desktop), <strong>445</strong> = SMB (Windows file sharing).">
                 <div class="term">Port</div>
                 <span class="term-es">Puerto</span>
                 <div class="desc">Numero que identifica un servicio: <strong>80</strong> = web, <strong>443</strong> = web segura (HTTPS), <strong>22</strong> = SSH, <strong>3389</strong> = RDP (escritorio remoto), <strong>445</strong> = SMB (compartir archivos Windows).</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="active directory ad directorio activo usuarios equipos permisos">
+            <div class="card" data-search="active directory ad directorio activo usuarios equipos permisos"
+                 data-desc-es="Sistema de Microsoft que <strong>gestiona usuarios, equipos y permisos</strong> en una red empresarial. Es el <strong>objetivo #1 de los atacantes</strong> porque quien controla el AD controla todo."
+                 data-desc-en="Microsoft system that <strong>manages users, devices and permissions</strong> in an enterprise network. It is the <strong>#1 target for attackers</strong> because whoever controls AD controls everything.">
                 <div class="term">Active Directory (AD)</div>
                 <span class="term-es">Directorio Activo</span>
                 <div class="desc">Sistema de Microsoft que <strong>gestiona usuarios, equipos y permisos</strong> en una red empresarial. Es el <strong>objetivo #1 de los atacantes</strong> porque quien controla el AD controla todo.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="domain controller dc controlador dominio servidor ad">
+            <div class="card" data-search="domain controller dc controlador dominio servidor ad"
+                 data-desc-es="Servidor que <strong>gestiona el Active Directory</strong>. Si un atacante lo compromete, tiene control total de la red. Protegerlo es prioridad maxima."
+                 data-desc-en="Server that <strong>manages Active Directory</strong>. If an attacker compromises it, they have total control of the network. Protecting it is the top priority.">
                 <div class="term">Domain Controller (DC)</div>
                 <span class="term-es">Controlador de dominio</span>
                 <div class="desc">Servidor que <strong>gestiona el Active Directory</strong>. Si un atacante lo compromete, tiene control total de la red. Protegerlo es prioridad maxima.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="hash huella digital archivo md5 sha256 identificar malware">
+            <div class="card" data-search="hash huella digital archivo md5 sha256 identificar malware"
+                 data-desc-es="<strong>Huella digital unica de un archivo.</strong> Si cambias un solo byte, el hash cambia completamente. Se usa para identificar malware. Tipos: MD5, SHA-1, SHA-256. CrowdStrike los usa como IOCs."
+                 data-desc-en="A <strong>unique digital fingerprint of a file.</strong> If you change a single byte, the hash changes completely. Used to identify malware. Types: MD5, SHA-1, SHA-256. CrowdStrike uses them as IOCs.">
                 <div class="term">Hash</div>
                 <span class="term-es">Huella digital</span>
                 <div class="desc"><strong>Huella digital unica de un archivo.</strong> Si cambias un solo byte, el hash cambia completamente. Se usa para identificar malware. Tipos: MD5, SHA-1, SHA-256. CrowdStrike los usa como IOCs.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="c2 c&c command control comando servidor atacante instrucciones">
+            <div class="card" data-search="c2 c&c command control comando servidor atacante instrucciones"
+                 data-desc-es="<strong>Servidor del atacante</strong> que envia instrucciones al malware instalado en tus equipos. El malware &quot;llama a casa&quot; para recibir ordenes. CrowdStrike detecta estas comunicaciones."
+                 data-desc-en="The <strong>attacker's server</strong> that sends instructions to the malware installed on your devices. The malware &quot;calls home&quot; to receive orders. CrowdStrike detects these communications.">
                 <div class="term">C2 / C&C</div>
                 <span class="term-en">Command and Control</span>
                 <span class="term-es">Comando y control</span>
                 <div class="desc"><strong>Servidor del atacante</strong> que envia instrucciones al malware instalado en tus equipos. El malware "llama a casa" para recibir ordenes. CrowdStrike detecta estas comunicaciones.</div>
                 <span class="tag tag-importante">Muy importante</span>
             </div>
-            <div class="card" data-search="powershell scripting windows administracion atacantes">
+            <div class="card" data-search="powershell scripting windows administracion atacantes"
+                 data-desc-es="Lenguaje de scripting de Windows. Muy potente y por eso <strong>muy usado tanto por administradores como por atacantes</strong>. CrowdStrike monitoriza la actividad de PowerShell de cerca."
+                 data-desc-en="Windows scripting language. Very powerful and therefore <strong>widely used by both administrators and attackers</strong>. CrowdStrike closely monitors PowerShell activity.">
                 <div class="term">PowerShell</div>
                 <div class="desc">Lenguaje de scripting de Windows. Muy potente y por eso <strong>muy usado tanto por administradores como por atacantes</strong>. CrowdStrike monitoriza la actividad de PowerShell de cerca.</div>
                 <span class="tag tag-crowdstrike">Monitorizado por CrowdStrike</span>
             </div>
-            <div class="card" data-search="api application programming interface integracion automatizacion">
+            <div class="card" data-search="api application programming interface integracion automatizacion"
+                 data-desc-es="Forma de que <strong>dos programas se comuniquen entre si</strong>. CrowdStrike tiene APIs para integrarse con SIEM, SOAR, y otras herramientas de seguridad."
+                 data-desc-en="A way for <strong>two programs to communicate with each other</strong>. CrowdStrike has APIs to integrate with SIEM, SOAR, and other security tools.">
                 <div class="term">API</div>
                 <span class="term-en">Application Programming Interface</span>
                 <div class="desc">Forma de que <strong>dos programas se comuniquen entre si</strong>. CrowdStrike tiene APIs para integrarse con SIEM, SOAR, y otras herramientas de seguridad.</div>
                 <span class="tag tag-basico">Basico</span>
             </div>
-            <div class="card" data-search="registry registro windows configuracion persistencia malware">
+            <div class="card" data-search="registry registro windows configuracion persistencia malware"
+                 data-desc-es="<strong>Base de datos de configuracion de Windows.</strong> El malware a menudo modifica el registro para persistir (sobrevivir a reinicios). CrowdStrike vigila cambios sospechosos en el registro."
+                 data-desc-en="<strong>Windows configuration database.</strong> Malware often modifies the registry to persist (survive reboots). CrowdStrike monitors suspicious registry changes.">
                 <div class="term">Registry</div>
                 <span class="term-es">Registro de Windows</span>
                 <div class="desc"><strong>Base de datos de configuracion de Windows.</strong> El malware a menudo modifica el registro para persistir (sobrevivir a reinicios). CrowdStrike vigila cambios sospechosos en el registro.</div>
@@ -747,10 +911,10 @@
 
     <!-- THREAT ACTORS -->
     <div class="section" id="actors">
-        <h2 class="section-title">Threat Actors - Nombres de CrowdStrike</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 20px;">CrowdStrike nombra a los grupos de atacantes con animales segun su pais de origen:</p>
+        <h2 class="section-title" data-es="Threat Actors - Nombres de CrowdStrike" data-en="Threat Actors - CrowdStrike Naming Convention">Threat Actors - Nombres de CrowdStrike</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;" data-es="CrowdStrike nombra a los grupos de atacantes con animales segun su pais de origen:" data-en="CrowdStrike names attacker groups after animals based on their country of origin:">CrowdStrike nombra a los grupos de atacantes con animales segun su pais de origen:</p>
         <div class="actors-grid">
-            <div class="actor-card" data-search="bear oso rusia fancy cozy">
+            <div class="actor-card" data-search="bear oso rusia fancy cozy" data-country-es="Rusia" data-country-en="Russia">
                 <div class="actor-emoji">&#x1F43B;</div>
                 <div class="actor-info">
                     <div class="actor-name">BEAR</div>
@@ -758,7 +922,7 @@
                     <div class="actor-example">Ej: FANCY BEAR, COZY BEAR</div>
                 </div>
             </div>
-            <div class="actor-card" data-search="panda china apt gobierno">
+            <div class="actor-card" data-search="panda china apt gobierno" data-country-es="China" data-country-en="China">
                 <div class="actor-emoji">&#x1F43C;</div>
                 <div class="actor-info">
                     <div class="actor-name">PANDA</div>
@@ -766,7 +930,7 @@
                     <div class="actor-example">Ej: WICKED PANDA, GOBLIN PANDA</div>
                 </div>
             </div>
-            <div class="actor-card" data-search="kitten gatito iran irani">
+            <div class="actor-card" data-search="kitten gatito iran irani" data-country-es="Iran" data-country-en="Iran">
                 <div class="actor-emoji">&#x1F431;</div>
                 <div class="actor-info">
                     <div class="actor-name">KITTEN</div>
@@ -774,7 +938,7 @@
                     <div class="actor-example">Ej: CHARMING KITTEN</div>
                 </div>
             </div>
-            <div class="actor-card" data-search="chollima corea norte norcoreano">
+            <div class="actor-card" data-search="chollima corea norte norcoreano" data-country-es="Corea del Norte" data-country-en="North Korea">
                 <div class="actor-emoji">&#x1F40E;</div>
                 <div class="actor-info">
                     <div class="actor-name">CHOLLIMA</div>
@@ -782,7 +946,7 @@
                     <div class="actor-example">Ej: LABYRINTH CHOLLIMA</div>
                 </div>
             </div>
-            <div class="actor-card" data-search="spider arana cibercrimen economico ransomware">
+            <div class="actor-card" data-search="spider arana cibercrimen economico ransomware" data-country-es="Cibercrimen (motivacion economica)" data-country-en="Cybercrime (financial motivation)">
                 <div class="actor-emoji">&#x1F577;&#xFE0F;</div>
                 <div class="actor-info">
                     <div class="actor-name">SPIDER</div>
@@ -790,20 +954,20 @@
                     <div class="actor-example">Ej: WIZARD SPIDER (Ryuk/Conti)</div>
                 </div>
             </div>
-            <div class="actor-card" data-search="jackal chacal hacktivismo activismo">
+            <div class="actor-card" data-search="jackal chacal hacktivismo activismo" data-country-es="Hacktivismo" data-country-en="Hacktivism">
                 <div class="actor-emoji">&#x1F43A;</div>
                 <div class="actor-info">
                     <div class="actor-name">JACKAL</div>
                     <div class="actor-country">Hacktivismo</div>
-                    <div class="actor-example">Motivacion ideologica/politica</div>
+                    <div class="actor-example" data-es="Motivacion ideologica/politica" data-en="Ideological/political motivation">Motivacion ideologica/politica</div>
                 </div>
             </div>
-            <div class="actor-card" data-search="hawk halcon otros paises">
+            <div class="actor-card" data-search="hawk halcon otros paises" data-country-es="Otros paises" data-country-en="Other countries">
                 <div class="actor-emoji">&#x1F985;</div>
                 <div class="actor-info">
                     <div class="actor-name">HAWK</div>
                     <div class="actor-country">Otros paises</div>
-                    <div class="actor-example">Actores de otros origenes</div>
+                    <div class="actor-example" data-es="Actores de otros origenes" data-en="Actors from other origins">Actores de otros origenes</div>
                 </div>
             </div>
         </div>
@@ -811,9 +975,9 @@
 
 </div>
 
-    <!-- Sección de resúmenes movida a modulos.html -->
-    
-<div class="footer">
+    <!-- Seccion de resumenes movida a modulos.html -->
+
+<div class="footer" data-es="Glosario de estudio para CrowdStrike Falcon Administrator | Se actualiza conforme avanzas en el curso" data-en="Study glossary for CrowdStrike Falcon Administrator | Updated as you progress through the course">
     Glosario de estudio para CrowdStrike Falcon Administrator | Se actualiza conforme avanzas en el curso
 </div>
 
@@ -864,7 +1028,9 @@
 
         allCards.forEach(card => {
             const searchData = (card.dataset.search || '') + ' ' + card.textContent.toLowerCase();
-            if (searchData.includes(query)) {
+            // Also search in data-desc-en for English searches
+            const descEn = (card.dataset.descEn || '').toLowerCase();
+            if (searchData.includes(query) || descEn.includes(query)) {
                 card.style.display = '';
                 found = true;
             } else {
@@ -892,6 +1058,110 @@
             card.style.display = '';
         });
     }
+
+    // === GLOSSARY i18n: swap descriptions and UI based on language ===
+    (function() {
+        function applyGlossaryLang() {
+            const lang = (typeof getLang === 'function') ? getLang() : 'es';
+            const helpOn = (typeof isHelpOn === 'function') ? isHelpOn() : false;
+
+            // Swap card descriptions
+            document.querySelectorAll('.card[data-desc-en]').forEach(card => {
+                const descEl = card.querySelector('.desc');
+                if (!descEl) return;
+                const descEs = card.dataset.descEs || '';
+                const descEn = card.dataset.descEn || '';
+
+                // Remove existing hints
+                const oldHint = card.querySelector('.lang-hint');
+                if (oldHint) oldHint.remove();
+
+                if (lang === 'en') {
+                    descEl.innerHTML = descEn;
+                    if (helpOn && descEs) {
+                        const hint = document.createElement('div');
+                        hint.className = 'lang-hint';
+                        hint.innerHTML = 'ES: ' + descEs;
+                        descEl.after(hint);
+                    }
+                } else {
+                    descEl.innerHTML = descEs;
+                    if (helpOn && descEn) {
+                        const hint = document.createElement('div');
+                        hint.className = 'lang-hint';
+                        hint.innerHTML = 'EN: ' + descEn;
+                        descEl.after(hint);
+                    }
+                }
+            });
+
+            // Swap actor country text
+            document.querySelectorAll('.actor-card[data-country-en]').forEach(card => {
+                const countryEl = card.querySelector('.actor-country');
+                if (!countryEl) return;
+                const countryEs = card.dataset.countryEs || '';
+                const countryEn = card.dataset.countryEn || '';
+                countryEl.textContent = (lang === 'en') ? countryEn : countryEs;
+            });
+
+            // Swap all elements with data-es / data-en attributes (section titles, callouts, nav, etc.)
+            document.querySelectorAll('[data-es][data-en]').forEach(el => {
+                // Skip cards (handled above) and elements inside cards
+                if (el.classList.contains('card') || el.closest('.card')) return;
+                // Skip actor-card internals already handled
+                if (el.closest('.actor-card') && el.classList.contains('actor-country')) return;
+
+                const textEs = el.dataset.es;
+                const textEn = el.dataset.en;
+
+                if (lang === 'en') {
+                    el.innerHTML = textEn;
+                } else {
+                    el.innerHTML = textEs;
+                }
+            });
+
+            // Swap search placeholder
+            const si = document.getElementById('searchInput');
+            if (si) {
+                si.placeholder = (lang === 'en') ? (si.dataset.placeholderEn || si.placeholder) : (si.dataset.placeholderEs || si.placeholder);
+            }
+
+            // Swap nav button text
+            document.querySelectorAll('.nav button[data-es][data-en]').forEach(btn => {
+                btn.textContent = (lang === 'en') ? btn.dataset.en : btn.dataset.es;
+            });
+
+            // Swap footer
+            const footer = document.querySelector('.footer[data-es][data-en]');
+            if (footer) {
+                footer.textContent = (lang === 'en') ? footer.dataset.en : footer.dataset.es;
+            }
+
+            // Swap no-results text
+            document.querySelectorAll('.no-results [data-es][data-en]').forEach(el => {
+                el.textContent = (lang === 'en') ? el.dataset.en : el.dataset.es;
+            });
+        }
+
+        // Run on load (after theme.js sets attributes)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => setTimeout(applyGlossaryLang, 50));
+        } else {
+            setTimeout(applyGlossaryLang, 50);
+        }
+
+        // Observe language and help attribute changes on <html>
+        const observer = new MutationObserver(mutations => {
+            for (const m of mutations) {
+                if (m.attributeName === 'data-lang' || m.attributeName === 'data-help') {
+                    applyGlossaryLang();
+                    return;
+                }
+            }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang', 'data-help'] });
+    })();
 </script>
 
 <script src="i18n.js"></script>
