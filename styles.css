@@ -553,9 +553,9 @@ input, textarea, select {
 /* ============================================================
    BILINGUAL QUESTION STYLES
    ============================================================ */
-/* Spanish translation subtitle (shown when EN mode is active) */
-.question-en {
-    font-size: 0.85rem;
+/* Translation help hint (shown when ? help is ON) */
+.question-hint {
+    font-size: 0.82rem;
     color: var(--text-muted);
     margin-bottom: 12px;
     padding: 8px 14px;
