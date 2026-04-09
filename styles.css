@@ -10,14 +10,14 @@
    ============================================================ */
 :root {
     /* --- Surfaces --- */
-    --bg-base: #fafafa;
+    --bg-base: #f0f0f3;
     --bg-raised: #ffffff;
-    --bg-overlay: #f4f4f5;
-    --bg-hover: #e4e4e7;
-    --bg-glass: rgba(255, 255, 255, 0.7);
-    --border-subtle: rgba(0, 0, 0, 0.06);
-    --border-default: rgba(0, 0, 0, 0.1);
-    --border-strong: rgba(0, 0, 0, 0.15);
+    --bg-overlay: #e8e8ec;
+    --bg-hover: #dcdce0;
+    --bg-glass: rgba(255, 255, 255, 0.75);
+    --border-subtle: rgba(0, 0, 0, 0.1);
+    --border-default: rgba(0, 0, 0, 0.14);
+    --border-strong: rgba(0, 0, 0, 0.2);
 
     /* --- Accent (orange) --- */
     --accent: #f97316;
@@ -62,12 +62,12 @@
     --radius-xl: 20px;
     --radius-full: 9999px;
 
-    /* --- Shadows (light mode: soft, diffused) --- */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
-    --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.12);
-    --shadow-card-hover: 0 20px 60px rgba(139, 92, 246, 0.1), 0 8px 20px rgba(0, 0, 0, 0.06);
+    /* --- Shadows (light mode: visible, elevated) --- */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.15);
+    --shadow-card-hover: 0 20px 60px rgba(139, 92, 246, 0.12), 0 8px 20px rgba(0, 0, 0, 0.1);
 
     /* --- Transitions --- */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -384,6 +384,7 @@ body::after {
     border-radius: var(--radius-lg);
     padding: 22px 24px;
     border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
     transition:
         border-color var(--t-base),
         transform var(--t-base),
