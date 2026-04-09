@@ -8,11 +8,11 @@
     <style>
         /* Progress overview */
         .progress-overview {
-            background: #1a2738;
+            background: #1c2130;
             border-radius: 16px;
             padding: 25px 30px;
             margin-bottom: 30px;
-            border: 1px solid #2a3a4e;
+            border: 1px solid #2e3650;
             display: flex;
             align-items: center;
             gap: 30px;
@@ -30,13 +30,13 @@
 
         .progress-circle .circle-bg {
             fill: none;
-            stroke: #2a3a4e;
+            stroke: #2e3650;
             stroke-width: 8;
         }
 
         .progress-circle .circle-fill {
             fill: none;
-            stroke: #e94560;
+            stroke: #ff6b4a;
             stroke-width: 8;
             stroke-linecap: round;
             transition: stroke-dashoffset 0.5s;
@@ -73,9 +73,9 @@
             gap: 6px;
         }
 
-        .dot-green { width: 10px; height: 10px; border-radius: 50%; background: #27ae60; display: inline-block; }
-        .dot-yellow { width: 10px; height: 10px; border-radius: 50%; background: #f1c40f; display: inline-block; }
-        .dot-gray { width: 10px; height: 10px; border-radius: 50%; background: #7f8c8d; display: inline-block; }
+        .dot-green { width: 10px; height: 10px; border-radius: 50%; background: #34d399; display: inline-block; }
+        .dot-yellow { width: 10px; height: 10px; border-radius: 50%; background: #fbbf24; display: inline-block; }
+        .dot-gray { width: 10px; height: 10px; border-radius: 50%; background: #6b7394; display: inline-block; }
 
         /* Module timeline */
         .timeline {
@@ -90,23 +90,23 @@
             top: 0;
             bottom: 0;
             width: 3px;
-            background: #2a3a4e;
+            background: #2e3650;
             border-radius: 2px;
         }
 
         /* Module card */
         .module-card {
             position: relative;
-            background: #1a2738;
+            background: #1c2130;
             border-radius: 16px;
             margin-bottom: 20px;
-            border: 1px solid #2a3a4e;
+            border: 1px solid #2e3650;
             overflow: hidden;
             transition: all 0.3s;
         }
 
         .module-card:hover {
-            border-color: #e94560;
+            border-color: #ff6b4a;
             box-shadow: 0 8px 25px rgba(233, 69, 96, 0.1);
         }
 
@@ -119,9 +119,9 @@
             height: 4px;
         }
 
-        .module-card.completed::before { background: linear-gradient(90deg, #27ae60, #2ecc71); }
-        .module-card.in-progress::before { background: linear-gradient(90deg, #f39c12, #f1c40f); }
-        .module-card.not-started::before { background: linear-gradient(90deg, #7f8c8d, #95a5a6); }
+        .module-card.completed::before { background: linear-gradient(90deg, #34d399, #34d399); }
+        .module-card.in-progress::before { background: linear-gradient(90deg, #fbbf24, #fbbf24); }
+        .module-card.not-started::before { background: linear-gradient(90deg, #6b7394, #9ba3be); }
 
         /* Timeline dot */
         .timeline-dot {
@@ -131,13 +131,13 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            border: 3px solid #0f1923;
+            border: 3px solid #141820;
             z-index: 2;
         }
 
-        .completed .timeline-dot { background: #27ae60; }
-        .in-progress .timeline-dot { background: #f1c40f; }
-        .not-started .timeline-dot { background: #7f8c8d; }
+        .completed .timeline-dot { background: #34d399; }
+        .in-progress .timeline-dot { background: #fbbf24; }
+        .not-started .timeline-dot { background: #6b7394; }
 
         /* Module header (clickable) */
         .module-header {
@@ -157,9 +157,9 @@
             letter-spacing: 0.5px;
         }
 
-        .completed .module-code { background: rgba(39, 174, 96, 0.2); color: #2ecc71; }
-        .in-progress .module-code { background: rgba(243, 156, 18, 0.2); color: #f1c40f; }
-        .not-started .module-code { background: rgba(127, 140, 141, 0.2); color: #95a5a6; }
+        .completed .module-code { background: rgba(39, 174, 96, 0.2); color: #34d399; }
+        .in-progress .module-code { background: rgba(243, 156, 18, 0.2); color: #fbbf24; }
+        .not-started .module-code { background: rgba(127, 140, 141, 0.2); color: #9ba3be; }
 
         /* Status changer */
         .status-changer {
@@ -172,7 +172,7 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            border: 2px solid #2a3a4e;
+            border: 2px solid #2e3650;
             background: transparent;
             cursor: pointer;
             font-size: 0.7rem;
@@ -183,12 +183,12 @@
         }
 
         .status-btn:hover { transform: scale(1.2); }
-        .status-btn[data-status="completed"] { border-color: #27ae60; color: #27ae60; }
-        .status-btn[data-status="completed"]:hover, .status-btn[data-status="completed"].active { background: #27ae60; color: #fff; }
-        .status-btn[data-status="in-progress"] { border-color: #f1c40f; color: #f1c40f; }
-        .status-btn[data-status="in-progress"]:hover, .status-btn[data-status="in-progress"].active { background: #f1c40f; color: #fff; }
-        .status-btn[data-status="not-started"] { border-color: #7f8c8d; color: #7f8c8d; }
-        .status-btn[data-status="not-started"]:hover, .status-btn[data-status="not-started"].active { background: #7f8c8d; color: #fff; }
+        .status-btn[data-status="completed"] { border-color: #34d399; color: #34d399; }
+        .status-btn[data-status="completed"]:hover, .status-btn[data-status="completed"].active { background: #34d399; color: #fff; }
+        .status-btn[data-status="in-progress"] { border-color: #fbbf24; color: #fbbf24; }
+        .status-btn[data-status="in-progress"]:hover, .status-btn[data-status="in-progress"].active { background: #fbbf24; color: #fff; }
+        .status-btn[data-status="not-started"] { border-color: #6b7394; color: #6b7394; }
+        .status-btn[data-status="not-started"]:hover, .status-btn[data-status="not-started"].active { background: #6b7394; color: #fff; }
 
         .module-title-text {
             flex: 1;
@@ -202,12 +202,12 @@
         }
 
         .module-title-text .module-meta {
-            color: #8892a4;
+            color: #9ba3be;
             font-size: 0.8rem;
         }
 
         .module-toggle {
-            color: #8892a4;
+            color: #9ba3be;
             font-size: 1.2rem;
             transition: transform 0.3s;
             min-width: 20px;
@@ -242,17 +242,17 @@
         .module-tabs button {
             padding: 7px 16px;
             border-radius: 20px;
-            border: 1px solid #2a3a4e;
+            border: 1px solid #2e3650;
             background: transparent;
-            color: #8892a4;
+            color: #9ba3be;
             cursor: pointer;
             font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.2s;
         }
 
-        .module-tabs button:hover { border-color: #5dade2; color: #5dade2; }
-        .module-tabs button.active { background: #5dade2; border-color: #5dade2; color: #fff; }
+        .module-tabs button:hover { border-color: #5fa8f5; color: #5fa8f5; }
+        .module-tabs button.active { background: #5fa8f5; border-color: #5fa8f5; color: #fff; }
 
         .module-tab-content { display: none; }
         .module-tab-content.active { display: block; }
@@ -260,16 +260,16 @@
         /* Objective */
         .objective {
             background: rgba(93, 173, 226, 0.1);
-            border-left: 3px solid #5dade2;
+            border-left: 3px solid #5fa8f5;
             padding: 14px 18px;
             border-radius: 0 10px 10px 0;
             margin-bottom: 20px;
-            color: #b0bec5;
+            color: #9ba3be;
             font-size: 0.92rem;
             line-height: 1.6;
         }
 
-        .objective strong { color: #5dade2; }
+        .objective strong { color: #5fa8f5; }
 
         /* Key points */
         .key-points { list-style: none; padding: 0; }
@@ -277,16 +277,16 @@
         .key-points li {
             padding: 12px 16px;
             margin-bottom: 8px;
-            background: #0f1923;
+            background: #141820;
             border-radius: 8px;
-            border-left: 3px solid #e94560;
-            color: #b0bec5;
+            border-left: 3px solid #ff6b4a;
+            color: #9ba3be;
             font-size: 0.92rem;
             line-height: 1.6;
         }
 
         .key-points li strong { color: #fff; }
-        .key-points li em { color: #f5c842; font-style: normal; }
+        .key-points li em { color: #fbbf24; font-style: normal; }
 
         /* Exam tip */
         .exam-tip {
@@ -296,7 +296,7 @@
             padding: 15px 18px;
             margin-top: 15px;
             font-size: 0.88rem;
-            color: #b0bec5;
+            color: #9ba3be;
         }
 
         .exam-tip::before {
@@ -304,7 +304,7 @@
             display: block;
             font-size: 0.7rem;
             font-weight: 700;
-            color: #f5c842;
+            color: #fbbf24;
             letter-spacing: 1px;
             margin-bottom: 6px;
         }
@@ -317,27 +317,27 @@
         }
 
         .vocab-item {
-            background: #0f1923;
+            background: #141820;
             border-radius: 8px;
             padding: 12px 16px;
-            border: 1px solid #2a3a4e;
+            border: 1px solid #2e3650;
         }
 
         .vocab-en {
-            color: #e94560;
+            color: #ff6b4a;
             font-weight: 700;
             font-size: 0.9rem;
             margin-bottom: 2px;
         }
 
         .vocab-es {
-            color: #5dade2;
+            color: #5fa8f5;
             font-size: 0.8rem;
             margin-bottom: 6px;
         }
 
         .vocab-def {
-            color: #8892a4;
+            color: #9ba3be;
             font-size: 0.82rem;
             line-height: 1.5;
         }
@@ -354,14 +354,14 @@
             padding: 8px 16px;
             border-radius: 20px;
             background: rgba(233, 69, 96, 0.15);
-            color: #e94560;
+            color: #ff6b4a;
             text-decoration: none;
             font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.2s;
         }
 
-        .related-links a:hover { background: #e94560; color: #fff; }
+        .related-links a:hover { background: #ff6b4a; color: #fff; }
 
         @media (max-width: 600px) {
             .timeline { padding-left: 25px; }
@@ -406,7 +406,7 @@
                 <span><span class="dot-yellow"></span> 0 en progreso</span>
                 <span><span class="dot-gray"></span> 12 pendientes</span>
             </div>
-            <p style="color: #8892a4; font-size: 0.8rem; margin-top: 8px;">12 modulos | 6h 25min tiempo total estimado</p>
+            <p style="color: #9ba3be; font-size: 0.8rem; margin-top: 8px;">12 modulos | 6h 25min tiempo total estimado</p>
         </div>
     </div>
 
@@ -458,7 +458,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: #9ba3be; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=100">Quiz FALCON 100</a>
                         <a href="flashcards.html?cat=falcon">Flashcards Falcon</a>
@@ -516,7 +516,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: #9ba3be; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=101">Quiz FALCON 101</a>
                         <a href="flashcards.html?cat=modulos">Flashcards Modulos</a>
@@ -573,7 +573,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: #9ba3be; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=102">Quiz FALCON 102</a>
                         <a href="flashcards.html?cat=gestion">Flashcards Gestion</a>
@@ -628,7 +628,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: #9ba3be; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=104">Quiz FALCON 104</a>
                         <a href="escenarios.html">Escenario: Ransomware detectado</a>
