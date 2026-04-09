@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulos - CrowdStrike Falcon Administrator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Progress overview */
+        .progress-overview {
+            background: #1a2738;
+            border-radius: 16px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            border: 1px solid #2a3a4e;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            min-width: 100px;
+        }
+
+        .progress-circle svg { transform: rotate(-90deg); }
+
+        .progress-circle .circle-bg {
+            fill: none;
+            stroke: #2a3a4e;
+            stroke-width: 8;
+        }
+
+        .progress-circle .circle-fill {
+            fill: none;
+            stroke: #e94560;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s;
+        }
+
+        .progress-circle .circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .progress-info { flex: 1; }
+
+        .progress-info h2 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .progress-counts {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .progress-counts span {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot-green { width: 10px; height: 10px; border-radius: 50%; background: #27ae60; display: inline-block; }
+        .dot-yellow { width: 10px; height: 10px; border-radius: 50%; background: #f1c40f; display: inline-block; }
+        .dot-gray { width: 10px; height: 10px; border-radius: 50%; background: #7f8c8d; display: inline-block; }
+
+        /* Module timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #2a3a4e;
+            border-radius: 2px;
+        }
+
+        /* Module card */
+        .module-card {
+            position: relative;
+            background: #1a2738;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #2a3a4e;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .module-card:hover {
+            border-color: #e94560;
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.1);
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .module-card.completed::before { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+        .module-card.in-progress::before { background: linear-gradient(90deg, #f39c12, #f1c40f); }
+        .module-card.not-started::before { background: linear-gradient(90deg, #7f8c8d, #95a5a6); }
+
+        /* Timeline dot */
+        .timeline-dot {
+            position: absolute;
+            left: -33px;
+            top: 25px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid #0f1923;
+            z-index: 2;
+        }
+
+        .completed .timeline-dot { background: #27ae60; }
+        .in-progress .timeline-dot { background: #f1c40f; }
+        .not-started .timeline-dot { background: #7f8c8d; }
+
+        /* Module header (clickable) */
+        .module-header {
+            padding: 22px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .module-code {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .completed .module-code { background: rgba(39, 174, 96, 0.2); color: #2ecc71; }
+        .in-progress .module-code { background: rgba(243, 156, 18, 0.2); color: #f1c40f; }
+        .not-started .module-code { background: rgba(127, 140, 141, 0.2); color: #95a5a6; }
+
+        .module-title-text {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .module-title-text h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+
+        .module-title-text .module-meta {
+            color: #8892a4;
+            font-size: 0.8rem;
+        }
+
+        .module-toggle {
+            color: #8892a4;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .module-card.open .module-toggle { transform: rotate(180deg); }
+
+        /* Module content (expandable) */
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .module-card.open .module-content {
+            max-height: 3000px;
+        }
+
+        .module-inner {
+            padding: 0 25px 25px;
+        }
+
+        /* Tabs inside module */
+        .module-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .module-tabs button {
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 1px solid #2a3a4e;
+            background: transparent;
+            color: #8892a4;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .module-tabs button:hover { border-color: #5dade2; color: #5dade2; }
+        .module-tabs button.active { background: #5dade2; border-color: #5dade2; color: #fff; }
+
+        .module-tab-content { display: none; }
+        .module-tab-content.active { display: block; }
+
+        /* Objective */
+        .objective {
+            background: rgba(93, 173, 226, 0.1);
+            border-left: 3px solid #5dade2;
+            padding: 14px 18px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 20px;
+            color: #b0bec5;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .objective strong { color: #5dade2; }
+
+        /* Key points */
+        .key-points { list-style: none; padding: 0; }
+
+        .key-points li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: #0f1923;
+            border-radius: 8px;
+            border-left: 3px solid #e94560;
+            color: #b0bec5;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .key-points li strong { color: #fff; }
+        .key-points li em { color: #f5c842; font-style: normal; }
+
+        /* Exam tip */
+        .exam-tip {
+            background: linear-gradient(135deg, rgba(245, 200, 66, 0.1), rgba(233, 69, 96, 0.1));
+            border: 1px solid rgba(245, 200, 66, 0.3);
+            border-radius: 10px;
+            padding: 15px 18px;
+            margin-top: 15px;
+            font-size: 0.88rem;
+            color: #b0bec5;
+        }
+
+        .exam-tip::before {
+            content: 'DATO CLAVE PARA EL EXAMEN';
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #f5c842;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        /* Vocabulary */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        .vocab-item {
+            background: #0f1923;
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid #2a3a4e;
+        }
+
+        .vocab-en {
+            color: #e94560;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .vocab-es {
+            color: #5dade2;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+
+        .vocab-def {
+            color: #8892a4;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        /* Related links */
+        .related-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .related-links a {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(233, 69, 96, 0.15);
+            color: #e94560;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .related-links a:hover { background: #e94560; color: #fff; }
+
+        @media (max-width: 600px) {
+            .timeline { padding-left: 25px; }
+            .timeline-dot { left: -20px; width: 16px; height: 16px; }
+            .progress-overview { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="glosario.html">Glosario</a>
+    <a href="modulos.html" class="active">Modulos</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="examen.html">Simulador Examen</a>
+    <a href="escenarios.html">Escenarios</a>
+</div>
+
+<div class="header">
+    <h1><span>Modulos</span> del Curso</h1>
+    <p>Resumen, vocabulario y claves de cada modulo - Todo en espanol</p>
+</div>
+
+<div class="container" style="max-width: 950px;">
+
+    <!-- PROGRESS OVERVIEW -->
+    <div class="progress-overview">
+        <div class="progress-circle">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle class="circle-bg" cx="50" cy="50" r="42"/>
+                <circle class="circle-fill" cx="50" cy="50" r="42"
+                    stroke-dasharray="264"
+                    stroke-dashoffset="220"/>
+            </svg>
+            <div class="circle-text">17%</div>
+        </div>
+        <div class="progress-info">
+            <h2>Tu progreso en el curso</h2>
+            <div class="progress-counts">
+                <span><span class="dot-green"></span> 2 completados</span>
+                <span><span class="dot-yellow"></span> 2 en progreso</span>
+                <span><span class="dot-gray"></span> 8 pendientes</span>
+            </div>
+            <p style="color: #8892a4; font-size: 0.8rem; margin-top: 8px;">12 modulos | 6h 25min tiempo total estimado</p>
+        </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="timeline">
+
+        <!-- FALCON 100 -->
+        <div class="module-card completed" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">COMPLETADO</span>
+                <div class="module-title-text">
+                    <h3>FALCON 100: Falcon Platform Architecture Overview</h3>
+                    <div class="module-meta">30 min | Arquitectura de la plataforma</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tabs">
+                    <button class="active" onclick="event.stopPropagation(); switchTab(this, 'resumen')">Resumen</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'vocabulario')">Vocabulario</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'practica')">Practica</button>
+                </div>
+
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Entender como esta construida la plataforma CrowdStrike Falcon, por que es diferente a un antivirus clasico, y como encajan todas las piezas.</div>
+                    <ul class="key-points">
+                        <li><strong>CrowdStrike Falcon es cloud-native:</strong> Toda la inteligencia y procesamiento esta en la nube. No necesitas servidores propios ni actualizar firmas. El sensor envia datos a la nube y ahi se analiza todo.</li>
+                        <li><strong>El sensor es ligero:</strong> Se instala en cada endpoint (PC, servidor) y consume pocos recursos. Solo recopila datos y los envia. <em>No es como un antivirus pesado que ralentiza el equipo.</em></li>
+                        <li><strong>Threat Graph:</strong> Es el cerebro de CrowdStrike. Una base de datos masiva que procesa <em>billones de eventos por semana</em> de todos los clientes. Si un ataque se detecta en un cliente, todos los demas se protegen automaticamente.</li>
+                        <li><strong>Arquitectura de un solo agente:</strong> Un unico sensor da acceso a todos los modulos (Prevent, Insight, Discover, Spotlight...). <em>Esto es una ventaja enorme frente a la competencia.</em></li>
+                        <li><strong>Enfoque en IOAs (Indicators of Attack):</strong> CrowdStrike analiza el <em>comportamiento</em> en tiempo real. Si un proceso hace algo sospechoso (ej: Word lanzando PowerShell), lo detecta aunque sea un malware nuevo.</li>
+                        <li><strong>Falcon Console:</strong> Tu panel de control web donde gestionas todo: alertas, politicas, equipos, investigaciones.</li>
+                    </ul>
+                    <div class="exam-tip">Recuerda: CrowdStrike usa <strong>un solo sensor ligero</strong>, es <strong>cloud-native</strong> (no on-premises), y su ventaja principal es <strong>IOAs + Threat Graph</strong>. Estas tres ideas aparecen constantemente.</div>
+                </div>
+
+                <div class="module-tab-content" data-tab="vocabulario">
+                    <div class="vocab-grid">
+                        <div class="vocab-item"><div class="vocab-en">Cloud-native</div><div class="vocab-es">Nativo en la nube</div><div class="vocab-def">Disenado para funcionar en la nube desde el principio</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Falcon Sensor</div><div class="vocab-es">Sensor / Agente</div><div class="vocab-def">Agente ligero instalado en cada endpoint</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Threat Graph</div><div class="vocab-es">Grafo de amenazas</div><div class="vocab-def">Base de datos masiva que correlaciona eventos globales</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Falcon Console</div><div class="vocab-es">Consola Falcon</div><div class="vocab-def">Interfaz web de gestion y administracion</div></div>
+                        <div class="vocab-item"><div class="vocab-en">IOA</div><div class="vocab-es">Indicador de ataque</div><div class="vocab-def">Deteccion basada en comportamiento en tiempo real</div></div>
+                        <div class="vocab-item"><div class="vocab-en">IOC</div><div class="vocab-es">Indicador de compromiso</div><div class="vocab-def">Evidencia de un ataque pasado (hash, IP, dominio)</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Endpoint</div><div class="vocab-es">Punto final / Equipo</div><div class="vocab-def">PC, portatil, servidor o movil en la red</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Single agent architecture</div><div class="vocab-es">Arquitectura de agente unico</div><div class="vocab-def">Un solo sensor para todos los modulos</div></div>
+                    </div>
+                </div>
+
+                <div class="module-tab-content" data-tab="practica">
+                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <div class="related-links">
+                        <a href="quiz.html" onclick="localStorage.setItem('quiz_filter','100')">Quiz FALCON 100</a>
+                        <a href="flashcards.html" onclick="localStorage.setItem('fc_filter','falcon')">Flashcards Falcon</a>
+                        <a href="glosario.html">Ver en glosario</a>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- FALCON 101 -->
+        <div class="module-card completed" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">COMPLETADO</span>
+                <div class="module-title-text">
+                    <h3>FALCON 101: Falcon Platform Essentials</h3>
+                    <div class="module-meta">50 min | Modulos principales de la plataforma</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tabs">
+                    <button class="active" onclick="event.stopPropagation(); switchTab(this, 'resumen')">Resumen</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'vocabulario')">Vocabulario</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'practica')">Practica</button>
+                </div>
+
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Conocer los modulos principales de Falcon y entender que hace cada uno. El "catalogo de productos" de CrowdStrike.</div>
+                    <ul class="key-points">
+                        <li><strong>Falcon Prevent (NGAV):</strong> Antivirus de nueva generacion. Bloquea malware conocido y desconocido con machine learning. <em>Primera linea de defensa.</em></li>
+                        <li><strong>Falcon Insight (EDR):</strong> Visibilidad total de cada equipo: procesos, conexiones, archivos. Permite investigar incidentes con el <em>process tree</em>.</li>
+                        <li><strong>Falcon OverWatch:</strong> Equipo <em>humano</em> de threat hunters 24/7. Complementan la IA buscando lo que las maquinas no ven.</li>
+                        <li><strong>Falcon Discover:</strong> Higiene de TI. Inventario de <em>aplicaciones, cuentas y activos</em>. Detecta shadow IT.</li>
+                        <li><strong>Falcon Spotlight:</strong> Vulnerabilidades <em>sin escaneos</em>. Usa datos del sensor. Cero impacto en rendimiento.</li>
+                        <li><strong>Falcon Fusion (SOAR):</strong> Automatizacion. Flujos "si pasa X, haz Y". <em>Ej: ransomware detectado → aislar equipo automaticamente.</em></li>
+                        <li><strong>Falcon Identity Protection:</strong> Protege Active Directory, detecta credenciales robadas y movimiento lateral.</li>
+                        <li><strong>Falcon Device Control:</strong> Control de USBs y perifericos.</li>
+                        <li><strong>Falcon Firewall Management:</strong> Gestiona Windows Firewall desde la consola de forma centralizada.</li>
+                    </ul>
+                    <div class="exam-tip">Truco para el examen: <strong>Prevent</strong> = bloquear, <strong>Insight</strong> = investigar, <strong>OverWatch</strong> = humanos, <strong>Discover</strong> = inventario, <strong>Spotlight</strong> = vulnerabilidades, <strong>Fusion</strong> = automatizar.</div>
+                </div>
+
+                <div class="module-tab-content" data-tab="vocabulario">
+                    <div class="vocab-grid">
+                        <div class="vocab-item"><div class="vocab-en">NGAV</div><div class="vocab-es">Antivirus nueva generacion</div><div class="vocab-def">Usa ML y comportamiento, no solo firmas</div></div>
+                        <div class="vocab-item"><div class="vocab-en">EDR</div><div class="vocab-es">Deteccion y respuesta en endpoints</div><div class="vocab-def">Monitoriza, detecta y permite responder</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Threat Hunting</div><div class="vocab-es">Caza de amenazas</div><div class="vocab-def">Busqueda proactiva de amenazas ocultas</div></div>
+                        <div class="vocab-item"><div class="vocab-en">SOAR</div><div class="vocab-es">Automatizacion de seguridad</div><div class="vocab-def">Orquestar y automatizar respuestas</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Shadow IT</div><div class="vocab-es">TI en la sombra</div><div class="vocab-def">Software/hardware no autorizado en la red</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Process Tree</div><div class="vocab-es">Arbol de procesos</div><div class="vocab-def">Cadena que muestra que proceso lanzo cual</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Device Control</div><div class="vocab-es">Control de dispositivos</div><div class="vocab-def">Gestion de USBs y perifericos</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Vulnerability Management</div><div class="vocab-es">Gestion de vulnerabilidades</div><div class="vocab-def">Identificar y priorizar debilidades</div></div>
+                    </div>
+                </div>
+
+                <div class="module-tab-content" data-tab="practica">
+                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <div class="related-links">
+                        <a href="quiz.html" onclick="localStorage.setItem('quiz_filter','101')">Quiz FALCON 101</a>
+                        <a href="flashcards.html" onclick="localStorage.setItem('fc_filter','modulos')">Flashcards Modulos</a>
+                        <a href="glosario.html">Ver en glosario</a>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- FALCON 102 -->
+        <div class="module-card in-progress" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">EN PROGRESO 4/6</span>
+                <div class="module-title-text">
+                    <h3>FALCON 102: Falcon Platform Onboarding Configuration</h3>
+                    <div class="module-meta">1 hora | Configuracion inicial de la plataforma</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tabs">
+                    <button class="active" onclick="event.stopPropagation(); switchTab(this, 'resumen')">Resumen</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'vocabulario')">Vocabulario</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'practica')">Practica</button>
+                </div>
+
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Aprender a configurar Falcon desde cero: crear usuarios, instalar sensores, configurar politicas y organizar equipos. El modulo mas practico hasta ahora.</div>
+                    <ul class="key-points">
+                        <li><strong>Configuracion inicial:</strong> Crear usuarios, asignar roles (Administrator, Analyst, Viewer...), configurar MFA/2FA. <em>El Falcon Administrator tiene acceso total.</em></li>
+                        <li><strong>Instalacion del sensor:</strong> Necesitas el <em>CID (Customer ID)</em>. Se puede desplegar via GPO, SCCM, scripts o manualmente.</li>
+                        <li><strong>Host Groups:</strong> Organizas equipos en grupos. <em>Estaticos</em> (manuales) o <em>Dinamicos</em> (automaticos por reglas: SO, dominio, OU, tags).</li>
+                        <li><strong>Prevention Policies:</strong> Defines QUE bloquea Falcon. Diferentes politicas para diferentes grupos. <em>Se asignan a Host Groups.</em></li>
+                        <li><strong>Sensor Update Policies:</strong> Controlas <em>cuando y como se actualizan</em> los sensores. Canales N, N-1, N-2.</li>
+                        <li><strong>Exclusiones:</strong> Para falsos positivos con software legitimo. Por <em>ruta, hash o proceso</em>. Cada exclusion es un punto ciego potencial.</li>
+                        <li><strong>RBAC:</strong> Control de acceso basado en roles. Principio de <em>minimo privilegio</em>.</li>
+                        <li><strong>Verificacion:</strong> Comprobar en <em>Host Management</em> que los equipos aparecen con grupo y politica correctos.</li>
+                    </ul>
+                    <div class="exam-tip">Flujo de onboarding: <strong>1) Crear usuarios/roles → 2) Instalar sensor (CID) → 3) Crear Host Groups → 4) Asignar Policies → 5) Verificar</strong>. Host Groups dinamicos son mejores que estaticos en entornos grandes.</div>
+                </div>
+
+                <div class="module-tab-content" data-tab="vocabulario">
+                    <div class="vocab-grid">
+                        <div class="vocab-item"><div class="vocab-en">CID (Customer ID)</div><div class="vocab-es">ID de cliente</div><div class="vocab-def">Identificador unico necesario para instalar sensores</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Host Group</div><div class="vocab-es">Grupo de equipos</div><div class="vocab-def">Agrupacion para aplicar politicas distintas</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Prevention Policy</div><div class="vocab-es">Politica de prevencion</div><div class="vocab-def">Define que bloquea Falcon automaticamente</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Sensor Update Policy</div><div class="vocab-es">Politica de actualizacion</div><div class="vocab-def">Controla versiones del sensor (N, N-1, N-2)</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Exclusion</div><div class="vocab-es">Exclusion</div><div class="vocab-def">Regla para ignorar falsos positivos</div></div>
+                        <div class="vocab-item"><div class="vocab-en">RBAC</div><div class="vocab-es">Control de acceso por roles</div><div class="vocab-def">Cada usuario solo ve/hace lo que necesita</div></div>
+                        <div class="vocab-item"><div class="vocab-en">GPO (Group Policy)</div><div class="vocab-es">Politica de grupo</div><div class="vocab-def">Metodo de despliegue masivo en Windows/AD</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Sensor Tags</div><div class="vocab-es">Etiquetas del sensor</div><div class="vocab-def">Etiquetas para organizar y crear grupos dinamicos</div></div>
+                    </div>
+                </div>
+
+                <div class="module-tab-content" data-tab="practica">
+                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <div class="related-links">
+                        <a href="quiz.html" onclick="localStorage.setItem('quiz_filter','102')">Quiz FALCON 102</a>
+                        <a href="flashcards.html" onclick="localStorage.setItem('fc_filter','gestion')">Flashcards Gestion</a>
+                        <a href="escenarios.html">Escenario: Desplegar 200 equipos</a>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- FALCON 104 -->
+        <div class="module-card in-progress" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">EN PROGRESO 0/3</span>
+                <div class="module-title-text">
+                    <h3>FALCON 104: Getting Started with Endpoint Security</h3>
+                    <div class="module-meta">25 min | Detecciones y respuesta a incidentes</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tabs">
+                    <button class="active" onclick="event.stopPropagation(); switchTab(this, 'resumen')">Resumen</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'vocabulario')">Vocabulario</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'practica')">Practica</button>
+                </div>
+
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Aprender a trabajar con detecciones y alertas del dia a dia. Como ver, investigar y gestionar incidentes. Este es tu trabajo diario como administrador.</div>
+                    <ul class="key-points">
+                        <li><strong>Dashboard principal:</strong> Resumen de <em>detecciones recientes, equipos con problemas, tendencias</em>. Lo primero que miras cada manana.</li>
+                        <li><strong>Severidad:</strong> Informational → Low → Medium → High → Critical. <em>Prioriza siempre Critical y High.</em></li>
+                        <li><strong>Process Tree:</strong> Reconstruye la escena: <em>que proceso inicio todo, que lanzo, que conexiones hizo, que archivos toco</em>.</li>
+                        <li><strong>Flujo de alertas:</strong> New → In Progress → True/False Positive → Closed. <em>Siempre documenta por que la cierras.</em></li>
+                        <li><strong>Acciones de respuesta:</strong> <em>Network Contain</em> (aislar), <em>Quarantine</em> (cuarentena del archivo), <em>RTR</em> (acceso remoto al equipo).</li>
+                        <li><strong>Mapeo MITRE ATT&CK:</strong> Cada deteccion te dice que tactica/tecnica se detecto (Execution, Persistence, Lateral Movement...).</li>
+                    </ul>
+                    <div class="exam-tip">Conoce el flujo: <strong>New → In Progress → TP/FP → Closed</strong> y las acciones: <strong>Contain, Quarantine, RTR</strong>. Cada deteccion se mapea a MITRE ATT&CK.</div>
+                </div>
+
+                <div class="module-tab-content" data-tab="vocabulario">
+                    <div class="vocab-grid">
+                        <div class="vocab-item"><div class="vocab-en">Detection</div><div class="vocab-es">Deteccion / Alerta</div><div class="vocab-def">Alerta generada cuando Falcon detecta algo sospechoso</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Severity</div><div class="vocab-es">Severidad / Gravedad</div><div class="vocab-def">Nivel de la alerta: Info, Low, Medium, High, Critical</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Network Containment</div><div class="vocab-es">Aislamiento de red</div><div class="vocab-def">Aisla el equipo pero mantiene conexion con CrowdStrike</div></div>
+                        <div class="vocab-item"><div class="vocab-en">RTR (Real Time Response)</div><div class="vocab-es">Respuesta en tiempo real</div><div class="vocab-def">Acceso remoto al equipo desde la consola</div></div>
+                        <div class="vocab-item"><div class="vocab-en">True Positive</div><div class="vocab-es">Verdadero positivo</div><div class="vocab-def">Alerta confirmada como amenaza real</div></div>
+                        <div class="vocab-item"><div class="vocab-en">False Positive</div><div class="vocab-es">Falso positivo</div><div class="vocab-def">Alerta incorrecta, era software legitimo</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Quarantine</div><div class="vocab-es">Cuarentena</div><div class="vocab-def">Aislar un archivo para que no se ejecute</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Tactic / Technique</div><div class="vocab-es">Tactica / Tecnica</div><div class="vocab-def">Clasificacion MITRE del tipo de ataque</div></div>
+                    </div>
+                </div>
+
+                <div class="module-tab-content" data-tab="practica">
+                    <p style="color: #8892a4; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <div class="related-links">
+                        <a href="quiz.html" onclick="localStorage.setItem('quiz_filter','104')">Quiz FALCON 104</a>
+                        <a href="escenarios.html">Escenario: Ransomware detectado</a>
+                        <a href="escenarios.html">Escenario: Investigar phishing</a>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- FALCON 105 -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>FALCON 105: Sensor Installation, Configuration & Troubleshooting</h3>
+                    <div class="module-meta">45 min | Instalacion y solucion de problemas del sensor</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tabs">
+                    <button class="active" onclick="event.stopPropagation(); switchTab(this, 'resumen')">Resumen</button>
+                    <button onclick="event.stopPropagation(); switchTab(this, 'vocabulario')">Vocabulario</button>
+                </div>
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Profundizar en la instalacion del sensor: metodos de despliegue, configuracion avanzada y troubleshooting cuando algo falla.</div>
+                    <ul class="key-points">
+                        <li><strong>Metodos de instalacion:</strong> Manual, GPO, SCCM/MECM, PowerShell, Intune, Jamf (Mac). <em>Cada metodo segun el entorno.</em></li>
+                        <li><strong>Requisitos:</strong> CID, instalador correcto para el SO, permisos de admin local, conectividad a la nube de CrowdStrike.</li>
+                        <li><strong>Sensor Tags:</strong> Etiquetas durante la instalacion. <em>Muy utiles para Host Groups dinamicos.</em></li>
+                        <li><strong>Troubleshooting:</strong> Si no reporta: verificar conectividad, comprobar servicio, revisar logs. <em>Modo de diagnostico disponible.</em></li>
+                        <li><strong>Proxy:</strong> En entornos con proxy, configurar durante la instalacion o via politica.</li>
+                        <li><strong>Canales de actualizacion:</strong> <em>N</em> (ultima), <em>N-1</em> (una atras), <em>N-2</em> (dos atras). N-1 en produccion, N en piloto.</li>
+                    </ul>
+                    <div class="exam-tip">El <strong>CID es obligatorio</strong>, los <strong>Sensor Tags</strong> organizan automaticamente, y los canales <strong>N/N-1/N-2</strong> son pregunta clasica.</div>
+                </div>
+                <div class="module-tab-content" data-tab="vocabulario">
+                    <div class="vocab-grid">
+                        <div class="vocab-item"><div class="vocab-en">Sensor Tag</div><div class="vocab-es">Etiqueta del sensor</div><div class="vocab-def">Etiqueta asignada durante instalacion</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Proxy</div><div class="vocab-es">Proxy</div><div class="vocab-def">Intermediario entre el sensor y la nube</div></div>
+                        <div class="vocab-item"><div class="vocab-en">Troubleshooting</div><div class="vocab-es">Solucion de problemas</div><div class="vocab-def">Diagnosticar y resolver fallos</div></div>
+                        <div class="vocab-item"><div class="vocab-en">N / N-1 / N-2</div><div class="vocab-es">Canales de version</div><div class="vocab-def">Ultima, una atras, dos atras</div></div>
+                    </div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- FALCON 106 -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>FALCON 106: Customizing Dashboards in Falcon</h3>
+                    <div class="module-meta">20 min | Personalizar dashboards</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Personalizar los dashboards de la consola para ver la informacion mas relevante de un vistazo.</div>
+                    <ul class="key-points">
+                        <li><strong>Dashboards predefinidos:</strong> Detecciones, estado de sensores, vulnerabilidades, actividad de usuarios.</li>
+                        <li><strong>Dashboards personalizados:</strong> Crea los tuyos con los widgets que necesites. <em>Ideal para tu rol o equipo.</em></li>
+                        <li><strong>Widgets:</strong> Graficos, tablas, contadores. <em>Anadir, quitar, mover y redimensionar.</em></li>
+                        <li><strong>Filtros:</strong> Por periodo de tiempo, Host Group, severidad, SO.</li>
+                        <li><strong>Compartir:</strong> Comparte dashboards con otros usuarios del equipo.</li>
+                    </ul>
+                    <div class="exam-tip">Saber que puedes <strong>crear dashboards personalizados con widgets</strong> y <strong>filtrar y compartir</strong> con el equipo.</div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- FALCON 107 -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>FALCON 107: Falcon Firewall Management Fundamentals</h3>
+                    <div class="module-meta">15 min | Gestion del firewall de host</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Gestionar el firewall de Windows de forma centralizada desde Falcon.</div>
+                    <ul class="key-points">
+                        <li><strong>Firewall Policies:</strong> Reglas que permiten o bloquean trafico por puerto, protocolo, IP, aplicacion. <em>Se asignan a Host Groups.</em></li>
+                        <li><strong>Reglas de arriba a abajo:</strong> La primera regla que coincide se aplica. <em>El orden importa.</em></li>
+                        <li><strong>Modo monitor vs enforce:</strong> <em>Monitor</em> = solo registra. <em>Enforce</em> = bloquea de verdad. Prueba siempre en monitor primero.</li>
+                        <li><strong>Sin agentes extra:</strong> El sensor ya tiene la capacidad. Se habilita desde la consola.</li>
+                    </ul>
+                    <div class="exam-tip">Reglas se procesan <strong>de arriba a abajo</strong> (orden importa) y el <strong>modo monitor</strong> es clave para probar antes de aplicar.</div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- SOAR 100 -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>SOAR 100: Falcon Fusion SOAR Fundamentals</h3>
+                    <div class="module-meta">45 min | Automatizacion de respuesta</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Usar Falcon Fusion para automatizar respuestas. Crear flujos "si pasa X, haz Y automaticamente".</div>
+                    <ul class="key-points">
+                        <li><strong>Workflows:</strong> Tienen <em>Trigger</em> (que lo activa), <em>Condiciones</em> (cuando aplica), <em>Acciones</em> (que hace).</li>
+                        <li><strong>Triggers:</strong> Deteccion nueva, cambio de severidad, nuevo host, vulnerabilidad encontrada.</li>
+                        <li><strong>Acciones:</strong> Contener equipo, enviar notificacion, ejecutar RTR, cambiar estado, anadir a grupo.</li>
+                        <li><strong>Plantillas:</strong> Vienen listas para usar y personalizar.</li>
+                        <li><strong>Beneficio:</strong> Reduce tiempo de respuesta de <em>horas a segundos</em>.</li>
+                    </ul>
+                    <div class="exam-tip">Estructura: <strong>Trigger → Condicion → Accion</strong>. Falcon Fusion puede <strong>contener equipos automaticamente</strong> ante detecciones criticas.</div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- FALCON 160 -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>FALCON 160: Falcon for Mobile</h3>
+                    <div class="module-meta">15 min | Proteccion de dispositivos moviles</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Entender como CrowdStrike protege moviles (iOS/Android) integrados en la plataforma.</div>
+                    <ul class="key-points">
+                        <li><strong>Proteccion movil:</strong> Detecta apps maliciosas, phishing movil, configuraciones inseguras, jailbreak/root.</li>
+                        <li><strong>Vista unificada:</strong> Los moviles aparecen en la misma consola que los PCs.</li>
+                        <li><strong>Amenazas moviles:</strong> WiFi inseguras, apps no oficiales, phishing por SMS.</li>
+                    </ul>
+                    <div class="exam-tip">Falcon for Mobile da <strong>visibilidad unificada</strong> y detecta amenazas moviles como <strong>phishing SMS y apps maliciosas</strong>.</div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- ITSEC 121 -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>ITSEC 121: Vulnerability Management Fundamentals</h3>
+                    <div class="module-meta">40 min | Gestion de vulnerabilidades con Spotlight</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Usar Falcon Spotlight para gestionar vulnerabilidades sin escaneos tradicionales.</div>
+                    <ul class="key-points">
+                        <li><strong>Sin escaneos:</strong> Usa datos del sensor. <em>Cero impacto en rendimiento.</em></li>
+                        <li><strong>CVE y CVSS:</strong> CVE = identificador unico de la vulnerabilidad. CVSS = puntuacion 0-10 (10 = critica).</li>
+                        <li><strong>Priorizacion inteligente:</strong> Prioriza por <em>riesgo real</em>: exploit publico, equipo expuesto, etc.</li>
+                        <li><strong>Tiempo real:</strong> Si instalas/quitas software, se refleja inmediatamente.</li>
+                        <li><strong>Remediacion:</strong> Spotlight te dice que tienes, <em>parchear es tu responsabilidad</em>.</li>
+                    </ul>
+                    <div class="exam-tip">Spotlight: <strong>sin escaneos</strong> (datos del sensor), prioriza por <strong>riesgo real</strong>, informacion <strong>en tiempo real</strong>.</div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- ITSEC 122 -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>ITSEC 122: Asset Management Fundamentals</h3>
+                    <div class="module-meta">40 min | Gestion de activos con Discover</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Usar Falcon Discover para tener un inventario completo de activos, aplicaciones y cuentas.</div>
+                    <ul class="key-points">
+                        <li><strong>Unmanaged hosts:</strong> Discover encuentra <em>equipos que no tienen sensor</em>. Puntos ciegos de tu proteccion.</li>
+                        <li><strong>Inventario de apps:</strong> Todas las apps instaladas, versiones, en que equipos. Detecta <em>shadow IT</em>.</li>
+                        <li><strong>Cuentas de usuario:</strong> Admins, cuentas inactivas, cuentas sospechosas. Reduce superficie de ataque.</li>
+                        <li><strong>Sin agentes extra:</strong> Todo con el mismo sensor.</li>
+                    </ul>
+                    <div class="exam-tip">Discover: encuentra <strong>unmanaged hosts</strong>, detecta <strong>shadow IT</strong>, funciona con <strong>el mismo sensor</strong>.</div>
+                </div>
+            </div></div>
+        </div>
+
+        <!-- ILT -->
+        <div class="module-card not-started" onclick="toggleModule(this)">
+            <div class="timeline-dot"></div>
+            <div class="module-header">
+                <span class="module-code">PENDIENTE</span>
+                <div class="module-title-text">
+                    <h3>Falcon Administrator ILT Courses</h3>
+                    <div class="module-meta">Instructor-Led Training | Clases en directo</div>
+                </div>
+                <div class="module-toggle">&#9660;</div>
+            </div>
+            <div class="module-content"><div class="module-inner">
+                <div class="module-tab-content active" data-tab="resumen">
+                    <div class="objective"><strong>Objetivo:</strong> Completar la formacion con clases dirigidas por un instructor. Estas son las sesiones en directo que complementan el e-learning.</div>
+                    <ul class="key-points">
+                        <li><strong>ILT = Instructor-Led Training:</strong> Clases en directo (presenciales o virtuales) con un instructor de CrowdStrike.</li>
+                        <li><strong>Labs practicos:</strong> Normalmente incluyen laboratorios donde practicas con una consola de Falcon real.</li>
+                        <li><strong>Requisito:</strong> Debes completar todos los modulos de e-learning antes de acceder al ILT.</li>
+                        <li><strong>Examen:</strong> Al final del ILT es donde normalmente se realiza el examen de certificacion.</li>
+                    </ul>
+                </div>
+            </div></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="footer">CrowdStrike Falcon Administrator - Material de estudio</div>
+
+<script>
+function toggleModule(card) {
+    card.classList.toggle('open');
+}
+
+function switchTab(btn, tabName) {
+    const card = btn.closest('.module-inner');
+    card.querySelectorAll('.module-tabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    card.querySelectorAll('.module-tab-content').forEach(t => {
+        t.classList.remove('active');
+        if (t.dataset.tab === tabName) t.classList.add('active');
+    });
+}
+</script>
+
+</body>
+</html>
