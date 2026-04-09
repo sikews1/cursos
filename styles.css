@@ -81,15 +81,15 @@
    DARK MODE
    ============================================================ */
 [data-theme="dark"] {
-    /* --- Surfaces --- */
-    --bg-base: #09090b;
-    --bg-raised: #131316;
-    --bg-overlay: #1a1a1f;
-    --bg-hover: #222228;
-    --bg-glass: rgba(255, 255, 255, 0.04);
-    --border-subtle: rgba(255, 255, 255, 0.06);
-    --border-default: rgba(255, 255, 255, 0.1);
-    --border-strong: rgba(255, 255, 255, 0.15);
+    /* --- Surfaces (dark navy blue) --- */
+    --bg-base: #0f1729;
+    --bg-raised: #162040;
+    --bg-overlay: #1c2a4a;
+    --bg-hover: #243456;
+    --bg-glass: rgba(22, 32, 64, 0.85);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-default: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.18);
 
     /* --- Accent (unchanged) --- */
     --accent-soft: rgba(249, 115, 22, 0.12);

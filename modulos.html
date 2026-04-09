@@ -860,7 +860,9 @@
 
 <script>
 const PROGRESS_KEY = 'falcon_module_progress';
-const statusLabels = { 'completed': 'COMPLETADO', 'in-progress': 'EN PROGRESO', 'not-started': 'PENDIENTE' };
+const statusLabels_es = { 'completed': 'COMPLETADO', 'in-progress': 'EN PROGRESO', 'not-started': 'PENDIENTE' };
+const statusLabels_en = { 'completed': 'COMPLETED', 'in-progress': 'IN PROGRESS', 'not-started': 'PENDING' };
+const statusLabels = statusLabels_es;
 
 function getProgress() {
     try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {}; } catch { return {}; }
@@ -922,6 +924,290 @@ function switchTab(btn, tabName) {
 }
 
 loadProgress();
+
+// === MODULE TRANSLATIONS ===
+const moduleMeta_en = {
+    f100: '30 min | Platform architecture',
+    f101: '50 min | Main platform modules',
+    f102: '1 hour | Initial platform configuration',
+    f104: '25 min | Detections and incident response',
+    f105: '45 min | Sensor installation and troubleshooting',
+    f106: '20 min | Customize dashboards',
+    f107: '15 min | Host firewall management',
+    soar100: '45 min | Response automation',
+    f160: '15 min | Mobile device protection',
+    itsec121: '40 min | Vulnerability management with Spotlight',
+    itsec122: '40 min | Asset management with Discover',
+    ilt: 'Instructor-Led Training | Live classes'
+};
+
+const moduleMeta_es = {
+    f100: '30 min | Arquitectura de la plataforma',
+    f101: '50 min | Modulos principales de la plataforma',
+    f102: '1 hora | Configuracion inicial de la plataforma',
+    f104: '25 min | Detecciones y respuesta a incidentes',
+    f105: '45 min | Instalacion y solucion de problemas del sensor',
+    f106: '20 min | Personalizar dashboards',
+    f107: '15 min | Gestion del firewall de host',
+    soar100: '45 min | Automatizacion de respuesta',
+    f160: '15 min | Proteccion de dispositivos moviles',
+    itsec121: '40 min | Gestion de vulnerabilidades con Spotlight',
+    itsec122: '40 min | Gestion de activos con Discover',
+    ilt: 'Instructor-Led Training | Clases en directo'
+};
+
+const moduleObjectives_en = {
+    f100: '<strong>Objective:</strong> Understand how the CrowdStrike Falcon platform is built, why it differs from a traditional antivirus, and how all the pieces fit together.',
+    f101: '<strong>Objective:</strong> Learn the main Falcon modules and understand what each one does. The CrowdStrike "product catalog".',
+    f102: '<strong>Objective:</strong> Learn to configure Falcon from scratch: create users, install sensors, configure policies and organize hosts. The most practical module so far.',
+    f104: '<strong>Objective:</strong> Learn to work with daily detections and alerts. How to view, investigate and manage incidents. This is your daily job as an administrator.',
+    f105: '<strong>Objective:</strong> Deep dive into sensor installation: deployment methods, advanced configuration, and troubleshooting when something fails.',
+    f106: '<strong>Objective:</strong> Customize the console dashboards to see the most relevant information at a glance.',
+    f107: '<strong>Objective:</strong> Manage host firewalls (Windows Firewall) centrally from the Falcon console.',
+    soar100: '<strong>Objective:</strong> Use Falcon Fusion to automate incident responses. Create "if X happens, do Y" workflows.',
+    f160: '<strong>Objective:</strong> Understand how CrowdStrike protects mobile devices (iOS/Android) integrated with the Falcon platform.',
+    itsec121: '<strong>Objective:</strong> Use Falcon Spotlight to manage vulnerabilities without traditional scans.',
+    itsec122: '<strong>Objective:</strong> Use Falcon Discover for a complete inventory of assets, applications and accounts.',
+    ilt: '<strong>Objective:</strong> Complete training with instructor-led live sessions. Practice with real Falcon labs.'
+};
+
+const moduleKeyPoints_en = {
+    f100: [
+        '<strong>CrowdStrike Falcon is cloud-native:</strong> All intelligence and processing is in the cloud. No on-premises servers needed, no signature updates. The sensor sends data to the cloud for analysis.',
+        '<strong>The sensor is lightweight:</strong> Installed on each endpoint (PC, server) consuming minimal resources. It only collects data and sends it. <em>Not like a heavy antivirus that slows down the machine.</em>',
+        '<strong>Threat Graph:</strong> CrowdStrike\'s brain. A massive database processing <em>trillions of events per week</em> from all customers. If an attack is detected at one customer, all others are automatically protected.',
+        '<strong>Single agent architecture:</strong> One sensor provides access to all modules (Prevent, Insight, Discover, Spotlight...). <em>This is a huge advantage over competitors.</em>',
+        '<strong>IOA-focused (Indicators of Attack):</strong> CrowdStrike analyzes <em>behavior</em> in real time. If a process does something suspicious (e.g., Word launching PowerShell), it detects it even if it\'s a brand new malware.',
+        '<strong>Falcon Console:</strong> Your web-based control panel where you manage everything: alerts, policies, hosts, investigations.'
+    ],
+    f101: [
+        '<strong>Falcon Prevent (NGAV):</strong> Next-gen antivirus. Blocks known and unknown malware with machine learning. <em>First line of defense.</em>',
+        '<strong>Falcon Insight (EDR):</strong> Full endpoint visibility: processes, connections, files. Investigate incidents with the <em>process tree</em>.',
+        '<strong>Falcon OverWatch:</strong> <em>Human</em> threat hunting team 24/7. They complement AI by actively searching for what machines might miss.',
+        '<strong>Falcon Discover:</strong> IT hygiene. Inventory of <em>applications, accounts and assets</em>. Detects shadow IT.',
+        '<strong>Falcon Spotlight:</strong> Vulnerability management <em>without scans</em>. Uses sensor data. Zero performance impact.',
+        '<strong>Falcon Fusion (SOAR):</strong> Automation. "If X happens, do Y" workflows. <em>E.g., ransomware detected → isolate host automatically.</em>',
+        '<strong>Falcon Identity Protection:</strong> Protects Active Directory, detects stolen credentials and lateral movement.',
+        '<strong>Falcon Device Control:</strong> USB and peripheral device control.',
+        '<strong>Falcon Firewall Management:</strong> Manages Windows Firewall from the console centrally.'
+    ],
+    f102: [
+        '<strong>Initial setup:</strong> Create users, assign roles (Administrator, Analyst, Viewer...), configure MFA/2FA. <em>Falcon Administrator has full access.</em>',
+        '<strong>Sensor installation:</strong> You need the <em>CID (Customer ID)</em>. Can be deployed via GPO, SCCM, scripts, or manually.',
+        '<strong>Host Groups:</strong> Organize hosts into groups. <em>Static</em> (manual) or <em>Dynamic</em> (automatic by rules: OS, domain, OU, tags).',
+        '<strong>Prevention Policies:</strong> Define WHAT Falcon blocks. Different policies for different groups. <em>Assigned to Host Groups.</em>',
+        '<strong>Sensor Update Policies:</strong> Control <em>when and how sensors update</em>. Channels: N, N-1, N-2.',
+        '<strong>Exclusions:</strong> For false positives with legitimate software. By <em>path, hash, or process</em>. Each exclusion is a potential blind spot.',
+        '<strong>RBAC:</strong> Role-based access control. <em>Least privilege</em> principle.',
+        '<strong>Verification:</strong> Check in <em>Host Management</em> that hosts appear with correct group and policy.'
+    ],
+    f104: [
+        '<strong>Main dashboard:</strong> Overview of <em>recent detections, problematic hosts, trends</em>. First thing you check every morning.',
+        '<strong>Severity levels:</strong> Informational → Low → Medium → High → Critical. <em>Always prioritize Critical and High.</em>',
+        '<strong>Process Tree:</strong> Reconstruct the scene: <em>which process started it all, what it launched, what connections it made, what files it touched</em>.',
+        '<strong>Alert workflow:</strong> New → In Progress → True/False Positive → Closed. <em>Always document why you close it.</em>',
+        '<strong>Response actions:</strong> <em>Network Contain</em> (isolate), <em>Quarantine</em> (file quarantine), <em>RTR</em> (remote access to the host).',
+        '<strong>MITRE ATT&CK mapping:</strong> Each detection tells you which tactic/technique was detected (Execution, Persistence, Lateral Movement...).'
+    ],
+    f105: [
+        '<strong>Installation methods:</strong> Manual, GPO, SCCM/MECM, PowerShell, Intune, Jamf (Mac). <em>Each method suits different environments.</em>',
+        '<strong>Requirements:</strong> CID, correct installer for the OS, local admin permissions, connectivity to CrowdStrike cloud.',
+        '<strong>Sensor Tags:</strong> Labels applied during installation. <em>Very useful for dynamic Host Groups.</em>',
+        '<strong>Basic troubleshooting:</strong> If not reporting: check connectivity, verify service is running, review logs. <em>Diagnostic mode available.</em>',
+        '<strong>Proxy:</strong> In proxy environments, configure during installation or via policy.',
+        '<strong>Update channels:</strong> <em>N</em> (latest), <em>N-1</em> (one behind), <em>N-2</em> (two behind). Best practice: N-1 in production, N in pilot group.'
+    ]
+};
+
+const moduleExamTips_en = {
+    f100: 'Remember: CrowdStrike uses <strong>a single lightweight sensor</strong>, is <strong>cloud-native</strong> (not on-premises), and its main advantage is <strong>IOAs + Threat Graph</strong>. These three ideas appear constantly.',
+    f101: 'Exam trick: <strong>Prevent</strong> = block, <strong>Insight</strong> = investigate, <strong>OverWatch</strong> = humans, <strong>Discover</strong> = inventory, <strong>Spotlight</strong> = vulnerabilities, <strong>Fusion</strong> = automate.',
+    f102: 'Onboarding flow: <strong>1) Create users/roles → 2) Install sensor (CID) → 3) Create Host Groups → 4) Assign Policies → 5) Verify</strong>. Dynamic Host Groups are better than static in large environments.',
+    f104: 'Know the flow: <strong>New → In Progress → TP/FP → Closed</strong> and the actions: <strong>Contain, Quarantine, RTR</strong>. Each detection maps to MITRE ATT&CK.',
+    f105: '<strong>CID is mandatory</strong>, <strong>Sensor Tags</strong> organize automatically, and <strong>N/N-1/N-2</strong> channels are a classic exam question.',
+    f106: 'Know that you can <strong>create custom dashboards with widgets</strong> and <strong>filter and share</strong> with the team.',
+    f107: 'Rules are processed <strong>top to bottom</strong> (order matters) and <strong>monitor mode</strong> is key for testing before enforcing.',
+    soar100: 'Structure: <strong>Trigger → Condition → Action</strong>. Falcon Fusion can <strong>contain hosts automatically</strong> on critical detections.',
+    f160: 'Falcon for Mobile provides <strong>unified visibility</strong> and detects mobile threats like <strong>SMS phishing and malicious apps</strong>.',
+    itsec121: 'Spotlight: <strong>no scans</strong> (uses sensor data), prioritizes by <strong>real risk</strong>, information <strong>always up to date in real time</strong>.',
+    itsec122: 'Discover: finds <strong>unmanaged hosts</strong>, detects <strong>shadow IT</strong>, works with <strong>the same sensor</strong>.'
+};
+
+const moduleVocabDefs_en = {
+    'Disenado para funcionar en la nube desde el principio': 'Designed to run in the cloud from the start',
+    'Agente ligero instalado en cada endpoint': 'Lightweight agent installed on each endpoint',
+    'Base de datos masiva que correlaciona eventos globales': 'Massive database correlating global events',
+    'Interfaz web de gestion y administracion': 'Web interface for management and administration',
+    'Deteccion basada en comportamiento en tiempo real': 'Behavior-based detection in real time',
+    'Evidencia de un ataque pasado (hash, IP, dominio)': 'Evidence of a past attack (hash, IP, domain)',
+    'PC, portatil, servidor o movil en la red': 'PC, laptop, server or mobile device on the network',
+    'Un solo sensor para todos los modulos': 'A single sensor for all modules',
+    'Usa ML y comportamiento, no solo firmas': 'Uses ML and behavior, not just signatures',
+    'Monitoriza, detecta y permite responder': 'Monitors, detects and enables response',
+    'Busqueda proactiva de amenazas ocultas': 'Proactive search for hidden threats',
+    'Orquestar y automatizar respuestas': 'Orchestrate and automate responses',
+    'Software/hardware no autorizado en la red': 'Unauthorized software/hardware on the network',
+    'Cadena que muestra que proceso lanzo cual': 'Chain showing which process launched which',
+    'Gestion de USBs y perifericos': 'USB and peripheral management',
+    'Identificar y priorizar debilidades': 'Identify and prioritize weaknesses',
+    'Identificador unico necesario para instalar sensores': 'Unique identifier needed to install sensors',
+    'Agrupacion para aplicar politicas distintas': 'Grouping to apply different policies',
+    'Define que bloquea Falcon automaticamente': 'Defines what Falcon blocks automatically',
+    'Controla versiones del sensor (N, N-1, N-2)': 'Controls sensor versions (N, N-1, N-2)',
+    'Regla para ignorar falsos positivos': 'Rule to ignore false positives',
+    'Cada usuario solo ve/hace lo que necesita': 'Each user only sees/does what they need',
+    'Metodo de despliegue masivo en Windows/AD': 'Mass deployment method in Windows/AD',
+    'Etiquetas para organizar y crear grupos dinamicos': 'Tags to organize and create dynamic groups',
+    'Alerta generada cuando Falcon detecta algo sospechoso': 'Alert generated when Falcon detects something suspicious',
+    'Nivel de la alerta: Info, Low, Medium, High, Critical': 'Alert level: Info, Low, Medium, High, Critical',
+    'Aisla el equipo pero mantiene conexion con CrowdStrike': 'Isolates the host but keeps connection to CrowdStrike',
+    'Acceso remoto al equipo desde la consola': 'Remote access to the host from the console',
+    'Alerta confirmada como amenaza real': 'Alert confirmed as a real threat',
+    'Alerta incorrecta, era software legitimo': 'Incorrect alert, was legitimate software',
+    'Aislar un archivo para que no se ejecute': 'Isolate a file to prevent execution',
+    'Clasificacion MITRE del tipo de ataque': 'MITRE classification of the attack type',
+    'Etiqueta asignada durante instalacion': 'Tag assigned during installation',
+    'Intermediario entre el sensor y la nube': 'Intermediary between the sensor and the cloud',
+    'Diagnosticar y resolver fallos': 'Diagnose and resolve issues',
+    'Ultima, una atras, dos atras': 'Latest, one behind, two behind',
+};
+
+// Apply translations to modules page
+function translateModules() {
+    const lang = typeof getLang === 'function' ? getLang() : 'es';
+    const help = typeof isHelpOn === 'function' ? isHelpOn() : false;
+
+    // Status labels
+    const labels = lang === 'en' ? statusLabels_en : statusLabels_es;
+
+    // Update module meta
+    document.querySelectorAll('.module-card[data-id]').forEach(card => {
+        const id = card.dataset.id;
+        const meta = card.querySelector('.module-meta');
+        if (meta) {
+            const dict = lang === 'en' ? moduleMeta_en : moduleMeta_es;
+            if (dict[id]) meta.textContent = dict[id];
+        }
+    });
+
+    // Update objectives
+    document.querySelectorAll('.module-card[data-id]').forEach(card => {
+        const id = card.dataset.id;
+        const obj = card.querySelector('.objective');
+        if (obj && moduleObjectives_en[id]) {
+            if (!obj.dataset.es) obj.dataset.es = obj.innerHTML;
+            obj.innerHTML = lang === 'en' ? moduleObjectives_en[id] : obj.dataset.es;
+            // Add help hint
+            const existing = obj.parentElement.querySelector('.module-hint');
+            if (existing) existing.remove();
+            if (help) {
+                const hint = document.createElement('div');
+                hint.className = 'question-hint module-hint';
+                hint.innerHTML = lang === 'en' ? obj.dataset.es : moduleObjectives_en[id];
+                obj.after(hint);
+            }
+        }
+    });
+
+    // Update key points
+    document.querySelectorAll('.module-card[data-id]').forEach(card => {
+        const id = card.dataset.id;
+        const points = card.querySelectorAll('.key-points li');
+        if (moduleKeyPoints_en[id]) {
+            points.forEach((li, i) => {
+                if (!li.dataset.es) li.dataset.es = li.innerHTML;
+                if (lang === 'en' && moduleKeyPoints_en[id][i]) {
+                    li.innerHTML = moduleKeyPoints_en[id][i];
+                } else {
+                    li.innerHTML = li.dataset.es;
+                }
+            });
+        }
+    });
+
+    // Update exam tips
+    document.querySelectorAll('.module-card[data-id]').forEach(card => {
+        const id = card.dataset.id;
+        const tip = card.querySelector('.exam-tip');
+        if (tip && moduleExamTips_en[id]) {
+            if (!tip.dataset.es) {
+                // Store original without the ::before pseudo content
+                const clone = tip.cloneNode(true);
+                tip.dataset.es = tip.innerHTML;
+            }
+            // The ::before content is CSS-based, need to override
+            if (lang === 'en') {
+                tip.innerHTML = moduleExamTips_en[id];
+                tip.style.setProperty('--tip-label', '"KEY EXAM POINT"');
+            } else {
+                tip.innerHTML = tip.dataset.es;
+                tip.style.removeProperty('--tip-label');
+            }
+        }
+    });
+
+    // Update vocab definitions
+    document.querySelectorAll('.vocab-def').forEach(el => {
+        if (!el.dataset.es) el.dataset.es = el.textContent;
+        const orig = el.dataset.es;
+        if (lang === 'en' && moduleVocabDefs_en[orig]) {
+            el.textContent = moduleVocabDefs_en[orig];
+        } else {
+            el.textContent = orig;
+        }
+    });
+
+    // Update practice section text
+    document.querySelectorAll('.module-tab-content[data-tab="practica"] p').forEach(el => {
+        if (!el.dataset.es) el.dataset.es = el.textContent;
+        el.textContent = lang === 'en' ? 'Practice this module\'s concepts:' : el.dataset.es;
+    });
+
+    // Update practice links
+    const practiceLinks = {
+        'Ver en glosario': 'View in glossary',
+    };
+    document.querySelectorAll('.related-links a').forEach(el => {
+        if (!el.dataset.es) el.dataset.es = el.textContent;
+        const orig = el.dataset.es.trim();
+        if (lang === 'en' && practiceLinks[orig]) el.textContent = practiceLinks[orig];
+        else if (lang === 'en' && orig.startsWith('Quiz')) el.textContent = orig;
+        else if (lang === 'en' && orig.startsWith('Flashcards')) el.textContent = orig;
+        else if (lang === 'en' && orig.startsWith('Escenario')) el.textContent = orig.replace('Escenario:', 'Scenario:');
+        else el.textContent = el.dataset.es;
+    });
+
+    // Update progress counts
+    updateOverview();
+}
+
+// Override updateOverview to be lang-aware
+const _origUpdateOverview = updateOverview;
+updateOverview = function() {
+    const cards = document.querySelectorAll('.module-card[data-id]');
+    let completed = 0, inProgress = 0, notStarted = 0;
+    cards.forEach(c => { if (c.classList.contains('completed')) completed++; else if (c.classList.contains('in-progress')) inProgress++; else notStarted++; });
+    const pct = Math.round((completed / cards.length) * 100);
+    const circ = 2 * Math.PI * 42;
+    const fill = document.querySelector('.circle-fill');
+    if (fill) { fill.setAttribute('stroke-dasharray', circ); fill.setAttribute('stroke-dashoffset', circ - (pct/100)*circ); }
+    const txt = document.querySelector('.circle-text');
+    if (txt) txt.textContent = pct + '%';
+    const counts = document.querySelector('.progress-counts');
+    const lang = typeof getLang === 'function' ? getLang() : 'es';
+    if (counts) {
+        if (lang === 'en') {
+            counts.innerHTML = '<span><span class="dot-green"></span> '+completed+' completed</span><span><span class="dot-yellow"></span> '+inProgress+' in progress</span><span><span class="dot-gray"></span> '+notStarted+' pending</span>';
+        } else {
+            counts.innerHTML = '<span><span class="dot-green"></span> '+completed+' completados</span><span><span class="dot-yellow"></span> '+inProgress+' en progreso</span><span><span class="dot-gray"></span> '+notStarted+' pendientes</span>';
+        }
+    }
+};
+
+// Watch for language changes
+const _modLangObs = new MutationObserver(() => translateModules());
+_modLangObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang', 'data-help'] });
+translateModules();
 </script>
 
 <script src="i18n.js"></script>
