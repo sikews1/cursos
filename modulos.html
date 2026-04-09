@@ -161,6 +161,35 @@
         .in-progress .module-code { background: rgba(243, 156, 18, 0.2); color: #f1c40f; }
         .not-started .module-code { background: rgba(127, 140, 141, 0.2); color: #95a5a6; }
 
+        /* Status changer */
+        .status-changer {
+            display: flex;
+            gap: 6px;
+            margin-left: auto;
+        }
+
+        .status-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #2a3a4e;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-btn:hover { transform: scale(1.2); }
+        .status-btn[data-status="completed"] { border-color: #27ae60; color: #27ae60; }
+        .status-btn[data-status="completed"]:hover, .status-btn[data-status="completed"].active { background: #27ae60; color: #fff; }
+        .status-btn[data-status="in-progress"] { border-color: #f1c40f; color: #f1c40f; }
+        .status-btn[data-status="in-progress"]:hover, .status-btn[data-status="in-progress"].active { background: #f1c40f; color: #fff; }
+        .status-btn[data-status="not-started"] { border-color: #7f8c8d; color: #7f8c8d; }
+        .status-btn[data-status="not-started"]:hover, .status-btn[data-status="not-started"].active { background: #7f8c8d; color: #fff; }
+
         .module-title-text {
             flex: 1;
             min-width: 200px;
@@ -385,7 +414,7 @@
     <div class="timeline">
 
         <!-- FALCON 100 -->
-        <div class="module-card completed" onclick="toggleModule(this)">
+        <div class="module-card completed" data-id="f100" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">COMPLETADO</span>
@@ -393,7 +422,7 @@
                     <h3>FALCON 100: Falcon Platform Architecture Overview</h3>
                     <div class="module-meta">30 min | Arquitectura de la plataforma</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tabs">
@@ -440,7 +469,7 @@
         </div>
 
         <!-- FALCON 101 -->
-        <div class="module-card completed" onclick="toggleModule(this)">
+        <div class="module-card completed" data-id="f101" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">COMPLETADO</span>
@@ -448,7 +477,7 @@
                     <h3>FALCON 101: Falcon Platform Essentials</h3>
                     <div class="module-meta">50 min | Modulos principales de la plataforma</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tabs">
@@ -498,7 +527,7 @@
         </div>
 
         <!-- FALCON 102 -->
-        <div class="module-card in-progress" onclick="toggleModule(this)">
+        <div class="module-card in-progress" data-id="f102" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">EN PROGRESO 4/6</span>
@@ -506,7 +535,7 @@
                     <h3>FALCON 102: Falcon Platform Onboarding Configuration</h3>
                     <div class="module-meta">1 hora | Configuracion inicial de la plataforma</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tabs">
@@ -555,7 +584,7 @@
         </div>
 
         <!-- FALCON 104 -->
-        <div class="module-card in-progress" onclick="toggleModule(this)">
+        <div class="module-card in-progress" data-id="f104" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">EN PROGRESO 0/3</span>
@@ -563,7 +592,7 @@
                     <h3>FALCON 104: Getting Started with Endpoint Security</h3>
                     <div class="module-meta">25 min | Detecciones y respuesta a incidentes</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tabs">
@@ -610,7 +639,7 @@
         </div>
 
         <!-- FALCON 105 -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="f105" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -618,7 +647,7 @@
                     <h3>FALCON 105: Sensor Installation, Configuration & Troubleshooting</h3>
                     <div class="module-meta">45 min | Instalacion y solucion de problemas del sensor</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tabs">
@@ -649,7 +678,7 @@
         </div>
 
         <!-- FALCON 106 -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="f106" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -657,7 +686,7 @@
                     <h3>FALCON 106: Customizing Dashboards in Falcon</h3>
                     <div class="module-meta">20 min | Personalizar dashboards</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tab-content active" data-tab="resumen">
@@ -675,7 +704,7 @@
         </div>
 
         <!-- FALCON 107 -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="f107" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -683,7 +712,7 @@
                     <h3>FALCON 107: Falcon Firewall Management Fundamentals</h3>
                     <div class="module-meta">15 min | Gestion del firewall de host</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tab-content active" data-tab="resumen">
@@ -700,7 +729,7 @@
         </div>
 
         <!-- SOAR 100 -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="soar100" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -708,7 +737,7 @@
                     <h3>SOAR 100: Falcon Fusion SOAR Fundamentals</h3>
                     <div class="module-meta">45 min | Automatizacion de respuesta</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tab-content active" data-tab="resumen">
@@ -726,7 +755,7 @@
         </div>
 
         <!-- FALCON 160 -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="f160" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -734,7 +763,7 @@
                     <h3>FALCON 160: Falcon for Mobile</h3>
                     <div class="module-meta">15 min | Proteccion de dispositivos moviles</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tab-content active" data-tab="resumen">
@@ -750,7 +779,7 @@
         </div>
 
         <!-- ITSEC 121 -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="itsec121" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -758,7 +787,7 @@
                     <h3>ITSEC 121: Vulnerability Management Fundamentals</h3>
                     <div class="module-meta">40 min | Gestion de vulnerabilidades con Spotlight</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tab-content active" data-tab="resumen">
@@ -776,7 +805,7 @@
         </div>
 
         <!-- ITSEC 122 -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="itsec122" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -784,7 +813,7 @@
                     <h3>ITSEC 122: Asset Management Fundamentals</h3>
                     <div class="module-meta">40 min | Gestion de activos con Discover</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tab-content active" data-tab="resumen">
@@ -801,7 +830,7 @@
         </div>
 
         <!-- ILT -->
-        <div class="module-card not-started" onclick="toggleModule(this)">
+        <div class="module-card not-started" data-id="ilt" onclick="toggleModule(this)">
             <div class="timeline-dot"></div>
             <div class="module-header">
                 <span class="module-code">PENDIENTE</span>
@@ -809,7 +838,7 @@
                     <h3>Falcon Administrator ILT Courses</h3>
                     <div class="module-meta">Instructor-Led Training | Clases en directo</div>
                 </div>
-                <div class="module-toggle">&#9660;</div>
+                <div class="status-changer" onclick="event.stopPropagation()"><button class="status-btn" data-status="not-started" onclick="setStatus(this)" title="Pendiente">&#9744;</button><button class="status-btn" data-status="in-progress" onclick="setStatus(this)" title="En progreso">&#9998;</button><button class="status-btn" data-status="completed" onclick="setStatus(this)" title="Completado">&#10003;</button></div><div class="module-toggle">&#9660;</div>
             </div>
             <div class="module-content"><div class="module-inner">
                 <div class="module-tab-content active" data-tab="resumen">
@@ -830,9 +859,57 @@
 <div class="footer">CrowdStrike Falcon Administrator - Material de estudio</div>
 
 <script>
-function toggleModule(card) {
-    card.classList.toggle('open');
+const PROGRESS_KEY = 'falcon_module_progress';
+const statusLabels = { 'completed': 'COMPLETADO', 'in-progress': 'EN PROGRESO', 'not-started': 'PENDIENTE' };
+
+function getProgress() {
+    try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {}; } catch { return {}; }
 }
+
+function setStatus(btn) {
+    const card = btn.closest('.module-card');
+    const id = card.dataset.id;
+    const status = btn.dataset.status;
+    card.classList.remove('completed', 'in-progress', 'not-started');
+    card.classList.add(status);
+    card.querySelector('.module-code').textContent = statusLabels[status];
+    card.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const p = getProgress(); p[id] = status;
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(p));
+    updateOverview();
+}
+
+function loadProgress() {
+    const p = getProgress();
+    document.querySelectorAll('.module-card[data-id]').forEach(card => {
+        const status = p[card.dataset.id];
+        if (status) {
+            card.classList.remove('completed', 'in-progress', 'not-started');
+            card.classList.add(status);
+            card.querySelector('.module-code').textContent = statusLabels[status];
+        }
+        const cur = card.classList.contains('completed') ? 'completed' : card.classList.contains('in-progress') ? 'in-progress' : 'not-started';
+        card.querySelectorAll('.status-btn').forEach(b => b.classList.toggle('active', b.dataset.status === cur));
+    });
+    updateOverview();
+}
+
+function updateOverview() {
+    const cards = document.querySelectorAll('.module-card[data-id]');
+    let completed = 0, inProgress = 0, notStarted = 0;
+    cards.forEach(c => { if (c.classList.contains('completed')) completed++; else if (c.classList.contains('in-progress')) inProgress++; else notStarted++; });
+    const pct = Math.round((completed / cards.length) * 100);
+    const circ = 2 * Math.PI * 42;
+    const fill = document.querySelector('.circle-fill');
+    if (fill) { fill.setAttribute('stroke-dasharray', circ); fill.setAttribute('stroke-dashoffset', circ - (pct/100)*circ); }
+    const txt = document.querySelector('.circle-text');
+    if (txt) txt.textContent = pct + '%';
+    const counts = document.querySelector('.progress-counts');
+    if (counts) counts.innerHTML = '<span><span class="dot-green"></span> '+completed+' completados</span><span><span class="dot-yellow"></span> '+inProgress+' en progreso</span><span><span class="dot-gray"></span> '+notStarted+' pendientes</span>';
+}
+
+function toggleModule(card) { card.classList.toggle('open'); }
 
 function switchTab(btn, tabName) {
     const card = btn.closest('.module-inner');
@@ -843,7 +920,10 @@ function switchTab(btn, tabName) {
         if (t.dataset.tab === tabName) t.classList.add('active');
     });
 }
+
+loadProgress();
 </script>
 
+<script src="auth.js"></script>
 </body>
 </html>
