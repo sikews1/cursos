@@ -652,8 +652,8 @@ function renderExamQ() {
     document.getElementById('currentQuestion').innerHTML = `
         <div class="exam-question">
             <div class="eq-number">Pregunta ${examIdx + 1} de ${examQuestions.length} ${isMistakesExam ? '<span style="color: var(--red);font-weight:700;"> - REPASO DE ERRORES</span>' : ''} ${failBadge}</div>
-            ${q.q_en ? '<div class="question-en">' + q.q_en + '</div>' : ''}
-            <div class="eq-text">${q.q}</div>
+            <div class="eq-text">${isBilingual() && q.q_en ? q.q_en : q.q}</div>
+            ${isBilingual() && q.q_en ? '<div class="question-en">' + q.q + '</div>' : ''}
             <ul class="eq-options">${opts}</ul>
         </div>
     `;
@@ -806,6 +806,7 @@ function resetAndMistakes() {
 renderHistory();
 </script>
 
+<script src="i18n.js"></script>
 <script src="theme.js"></script>
 <script src="auth.js"></script>
 </body>

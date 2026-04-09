@@ -593,8 +593,8 @@ function renderQuestion() {
         <div class="question-card">
             <div class="question-counter">Pregunta ${currentIndex + 1} de ${currentQuestions.length}</div>
             <span class="question-module-tag">${q.moduleLabel}</span>
-            ${q.question_en ? '<div class="question-en">' + q.question_en + '</div>' : ''}
-            <div class="question-text">${q.question}</div>
+            <div class="question-text">${isBilingual() && q.question_en ? q.question_en : q.question}</div>
+            ${isBilingual() && q.question_en ? '<div class="question-en">' + q.question + '</div>' : ''}
             <ul class="options">${optionsHtml}</ul>
             <div class="explanation ${answered ? 'show' : ''}">${q.explanation}</div>
         </div>
@@ -691,6 +691,7 @@ if (urlModule) {
 }
 </script>
 
+<script src="i18n.js"></script>
 <script src="theme.js"></script>
 <script src="auth.js"></script>
 </body>

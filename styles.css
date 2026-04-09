@@ -553,21 +553,17 @@ input, textarea, select {
 /* ============================================================
    BILINGUAL QUESTION STYLES
    ============================================================ */
+/* Spanish translation subtitle (shown when EN mode is active) */
 .question-en {
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
-    margin-bottom: 8px;
-    padding: 10px 14px;
+    margin-bottom: 12px;
+    padding: 8px 14px;
     background: var(--bg-overlay);
     border-left: 3px solid var(--purple);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     font-style: italic;
     line-height: 1.5;
-    display: none;
-}
-
-[data-lang="en"] .question-en {
-    display: block;
 }
 
 /* ============================================================
