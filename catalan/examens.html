@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exàmens de Pràctica - C1 Català</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .cat-nav {
+            background: rgba(var(--bg-base-rgb, 240,240,243), 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .cat-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+
+        .cat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .cat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .cat-nav a.home { color: var(--accent); font-weight: 600; }
+        .cat-nav a.home:hover { background: var(--accent-soft); }
+
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(251, 191, 36, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(239, 68, 68, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
+
+        /* Exam collapsible */
+        .exam-block {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .exam-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .exam-header:hover { background: var(--bg-hover); }
+
+        .exam-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .exam-header h2 .exam-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .exam-header .toggle-icon {
+            font-size: 1.4rem;
+            transition: transform 0.3s;
+            color: var(--text-muted);
+        }
+
+        .exam-header.open .toggle-icon { transform: rotate(180deg); }
+
+        .exam-body {
+            display: none;
+            padding: 0 24px 28px;
+        }
+
+        .exam-body.open { display: block; }
+
+        /* Exercise section */
+        .exercise {
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .exercise:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+
+        .exercise-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exercise-title .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .exercise-desc {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+        }
+
+        /* Fill gaps */
+        .fill-text {
+            background: var(--bg-overlay);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            line-height: 1.9;
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+
+        .fill-text .gap {
+            display: inline-block;
+            min-width: 60px;
+            border-bottom: 2px dashed var(--accent);
+            text-align: center;
+            font-weight: 700;
+            color: var(--accent);
+            padding: 0 4px;
+        }
+
+        .fill-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .fill-inputs label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+
+        .fill-inputs label span {
+            background: var(--accent);
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .fill-inputs input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            background: var(--bg-raised);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            transition: border-color 0.2s;
+        }
+
+        .fill-inputs input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .fill-inputs input.correct {
+            border-color: var(--green);
+            background: var(--green-soft);
+        }
+
+        .fill-inputs input.wrong {
+            border-color: var(--red);
+            background: var(--red-soft);
+        }
+
+        .correction-text {
+            color: var(--green);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        /* Error correction */
+        .error-text {
+            background: var(--bg-overlay);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            line-height: 2;
+            font-size: 0.92rem;
+            margin-bottom: 14px;
+        }
+
+        .error-segment {
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-underline-offset: 3px;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        .error-segment:hover { background: var(--accent-soft); }
+
+        .error-segment.checked-correct {
+            background: var(--green-soft);
+            text-decoration-color: var(--green);
+            color: var(--green);
+        }
+
+        .error-segment.checked-wrong {
+            background: var(--red-soft);
+            text-decoration-color: var(--red);
+            color: var(--red);
+        }
+
+        .error-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-raised);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 280px;
+            text-align: center;
+        }
+
+        .error-popup.visible { display: block; }
+
+        .error-popup h4 { margin: 0 0 12px; font-size: 0.95rem; }
+
+        .error-popup .popup-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 14px;
+        }
+
+        .error-popup .popup-btns button {
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: all 0.2s;
+        }
+
+        .btn-correct { background: var(--green); color: #fff; }
+        .btn-correct:hover { opacity: 0.85; }
+        .btn-incorrect { background: var(--red); color: #fff; }
+        .btn-incorrect:hover { opacity: 0.85; }
+
+        .error-feedback {
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .error-feedback.right { background: var(--green-soft); color: var(--green); }
+        .error-feedback.wrong-feedback { background: var(--red-soft); color: var(--red); }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        .overlay.visible { display: block; }
+
+        /* Multiple choice */
+        .mc-question {
+            background: var(--bg-overlay);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+        }
+
+        .mc-question p {
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .mc-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .mc-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .mc-options label:hover { background: var(--bg-hover); }
+
+        .mc-options label.correct-option {
+            background: var(--green-soft);
+            border-color: var(--green);
+        }
+
+        .mc-options label.wrong-option {
+            background: var(--red-soft);
+            border-color: var(--red);
+        }
+
+        .mc-options input[type="radio"] {
+            accent-color: var(--accent);
+        }
+
+        /* Composition */
+        .comp-prompt {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(239, 68, 68, 0.06));
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+        }
+
+        .comp-prompt h4 {
+            margin: 0 0 6px;
+            font-size: 0.95rem;
+        }
+
+        .comp-prompt p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .comp-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 16px;
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            resize: vertical;
+            background: var(--bg-raised);
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .comp-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .word-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .word-counter.met { color: var(--green); }
+
+        .checklist {
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+        }
+
+        .checklist h4 {
+            margin: 0 0 10px;
+            font-size: 0.9rem;
+        }
+
+        .checklist label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            padding: 4px 0;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .checklist input[type="checkbox"] { accent-color: var(--accent); }
+
+        .model-answer {
+            display: none;
+            margin-top: 16px;
+            padding: 20px;
+            background: var(--green-soft);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            line-height: 1.8;
+        }
+
+        .model-answer.visible { display: block; }
+
+        .model-answer h4 {
+            color: var(--green);
+            margin: 0 0 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            color: #fff;
+        }
+
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .btn-secondary {
+            background: var(--bg-overlay);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+        }
+
+        .btn-secondary:hover { background: var(--bg-hover); }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        /* Score */
+        .score-display {
+            display: none;
+            margin-top: 14px;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .score-display.visible { display: block; }
+        .score-display.good { background: var(--green-soft); color: var(--green); }
+        .score-display.bad { background: var(--red-soft); color: var(--red); }
+        .score-display.ok { background: var(--yellow-soft); color: #b45309; }
+
+        @media (max-width: 600px) {
+            .mc-options { grid-template-columns: 1fr; }
+            .fill-inputs { grid-template-columns: 1fr; }
+            .exam-header h2 { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cat-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+        <a href="gramatica.html">Gramàtica</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="flashcards.html">Flashcards</a>
+        <a href="examens.html" class="active">Exàmens</a>
+        <a href="redaccio.html">Redacció</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Exàmens de Pràctica</span></h1>
+        <p>Exercicis tipus examen real C1 - Mossos d'Esquadra</p>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+    <div class="error-popup" id="errorPopup">
+        <h4 id="popupSegment"></h4>
+        <p style="font-size:0.85rem;color:var(--text-secondary)">Aquesta part del text és correcta o incorrecta?</p>
+        <div class="popup-btns">
+            <button class="btn-correct" onclick="answerError('correct')">Correcte</button>
+            <button class="btn-incorrect" onclick="answerError('incorrect')">Incorrecte</button>
+        </div>
+        <div class="error-feedback" id="popupFeedback" style="display:none"></div>
+    </div>
+
+    <div class="container">
+
+        <!-- ===================== EXAM 1 ===================== -->
+        <div class="exam-block">
+            <div class="exam-header" onclick="toggleExam(this)">
+                <h2><span class="exam-num">1</span> Examen 1 — Seguretat ciutadana</h2>
+                <span class="toggle-icon">&#9660;</span>
+            </div>
+            <div class="exam-body">
+
+                <!-- Ex 1.1: Fill gaps -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 1</span> Completar buits</div>
+                    <div class="exercise-desc">Completa el text sobre seguretat ciutadana amb la paraula adequada (pronoms febles, preposicions, articles).</div>
+                    <div class="fill-text">
+                        La seguretat ciutadana és un dret fonamental que cal garantir <span class="gap">(1)</span> tots els ciutadans. Els cossos policials s'<span class="gap">(2)</span> dediquen amb professionalitat i vocació. Quan hi ha un incident, cal comunicar-<span class="gap">(3)</span> immediatament a la central. Els agents <span class="gap">(4)</span> van ràpidament al lloc dels fets. Si algú necessita ajuda, els mossos <span class="gap">(5)</span> la proporcionen sense dubtar. La prevenció del delicte és clau <span class="gap">(6)</span> mantenir la convivència. Cal invertir <span class="gap">(7)</span> formació perquè els agents estiguin preparats. És important que la ciutadania <span class="gap">(8)</span> consciència de la importància de col·laborar amb la policia. Molts ciutadans no <span class="gap">(9)</span> són conscients, però la seva col·laboració és essencial. El cos de Mossos d'Esquadra treballa <span class="gap">(10)</span> garantir la seguretat de tothom.
+                    </div>
+                    <div class="fill-inputs" id="fill1">
+                        <label><span>1</span><input type="text" data-answer="a" placeholder="preposició"></label>
+                        <label><span>2</span><input type="text" data-answer="hi" placeholder="pronom feble"></label>
+                        <label><span>3</span><input type="text" data-answer="ho" placeholder="pronom feble"></label>
+                        <label><span>4</span><input type="text" data-answer="hi" placeholder="pronom feble"></label>
+                        <label><span>5</span><input type="text" data-answer="la hi" placeholder="combinació pronoms"></label>
+                        <label><span>6</span><input type="text" data-answer="per a" placeholder="preposició"></label>
+                        <label><span>7</span><input type="text" data-answer="en" placeholder="preposició"></label>
+                        <label><span>8</span><input type="text" data-answer="tingui" placeholder="verb"></label>
+                        <label><span>9</span><input type="text" data-answer="en" placeholder="pronom feble"></label>
+                        <label><span>10</span><input type="text" data-answer="per" placeholder="preposició"></label>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkFill('fill1')">Corregir</button>
+                        <button class="btn btn-secondary" onclick="resetFill('fill1')">Reiniciar</button>
+                    </div>
+                    <div class="score-display" id="fill1-score"></div>
+                </div>
+
+                <!-- Ex 1.2: Error correction -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 2</span> Correcció d'errors</div>
+                    <div class="exercise-desc">Fes clic a cada segment subratllat i decideix si és correcte o incorrecte. El text tracta sobre tecnologia i conté castellanismes i errors d'accentuació.</div>
+                    <div class="error-text" id="errors1">
+                        La tecnologia ha canviat <span class="error-segment" data-correct="false" data-correction="el més important → el que és més important / allò més important" onclick="openError(this)">lo més important</span> de la nostra vida quotidiana. <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">Des de fa anys</span>, els dispositius mòbils ens permeten comunicar-nos <span class="error-segment" data-correct="false" data-correction="des de → desde és castellanisme; correcte: des de" onclick="openError(this)">desde qualsevol lloc</span>. Les xarxes socials <span class="error-segment" data-correct="false" data-correction="tenen que → han de (castellanisme: tener que)" onclick="openError(this)">tenen que ser</span> regulades per evitar abusos. La <span class="error-segment" data-correct="false" data-correction="intel·ligència (amb ela geminada i accent tancat)" onclick="openError(this)">inteligencia</span> artificial transformarà molts sectors. <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">Tanmateix</span>, cal garantir que la tecnologia sigui accessible. Molts experts <span class="error-segment" data-correct="false" data-correction="opinen → creuen / consideren (opinar és acceptat, però aquí l'error és l'accent: opinèn no és correcte; la forma vàlida és opinen)" onclick="openError(this)">opinèn</span> que la regulació és insuficient. <span class="error-segment" data-correct="false" data-correction="buscar → cercar / buscar és castellanisme habitual" onclick="openError(this)">Buscar</span> solucions és responsabilitat de tots. Les empreses <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">haurien d'invertir</span> més en ciberseguretat. Cal que <span class="error-segment" data-correct="false" data-correction="adonar-se'n → la forma és correcta, però el pronom: ens n'adonem (no ens adonem)" onclick="openError(this)">ens adonem</span> dels riscos que comporta la digitalització. La <span class="error-segment" data-correct="false" data-correction="conexió → connexió (amb doble enna i accent obert)" onclick="openError(this)">conexió</span> a internet és ja un dret fonamental.
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="resetErrors('errors1')">Reiniciar</button>
+                    </div>
+                </div>
+
+                <!-- Ex 1.3: Multiple choice -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 3</span> Tria d'opcions</div>
+                    <div class="exercise-desc">Tria l'opció correcta per a cada frase.</div>
+                    <div id="mc1">
+                        <div class="mc-question">
+                            <p>1. No _____ recordo, d'aquella conversa.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q1" value="a"> a) me'n</label>
+                                <label><input type="radio" name="mc1q1" value="b"> b) me</label>
+                                <label><input type="radio" name="mc1q1" value="c"> c) m'ho</label>
+                                <label><input type="radio" name="mc1q1" value="d"> d) m'hi</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>2. Vols anar _____ cinema o prefereixes quedar-te a casa?</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q2" value="a"> a) en el</label>
+                                <label><input type="radio" name="mc1q2" value="b"> b) al</label>
+                                <label><input type="radio" name="mc1q2" value="c"> c) a el</label>
+                                <label><input type="radio" name="mc1q2" value="d"> d) cap el</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>3. Si jo _____ més temps, estudiaria més gramàtica.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q3" value="a"> a) tinc</label>
+                                <label><input type="radio" name="mc1q3" value="b"> b) tenia</label>
+                                <label><input type="radio" name="mc1q3" value="c"> c) tingués</label>
+                                <label><input type="radio" name="mc1q3" value="d"> d) tingui</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>4. Cal que _____ la veritat, encara que sigui difícil.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q4" value="a"> a) diu</label>
+                                <label><input type="radio" name="mc1q4" value="b"> b) digui</label>
+                                <label><input type="radio" name="mc1q4" value="c"> c) dir</label>
+                                <label><input type="radio" name="mc1q4" value="d"> d) deia</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>5. Li vaig dir que _____ a les vuit del matí.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q5" value="a"> a) vingui</label>
+                                <label><input type="radio" name="mc1q5" value="b"> b) vindrà</label>
+                                <label><input type="radio" name="mc1q5" value="c"> c) vingués</label>
+                                <label><input type="radio" name="mc1q5" value="d"> d) ve</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>6. Aquesta feina és _____ difícil _____ pensàvem.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q6" value="a"> a) tan ... com</label>
+                                <label><input type="radio" name="mc1q6" value="b"> b) tant ... com</label>
+                                <label><input type="radio" name="mc1q6" value="c"> c) tan ... que</label>
+                                <label><input type="radio" name="mc1q6" value="d"> d) més ... com</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>7. D'entrades, no _____ queden. Ja s'han acabat.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q7" value="a"> a) en</label>
+                                <label><input type="radio" name="mc1q7" value="b"> b) hi</label>
+                                <label><input type="radio" name="mc1q7" value="c"> c) ne</label>
+                                <label><input type="radio" name="mc1q7" value="d"> d) n'en</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>8. Hem parlat _____ el director sobre el projecte.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q8" value="a"> a) en</label>
+                                <label><input type="radio" name="mc1q8" value="b"> b) a</label>
+                                <label><input type="radio" name="mc1q8" value="c"> c) amb</label>
+                                <label><input type="radio" name="mc1q8" value="d"> d) per</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>9. No m'agrada gens _____ situació actual.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q9" value="a"> a) la</label>
+                                <label><input type="radio" name="mc1q9" value="b"> b) el</label>
+                                <label><input type="radio" name="mc1q9" value="c"> c) l'</label>
+                                <label><input type="radio" name="mc1q9" value="d"> d) una</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>10. Espero que tot _____ bé a l'examen de demà.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc1q10" value="a"> a) anirà</label>
+                                <label><input type="radio" name="mc1q10" value="b"> b) va</label>
+                                <label><input type="radio" name="mc1q10" value="c"> c) vagi</label>
+                                <label><input type="radio" name="mc1q10" value="d"> d) aniria</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkMC('mc1', ['a','b','c','b','c','a','a','c','a','c'])">Corregir</button>
+                        <button class="btn btn-secondary" onclick="resetMC('mc1')">Reiniciar</button>
+                    </div>
+                    <div class="score-display" id="mc1-score"></div>
+                </div>
+
+                <!-- Ex 1.4: Composition -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 4</span> Redacció guiada</div>
+                    <div class="comp-prompt">
+                        <h4>Tema: La importància de la seguretat pública en una societat democràtica</h4>
+                        <p>Escriu un text argumentatiu d'un mínim de 180 paraules. Utilitza un registre formal, connectors textuals variats i exemples concrets.</p>
+                    </div>
+                    <textarea class="comp-textarea" id="comp1" placeholder="Escriu la teva redacció aquí..." oninput="countWords('comp1')"></textarea>
+                    <div class="word-counter" id="comp1-counter">0 paraules (mínim 180)</div>
+                    <div class="checklist">
+                        <h4>Autoavaluació</h4>
+                        <label><input type="checkbox"> He utilitzat connectors variats (tanmateix, d'altra banda, en definitiva...)</label>
+                        <label><input type="checkbox"> He mantingut un registre formal durant tot el text</label>
+                        <label><input type="checkbox"> He revisat els accents (à, è, é, í, ò, ó, ú)</label>
+                        <label><input type="checkbox"> He estructurat el text amb introducció, desenvolupament i conclusió</label>
+                        <label><input type="checkbox"> He evitat castellanismes</label>
+                        <label><input type="checkbox"> He utilitzat correctament els pronoms febles</label>
+                        <label><input type="checkbox"> He revisat l'apostrofació i les contraccions</label>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="toggleModel('model1')">Veure model</button>
+                    </div>
+                    <div class="model-answer" id="model1">
+                        <h4>Text model</h4>
+                        <p>La seguretat pública constitueix un dels pilars fonamentals de qualsevol societat democràtica. Sens dubte, garantir la protecció dels ciutadans és una responsabilitat ineludible de les institucions, ja que sense un entorn segur resulta impossible exercir plenament els drets i les llibertats individuals.</p>
+                        <p>En primer lloc, cal destacar que la seguretat pública no es limita únicament a la prevenció del delicte, sinó que abasta un conjunt ampli d'actuacions orientades a preservar la convivència i l'ordre social. En aquest sentit, la tasca dels cossos policials, com ara els Mossos d'Esquadra, és essencial per mantenir la cohesió social.</p>
+                        <p>D'altra banda, és imprescindible que les polítiques de seguretat es fonamentin en el respecte als drets humans. Una actuació policial proporcionada i respectuosa genera confiança entre la ciutadania i enforteix els vincles entre la societat i les forces de seguretat. Tanmateix, la manca de recursos pot dificultar aquesta tasca.</p>
+                        <p>En definitiva, la seguretat pública i la democràcia són conceptes inseparables. Cal que les administracions inverteixin en formació, tecnologia i proximitat perquè els agents puguin desenvolupar la seva feina amb eficàcia i responsabilitat. Només així es pot construir una societat veritablement lliure i segura per a tothom.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===================== EXAM 2 ===================== -->
+        <div class="exam-block">
+            <div class="exam-header" onclick="toggleExam(this)">
+                <h2><span class="exam-num">2</span> Examen 2 — Medi ambient i treball</h2>
+                <span class="toggle-icon">&#9660;</span>
+            </div>
+            <div class="exam-body">
+
+                <!-- Ex 2.1: Fill gaps -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 1</span> Completar buits</div>
+                    <div class="exercise-desc">Completa el text sobre medi ambient amb connectors i formes verbals adequades.</div>
+                    <div class="fill-text">
+                        El canvi climàtic és un dels reptes més greus del nostre temps. <span class="gap">(1)</span>, molts governs no hi dediquen prou recursos. <span class="gap">(2)</span> que els científics alertin constantment dels perills, les emissions de CO₂ continuen augmentant. Cal que tots els ciutadans <span class="gap">(3)</span> mesures urgents. <span class="gap">(4)</span>, és necessari que les empreses <span class="gap">(5)</span> la seva petjada ecològica. Si no actuem aviat, és probable que les conseqüències <span class="gap">(6)</span> irreversibles. <span class="gap">(7)</span> de reduir el consum, hauríem de promoure les energies renovables. <span class="gap">(8)</span>, la transició ecològica requereix inversions importants. El govern ha proposat que es <span class="gap">(9)</span> noves lleis mediambientals. <span class="gap">(10)</span>, la responsabilitat és compartida entre institucions i ciutadania.
+                    </div>
+                    <div class="fill-inputs" id="fill2">
+                        <label><span>1</span><input type="text" data-answer="Tanmateix" placeholder="connector"></label>
+                        <label><span>2</span><input type="text" data-answer="Malgrat" placeholder="connector"></label>
+                        <label><span>3</span><input type="text" data-answer="adoptin" placeholder="verb subjuntiu"></label>
+                        <label><span>4</span><input type="text" data-answer="A més" placeholder="connector"></label>
+                        <label><span>5</span><input type="text" data-answer="redueixi" placeholder="verb subjuntiu"></label>
+                        <label><span>6</span><input type="text" data-answer="siguin" placeholder="verb subjuntiu"></label>
+                        <label><span>7</span><input type="text" data-answer="A banda" placeholder="connector"></label>
+                        <label><span>8</span><input type="text" data-answer="No obstant això" placeholder="connector"></label>
+                        <label><span>9</span><input type="text" data-answer="promulguin" placeholder="verb subjuntiu"></label>
+                        <label><span>10</span><input type="text" data-answer="En definitiva" placeholder="connector"></label>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkFill('fill2')">Corregir</button>
+                        <button class="btn btn-secondary" onclick="resetFill('fill2')">Reiniciar</button>
+                    </div>
+                    <div class="score-display" id="fill2-score"></div>
+                </div>
+
+                <!-- Ex 2.2: Error correction -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 2</span> Correcció d'errors</div>
+                    <div class="exercise-desc">Fes clic a cada segment subratllat i decideix si és correcte o incorrecte. Es tracta d'una carta formal amb errors de registre, apostrofació i castellanismes.</div>
+                    <div class="error-text" id="errors2">
+                        <span class="error-segment" data-correct="false" data-correction="Benvolgut senyor → si és formal, millor: Benvolgut senyor, (amb coma). Aquí la forma és acceptable." onclick="openError(this)">Benvolgut senyor</span>, em dirigeixo a vostè per sol·licitar informació sobre <span class="error-segment" data-correct="false" data-correction="la oferta → l'oferta (cal apostrofar l'article femení davant de vocal)" onclick="openError(this)">la oferta</span> de treball publicada al vostre web. Tinc <span class="error-segment" data-correct="false" data-correction="experiència en → experiència en és correcte, però aquí: experiencia és castellanisme; cal: experiència" onclick="openError(this)">experiencia</span> en l'àmbit de la gestió administrativa. <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">M'agradaria</span> poder incorporar-me al vostre equip. Estic convençut que puc <span class="error-segment" data-correct="false" data-correction="aportar el meu gra de sorra → aportar el meu granet de sorra (calc del castellà: poner mi granito de arena; en català: aportar el meu granet de sorra)" onclick="openError(this)">aportar el meu gra d'arena</span> al departament. He <span class="error-segment" data-correct="false" data-correction="treballat durant desde → treballat des de (desde és castellanisme)" onclick="openError(this)">treballat desde</span> fa cinc anys en empreses similars. <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">A més a més</span>, disposo de formació complementària en comptabilitat. Espero que <span class="error-segment" data-correct="false" data-correction="tinguen → tinguin (forma correcta del subjuntiu)" onclick="openError(this)">tinguen</span> en compte la meva candidatura. Quedo <span class="error-segment" data-correct="false" data-correction="a la seva disposició → a la vostra disposició (coherència de tractament: vostè/vostre)" onclick="openError(this)">a la seva disposició</span> per a qualsevol aclariment. <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">Ben cordialment</span>.
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="resetErrors('errors2')">Reiniciar</button>
+                    </div>
+                </div>
+
+                <!-- Ex 2.3: Multiple choice -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 3</span> Tria d'opcions</div>
+                    <div class="exercise-desc">Tria l'opció correcta per a cada frase.</div>
+                    <div id="mc2">
+                        <div class="mc-question">
+                            <p>1. No sé si _____ a temps a la reunió.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q1" value="a"> a) arribaré</label>
+                                <label><input type="radio" name="mc2q1" value="b"> b) arribi</label>
+                                <label><input type="radio" name="mc2q1" value="c"> c) arribo</label>
+                                <label><input type="radio" name="mc2q1" value="d"> d) arribés</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>2. _____ que plou, ens quedarem a casa.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q2" value="a"> a) Com</label>
+                                <label><input type="radio" name="mc2q2" value="b"> b) Atès</label>
+                                <label><input type="radio" name="mc2q2" value="c"> c) Perquè</label>
+                                <label><input type="radio" name="mc2q2" value="d"> d) Per tal que</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>3. Aquesta pel·lícula, ja _____ he vista dues vegades.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q3" value="a"> a) la</label>
+                                <label><input type="radio" name="mc2q3" value="b"> b) li</label>
+                                <label><input type="radio" name="mc2q3" value="c"> c) ho</label>
+                                <label><input type="radio" name="mc2q3" value="d"> d) hi</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>4. Vam decidir anar-_____ tot i la pluja.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q4" value="a"> a) hi</label>
+                                <label><input type="radio" name="mc2q4" value="b"> b) ho</label>
+                                <label><input type="radio" name="mc2q4" value="c"> c) en</label>
+                                <label><input type="radio" name="mc2q4" value="d"> d) li</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>5. Necessito que em _____ el document avui.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q5" value="a"> a) envies</label>
+                                <label><input type="radio" name="mc2q5" value="b"> b) enviïs</label>
+                                <label><input type="radio" name="mc2q5" value="c"> c) enviaràs</label>
+                                <label><input type="radio" name="mc2q5" value="d"> d) enviant</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>6. _____ director de l'empresa va anunciar canvis importants.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q6" value="a"> a) Lo</label>
+                                <label><input type="radio" name="mc2q6" value="b"> b) El</label>
+                                <label><input type="radio" name="mc2q6" value="c"> c) Al</label>
+                                <label><input type="radio" name="mc2q6" value="d"> d) Un</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>7. He anat a la botiga, però no _____ he trobat res.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q7" value="a"> a) en</label>
+                                <label><input type="radio" name="mc2q7" value="b"> b) hi</label>
+                                <label><input type="radio" name="mc2q7" value="c"> c) ho</label>
+                                <label><input type="radio" name="mc2q7" value="d"> d) li</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>8. Treballo _____ una empresa multinacional.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q8" value="a"> a) a</label>
+                                <label><input type="radio" name="mc2q8" value="b"> b) en</label>
+                                <label><input type="radio" name="mc2q8" value="c"> c) amb</label>
+                                <label><input type="radio" name="mc2q8" value="d"> d) per</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>9. No crec que _____ raó en aquest cas.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q9" value="a"> a) tens</label>
+                                <label><input type="radio" name="mc2q9" value="b"> b) tinguis</label>
+                                <label><input type="radio" name="mc2q9" value="c"> c) tindràs</label>
+                                <label><input type="radio" name="mc2q9" value="d"> d) tenies</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>10. Ho farem _____ sigui necessari.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc2q10" value="a"> a) quan</label>
+                                <label><input type="radio" name="mc2q10" value="b"> b) quant</label>
+                                <label><input type="radio" name="mc2q10" value="c"> c) com</label>
+                                <label><input type="radio" name="mc2q10" value="d"> d) sempre que</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkMC('mc2', ['a','b','a','a','b','b','b','a','b','d'])">Corregir</button>
+                        <button class="btn btn-secondary" onclick="resetMC('mc2')">Reiniciar</button>
+                    </div>
+                    <div class="score-display" id="mc2-score"></div>
+                </div>
+
+                <!-- Ex 2.4: Composition -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 4</span> Redacció guiada</div>
+                    <div class="comp-prompt">
+                        <h4>Tema: Els avantatges i inconvenients del teletreball</h4>
+                        <p>Escriu un text argumentatiu d'un mínim de 180 paraules. Presenta arguments a favor i en contra, i conclou amb la teva opinió personal. Utilitza un registre formal.</p>
+                    </div>
+                    <textarea class="comp-textarea" id="comp2" placeholder="Escriu la teva redacció aquí..." oninput="countWords('comp2')"></textarea>
+                    <div class="word-counter" id="comp2-counter">0 paraules (mínim 180)</div>
+                    <div class="checklist">
+                        <h4>Autoavaluació</h4>
+                        <label><input type="checkbox"> He presentat arguments a favor i en contra</label>
+                        <label><input type="checkbox"> He utilitzat connectors de contrast (tanmateix, no obstant això, en canvi...)</label>
+                        <label><input type="checkbox"> He mantingut un registre formal</label>
+                        <label><input type="checkbox"> He revisat els accents i l'apostrofació</label>
+                        <label><input type="checkbox"> He inclòs una conclusió amb la meva opinió</label>
+                        <label><input type="checkbox"> He evitat castellanismes i expressions col·loquials</label>
+                        <label><input type="checkbox"> He superat les 180 paraules</label>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="toggleModel('model2')">Veure model</button>
+                    </div>
+                    <div class="model-answer" id="model2">
+                        <h4>Text model</h4>
+                        <p>El teletreball s'ha consolidat com una modalitat laboral cada vegada més estesa arran de la pandèmia de la COVID-19. Aquesta nova forma de treballar presenta tant avantatges com inconvenients que convé analitzar amb deteniment.</p>
+                        <p>Pel que fa als aspectes positius, el teletreball permet una major conciliació entre la vida laboral i la personal. Els treballadors estalvien temps i diners en desplaçaments, cosa que repercuteix positivament en el seu benestar. A més, diverses investigacions demostren que la productivitat pot augmentar quan els empleats treballen des de casa, ja que hi ha menys interrupcions.</p>
+                        <p>No obstant això, el teletreball també comporta riscos significatius. D'una banda, l'aïllament social pot afectar la salut mental dels treballadors. De l'altra, la dificultat per desconnectar pot provocar jornades laborals excessivament llargues. Tanmateix, la manca de supervisió directa pot generar desconfiança per part de les empreses.</p>
+                        <p>En la meva opinió, el teletreball és una eina valuosa sempre que s'implementi amb criteris clars i equilibrats. El model híbrid, que combina dies presencials i dies a distància, em sembla la solució més raonable. D'aquesta manera, es poden aprofitar els avantatges de les dues modalitats i minimitzar-ne els inconvenients. En definitiva, cal que empreses i treballadors col·laborin per trobar l'equilibri adequat.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===================== EXAM 3 ===================== -->
+        <div class="exam-block">
+            <div class="exam-header" onclick="toggleExam(this)">
+                <h2><span class="exam-num">3</span> Examen 3 — Educació i societat</h2>
+                <span class="toggle-icon">&#9660;</span>
+            </div>
+            <div class="exam-body">
+
+                <!-- Ex 3.1: Fill gaps -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 1</span> Completar buits</div>
+                    <div class="exercise-desc">Completa el text sobre educació amb articles, pronoms febles i formes verbals adequades.</div>
+                    <div class="fill-text">
+                        <span class="gap">(1)</span> educació és la base de qualsevol societat avançada. Els mestres <span class="gap">(2)</span> dediquen amb passió, malgrat les dificultats. Quan un alumne té problemes, cal ajudar-<span class="gap">(3)</span> sense demora. De recursos, no <span class="gap">(4)</span> hi ha prou a les escoles públiques. És fonamental que el govern <span class="gap">(5)</span> més en educació. <span class="gap">(6)</span> alumnes que tenen dificultats d'aprenentatge necessiten atenció especial. Si volguéssim millorar el sistema, <span class="gap">(7)</span> de començar per la formació del professorat. A les universitats, molts estudiants no <span class="gap">(8)</span> van preparats i fracassen el primer any. Cal que la societat <span class="gap">(9)</span> conscient de la importància de l'educació. L'aprenentatge no acaba mai: cal formar-<span class="gap">(10)</span> durant tota la vida.
+                    </div>
+                    <div class="fill-inputs" id="fill3">
+                        <label><span>1</span><input type="text" data-answer="L'" placeholder="article"></label>
+                        <label><span>2</span><input type="text" data-answer="s'hi" placeholder="pronoms febles"></label>
+                        <label><span>3</span><input type="text" data-answer="lo" placeholder="pronom feble"></label>
+                        <label><span>4</span><input type="text" data-answer="n'" placeholder="pronom feble"></label>
+                        <label><span>5</span><input type="text" data-answer="inverteixi" placeholder="verb subjuntiu"></label>
+                        <label><span>6</span><input type="text" data-answer="Els" placeholder="article"></label>
+                        <label><span>7</span><input type="text" data-answer="hauríem" placeholder="verb condicional"></label>
+                        <label><span>8</span><input type="text" data-answer="hi" placeholder="pronom feble"></label>
+                        <label><span>9</span><input type="text" data-answer="sigui" placeholder="verb subjuntiu"></label>
+                        <label><span>10</span><input type="text" data-answer="se" placeholder="pronom feble"></label>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkFill('fill3')">Corregir</button>
+                        <button class="btn btn-secondary" onclick="resetFill('fill3')">Reiniciar</button>
+                    </div>
+                    <div class="score-display" id="fill3-score"></div>
+                </div>
+
+                <!-- Ex 3.2: Error correction -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 2</span> Correcció d'errors</div>
+                    <div class="exercise-desc">Fes clic a cada segment subratllat i decideix si és correcte o incorrecte. Es tracta d'un article periodístic amb errors de B/V, plurals i accents.</div>
+                    <div class="error-text" id="errors3">
+                        L'Ajuntament de Barcelona ha aprovat un nou pla educatiu que <span class="error-segment" data-correct="false" data-correction="preveu → preveu és correcte amb accent: preveu (present) o bé preveia (imperfet); aquí l'error és proveu en lloc de preveu" onclick="openError(this)">proveu</span> la construcció de deu escoles noves. Els <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">responsables</span> del projecte han explicat que les obres començaran el mes vinent. Segons els <span class="error-segment" data-correct="false" data-correction="tècnics (amb accent obert, no tancat)" onclick="openError(this)">técnics</span>, les noves instal·lacions seran modernes i sostenibles. Les <span class="error-segment" data-correct="false" data-correction="activitats (amb t final, no ts); plural correcte: activitats" onclick="openError(this)">activitatss</span> extraescolars també s'ampliaran. <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">D'altra banda</span>, el consistori ha anunciat que <span class="error-segment" data-correct="false" data-correction="haurà → ha d'haver-hi (calc del castellà: habrá → hi haurà)" onclick="openError(this)">haurà</span> una inversió de tres milions d'euros. Les famílies han <span class="error-segment" data-correct="false" data-correction="rebut → rebut és correcte; l'error és rebuig en lloc de rebut" onclick="openError(this)">rebuig</span> la notícia amb entusiasme. El sindicat de mestres considera que les mesures són <span class="error-segment" data-correct="true" data-correction="" onclick="openError(this)">imprescindibles</span>. Alguns <span class="error-segment" data-correct="false" data-correction="veïns → veïns és correcte; l'error és veins sense dièresi" onclick="openError(this)">veins</span> del barri, però, temen les molèsties de les obres. El regidor d'Educació ha assegurat que es minimitzaran els <span class="error-segment" data-correct="false" data-correction="incovenients → inconvenients (falta la n)" onclick="openError(this)">incovenients</span>.
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="resetErrors('errors3')">Reiniciar</button>
+                    </div>
+                </div>
+
+                <!-- Ex 3.3: Multiple choice -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 3</span> Tria d'opcions</div>
+                    <div class="exercise-desc">Tria l'opció correcta per a cada frase.</div>
+                    <div id="mc3">
+                        <div class="mc-question">
+                            <p>1. Encara no he decidit _____ faré les vacances.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q1" value="a"> a) on</label>
+                                <label><input type="radio" name="mc3q1" value="b"> b) a on</label>
+                                <label><input type="radio" name="mc3q1" value="c"> c) allà</label>
+                                <label><input type="radio" name="mc3q1" value="d"> d) per on</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>2. _____ hagin acabat les obres, podrem tornar a l'escola.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q2" value="a"> a) Quan</label>
+                                <label><input type="radio" name="mc3q2" value="b"> b) Quant</label>
+                                <label><input type="radio" name="mc3q2" value="c"> c) Mentre</label>
+                                <label><input type="radio" name="mc3q2" value="d"> d) Fins</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>3. De cotxes, n'hem vist _____ avui.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q3" value="a"> a) molt</label>
+                                <label><input type="radio" name="mc3q3" value="b"> b) molts</label>
+                                <label><input type="radio" name="mc3q3" value="c"> c) molta</label>
+                                <label><input type="radio" name="mc3q3" value="d"> d) moltes</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>4. La professora vol que els alumnes _____ els deures cada dia.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q4" value="a"> a) fan</label>
+                                <label><input type="radio" name="mc3q4" value="b"> b) facin</label>
+                                <label><input type="radio" name="mc3q4" value="c"> c) farien</label>
+                                <label><input type="radio" name="mc3q4" value="d"> d) fer</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>5. No _____ pensis més, en aquest problema.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q5" value="a"> a) ho</label>
+                                <label><input type="radio" name="mc3q5" value="b"> b) hi</label>
+                                <label><input type="radio" name="mc3q5" value="c"> c) en</label>
+                                <label><input type="radio" name="mc3q5" value="d"> d) li</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>6. Ens van dir que _____ l'informe abans de divendres.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q6" value="a"> a) lliurem</label>
+                                <label><input type="radio" name="mc3q6" value="b"> b) lliuréssim</label>
+                                <label><input type="radio" name="mc3q6" value="c"> c) lliurarem</label>
+                                <label><input type="radio" name="mc3q6" value="d"> d) lliurant</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>7. He deixat les claus _____ la taula de l'entrada.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q7" value="a"> a) en</label>
+                                <label><input type="radio" name="mc3q7" value="b"> b) a</label>
+                                <label><input type="radio" name="mc3q7" value="c"> c) sobre</label>
+                                <label><input type="radio" name="mc3q7" value="d"> d) damunt</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>8. M'han dit que _____ ha una plaça lliure al curs.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q8" value="a"> a) en</label>
+                                <label><input type="radio" name="mc3q8" value="b"> b) hi</label>
+                                <label><input type="radio" name="mc3q8" value="c"> c) ho</label>
+                                <label><input type="radio" name="mc3q8" value="d"> d) n'</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>9. Aquella noia és _____ amiga de la meva germana.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q9" value="a"> a) la</label>
+                                <label><input type="radio" name="mc3q9" value="b"> b) una</label>
+                                <label><input type="radio" name="mc3q9" value="c"> c) l'</label>
+                                <label><input type="radio" name="mc3q9" value="d"> d) sa</label>
+                            </div>
+                        </div>
+                        <div class="mc-question">
+                            <p>10. No vull que _____ tard; és molt important.</p>
+                            <div class="mc-options">
+                                <label><input type="radio" name="mc3q10" value="a"> a) arribes</label>
+                                <label><input type="radio" name="mc3q10" value="b"> b) arribis</label>
+                                <label><input type="radio" name="mc3q10" value="c"> c) arribaràs</label>
+                                <label><input type="radio" name="mc3q10" value="d"> d) arribar</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkMC('mc3', ['a','a','b','b','b','b','c','b','b','b'])">Corregir</button>
+                        <button class="btn btn-secondary" onclick="resetMC('mc3')">Reiniciar</button>
+                    </div>
+                    <div class="score-display" id="mc3-score"></div>
+                </div>
+
+                <!-- Ex 3.4: Composition -->
+                <div class="exercise">
+                    <div class="exercise-title"><span class="badge">Exercici 4</span> Redacció guiada</div>
+                    <div class="comp-prompt">
+                        <h4>Tema: Cal prohibir els telèfons mòbils a les escoles?</h4>
+                        <p>Escriu un text argumentatiu d'un mínim de 180 paraules. Presenta arguments a favor i en contra de la prohibició, i conclou amb la teva opinió. Utilitza un registre formal i connectors variats.</p>
+                    </div>
+                    <textarea class="comp-textarea" id="comp3" placeholder="Escriu la teva redacció aquí..." oninput="countWords('comp3')"></textarea>
+                    <div class="word-counter" id="comp3-counter">0 paraules (mínim 180)</div>
+                    <div class="checklist">
+                        <h4>Autoavaluació</h4>
+                        <label><input type="checkbox"> He presentat arguments a favor i en contra de la prohibició</label>
+                        <label><input type="checkbox"> He utilitzat connectors d'addició i contrast</label>
+                        <label><input type="checkbox"> He mantingut un registre formal i coherent</label>
+                        <label><input type="checkbox"> He revisat accents, apostrofació i dièresis</label>
+                        <label><input type="checkbox"> He estructurat el text amb paràgrafs clars</label>
+                        <label><input type="checkbox"> He evitat castellanismes i formes incorrectes</label>
+                        <label><input type="checkbox"> He inclòs una conclusió amb la meva opinió raonada</label>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="toggleModel('model3')">Veure model</button>
+                    </div>
+                    <div class="model-answer" id="model3">
+                        <h4>Text model</h4>
+                        <p>El debat sobre la prohibició dels telèfons mòbils a les escoles és un tema d'actualitat que genera opinions molt diverses. D'una banda, hi ha arguments sòlids a favor de la restricció; de l'altra, la tecnologia també ofereix oportunitats educatives que no podem obviar.</p>
+                        <p>En primer lloc, els defensors de la prohibició argumenten que els mòbils són una font constant de distracció que perjudica el rendiment acadèmic dels alumnes. A més a més, l'ús excessiu de les xarxes socials durant l'horari escolar pot fomentar situacions d'assetjament escolar i afectar negativament les relacions interpersonals. Així mateix, diversos estudis demostren que la presència del mòbil redueix la capacitat d'atenció, fins i tot quan l'aparell està apagat.</p>
+                        <p>No obstant això, els detractors de la prohibició total sostenen que els dispositius mòbils poden ser eines pedagògiques molt útils si s'utilitzen correctament. Per exemple, permeten accedir a recursos educatius en línia, realitzar treballs col·laboratius i desenvolupar competències digitals imprescindibles per al futur professional dels alumnes.</p>
+                        <p>En la meva opinió, la solució més encertada no és la prohibició absoluta, sinó la regulació intel·ligent. Considero que cal establir normes clares sobre quan i com es poden utilitzar els telèfons a l'aula, tot fomentant un ús responsable i educatiu. En definitiva, l'objectiu hauria de ser ensenyar als joves a gestionar la tecnologia de manera autònoma i crítica, ja que viuen en un món inevitablement digital.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Toggle exam sections
+        function toggleExam(header) {
+            header.classList.toggle('open');
+            const body = header.nextElementSibling;
+            body.classList.toggle('open');
+        }
+
+        // ========== FILL GAPS ==========
+        function checkFill(id) {
+            const container = document.getElementById(id);
+            const inputs = container.querySelectorAll('input');
+            let correct = 0;
+            inputs.forEach(input => {
+                const answer = input.dataset.answer.toLowerCase().trim();
+                const userAnswer = input.value.toLowerCase().trim();
+                // Accept answer with or without apostrophe variations
+                if (userAnswer === answer) {
+                    input.classList.remove('wrong');
+                    input.classList.add('correct');
+                    correct++;
+                    // Remove old correction
+                    const old = input.parentElement.querySelector('.correction-text');
+                    if (old) old.remove();
+                } else {
+                    input.classList.remove('correct');
+                    input.classList.add('wrong');
+                    // Show correct answer
+                    const old = input.parentElement.querySelector('.correction-text');
+                    if (old) old.remove();
+                    const span = document.createElement('span');
+                    span.className = 'correction-text';
+                    span.textContent = '→ ' + input.dataset.answer;
+                    input.parentElement.appendChild(span);
+                }
+            });
+            const total = inputs.length;
+            const score = document.getElementById(id + '-score');
+            score.classList.add('visible');
+            score.textContent = `Resultat: ${correct}/${total} correctes`;
+            if (correct === total) { score.className = 'score-display visible good'; }
+            else if (correct >= total * 0.6) { score.className = 'score-display visible ok'; }
+            else { score.className = 'score-display visible bad'; }
+        }
+
+        function resetFill(id) {
+            const container = document.getElementById(id);
+            container.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.classList.remove('correct', 'wrong');
+            });
+            container.querySelectorAll('.correction-text').forEach(el => el.remove());
+            const score = document.getElementById(id + '-score');
+            score.classList.remove('visible');
+        }
+
+        // ========== ERROR CORRECTION ==========
+        let currentSegment = null;
+
+        function openError(el) {
+            if (el.classList.contains('checked-correct') || el.classList.contains('checked-wrong')) return;
+            currentSegment = el;
+            document.getElementById('popupSegment').textContent = '«' + el.textContent + '»';
+            document.getElementById('popupFeedback').style.display = 'none';
+            document.getElementById('errorPopup').classList.add('visible');
+            document.getElementById('overlay').classList.add('visible');
+        }
+
+        function answerError(answer) {
+            if (!currentSegment) return;
+            const isCorrect = currentSegment.dataset.correct === 'true';
+            const fb = document.getElementById('popupFeedback');
+
+            if ((answer === 'correct' && isCorrect) || (answer === 'incorrect' && !isCorrect)) {
+                currentSegment.classList.add('checked-correct');
+                fb.className = 'error-feedback right';
+                if (isCorrect) {
+                    fb.textContent = 'Correcte! Aquesta part no conté errors.';
+                } else {
+                    fb.textContent = 'Correcte! L\'error és: ' + currentSegment.dataset.correction;
+                }
+            } else {
+                currentSegment.classList.add('checked-wrong');
+                fb.className = 'error-feedback wrong-feedback';
+                if (isCorrect) {
+                    fb.textContent = 'Incorrecte. Aquesta part és correcta, no hi ha cap error.';
+                } else {
+                    fb.textContent = 'Incorrecte. Sí que hi ha un error: ' + currentSegment.dataset.correction;
+                }
+            }
+            fb.style.display = 'block';
+            setTimeout(() => closePopup(), 3000);
+        }
+
+        function closePopup() {
+            document.getElementById('errorPopup').classList.remove('visible');
+            document.getElementById('overlay').classList.remove('visible');
+            currentSegment = null;
+        }
+
+        function resetErrors(id) {
+            const container = document.getElementById(id);
+            container.querySelectorAll('.error-segment').forEach(el => {
+                el.classList.remove('checked-correct', 'checked-wrong');
+            });
+        }
+
+        // ========== MULTIPLE CHOICE ==========
+        function checkMC(id, answers) {
+            const container = document.getElementById(id);
+            const questions = container.querySelectorAll('.mc-question');
+            let correct = 0;
+
+            questions.forEach((q, i) => {
+                const selected = q.querySelector('input:checked');
+                const labels = q.querySelectorAll('label');
+                // Reset
+                labels.forEach(l => l.classList.remove('correct-option', 'wrong-option'));
+
+                if (selected) {
+                    const parentLabel = selected.parentElement;
+                    if (selected.value === answers[i]) {
+                        parentLabel.classList.add('correct-option');
+                        correct++;
+                    } else {
+                        parentLabel.classList.add('wrong-option');
+                        // Highlight correct
+                        labels.forEach(l => {
+                            const radio = l.querySelector('input');
+                            if (radio.value === answers[i]) l.classList.add('correct-option');
+                        });
+                    }
+                } else {
+                    // Not answered — show correct
+                    labels.forEach(l => {
+                        const radio = l.querySelector('input');
+                        if (radio.value === answers[i]) l.classList.add('correct-option');
+                    });
+                }
+            });
+
+            const total = questions.length;
+            const score = document.getElementById(id + '-score');
+            score.classList.add('visible');
+            score.textContent = `Resultat: ${correct}/${total} correctes`;
+            if (correct === total) { score.className = 'score-display visible good'; }
+            else if (correct >= total * 0.6) { score.className = 'score-display visible ok'; }
+            else { score.className = 'score-display visible bad'; }
+        }
+
+        function resetMC(id) {
+            const container = document.getElementById(id);
+            container.querySelectorAll('input').forEach(r => r.checked = false);
+            container.querySelectorAll('label').forEach(l => l.classList.remove('correct-option', 'wrong-option'));
+            const score = document.getElementById(id + '-score');
+            score.classList.remove('visible');
+        }
+
+        // ========== COMPOSITION ==========
+        function countWords(id) {
+            const textarea = document.getElementById(id);
+            const counter = document.getElementById(id + '-counter');
+            const text = textarea.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            counter.textContent = words + ' paraules (mínim 180)';
+            if (words >= 180) {
+                counter.classList.add('met');
+            } else {
+                counter.classList.remove('met');
+            }
+        }
+
+        function toggleModel(id) {
+            const model = document.getElementById(id);
+            model.classList.toggle('visible');
+        }
+    </script>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+</body>
+</html>
