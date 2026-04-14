@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gramàtica Catalana C1 - Referència</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .cat-nav {
+            background: rgba(240,240,243, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        [data-theme="dark"] .cat-nav { background: rgba(15,23,41, 0.85); }
+        .cat-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+        .cat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .cat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .cat-nav a.home { color: var(--accent); font-weight: 600; }
+        .cat-nav a.home:hover { background: var(--accent-soft); }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 0 0 8px;
+        }
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* TOC */
+        .toc {
+            max-width: 800px;
+            margin: 24px auto;
+            padding: 0 20px;
+        }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px;
+        }
+        .toc-grid a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all var(--t-fast);
+        }
+        .toc-grid a:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+            transform: translateY(-1px);
+        }
+        .toc-badge {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Main container */
+        .grammar-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 20px 80px;
+        }
+
+        /* Collapsible section */
+        .grammar-section {
+            margin-bottom: 16px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            background: var(--bg-raised);
+            overflow: hidden;
+            transition: box-shadow var(--t-base);
+        }
+        .grammar-section:hover {
+            box-shadow: var(--shadow-sm);
+        }
+        .grammar-section.open {
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: background var(--t-fast);
+        }
+        .section-header:hover { background: var(--bg-hover); }
+
+        .section-badge {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.82rem; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 1;
+        }
+        .section-header h2 small {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .section-chevron {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: transform var(--t-base);
+            flex-shrink: 0;
+        }
+        .grammar-section.open .section-chevron { transform: rotate(180deg); }
+
+        .section-body {
+            display: none;
+            padding: 0 20px 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .grammar-section.open .section-body { display: block; }
+
+        /* Content styling */
+        .section-body h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 20px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .section-body h3:first-child { margin-top: 16px; }
+
+        .section-body p, .section-body li {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .section-body ul, .section-body ol {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+        .section-body li { margin-bottom: 4px; }
+
+        /* Example boxes */
+        .ex-correct, .ex-incorrect {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            margin: 6px 0;
+            line-height: 1.6;
+        }
+        .ex-correct {
+            background: var(--green-soft);
+            border-left: 3px solid var(--green);
+            color: var(--text-primary);
+        }
+        .ex-incorrect {
+            background: var(--red-soft);
+            border-left: 3px solid var(--red);
+            color: var(--text-primary);
+        }
+        .ex-correct::before { content: "\2713 "; font-weight: 700; color: var(--green); }
+        .ex-incorrect::before { content: "\2717 "; font-weight: 700; color: var(--red); }
+
+        /* Exam trap callout */
+        .trap {
+            background: var(--yellow-soft);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-left: 4px solid var(--yellow);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .trap-title {
+            font-weight: 700;
+            color: #b45309;
+            margin-bottom: 4px;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        [data-theme="dark"] .trap-title { color: #fbbf24; }
+
+        /* Tables */
+        .grammar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.83rem;
+        }
+        .grammar-table th, .grammar-table td {
+            padding: 8px 12px;
+            border: 1px solid var(--border-subtle);
+            text-align: left;
+        }
+        .grammar-table th {
+            background: var(--bg-overlay);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .grammar-table td {
+            color: var(--text-secondary);
+        }
+        .grammar-table tr:hover td {
+            background: var(--bg-hover);
+        }
+
+        /* Rule box */
+        .rule-box {
+            background: var(--blue-soft);
+            border-left: 3px solid var(--blue);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin: 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .rule-box strong { color: var(--blue); }
+
+        /* Note box */
+        .note-box {
+            background: var(--purple-soft);
+            border-left: 3px solid var(--purple);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin: 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            text-align: center;
+            margin-top: 8px;
+        }
+        .scroll-top a {
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .scroll-top a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.6rem; }
+            .toc-grid { grid-template-columns: 1fr; }
+            .section-header { padding: 14px 16px; }
+            .section-body { padding: 0 16px 20px; }
+            .grammar-table { font-size: 0.76rem; }
+            .grammar-table th, .grammar-table td { padding: 6px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cat-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+        <a href="gramatica.html" class="active">Gramàtica</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="flashcards.html">Flashcards</a>
+        <a href="redaccio.html">Redacció</a>
+    </div>
+
+    <div class="hero">
+        <h1>Gramàtica Catalana</h1>
+        <p>Regles i exemples per al nivell C1</p>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="toc">
+        <div class="toc-grid">
+            <a href="#accentuacio"><span class="toc-badge">1</span>Accentuació</a>
+            <a href="#apostrofacio"><span class="toc-badge">2</span>Apostrofació</a>
+            <a href="#pronoms"><span class="toc-badge">3</span>Pronoms febles</a>
+            <a href="#verbs"><span class="toc-badge">4</span>Verbs irregulars</a>
+            <a href="#bv"><span class="toc-badge">5</span>B / V</a>
+            <a href="#plurals"><span class="toc-badge">6</span>Plurals i femenins</a>
+            <a href="#preposicions"><span class="toc-badge">7</span>Preposicions</a>
+            <a href="#connectors"><span class="toc-badge">8</span>Connectors textuals</a>
+            <a href="#castellanismes"><span class="toc-badge">9</span>Castellanismes</a>
+            <a href="#registre"><span class="toc-badge">10</span>Registre formal</a>
+        </div>
+    </div>
+
+    <div class="grammar-container">
+
+        <!-- ============================================================
+             1. ACCENTUACIÓ
+             ============================================================ -->
+        <div class="grammar-section" id="accentuacio">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">1</span>
+                <h2>Accentuació <small>Accent obert vs tancat, regles i excepcions</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Accent obert (`) vs tancat (&acute;)</h3>
+                <p>En català hi ha dos tipus d'accent gràfic que marquen la pronúncia de les vocals <strong>e</strong> i <strong>o</strong>:</p>
+                <ul>
+                    <li><strong>Accent obert (`)</strong> &mdash; indica que la vocal es pronuncia oberta: <em>è</em> [&epsilon;], <em>ò</em> [&open;] (en castellà: sonido más abierto, como la "e" de "perro")</li>
+                    <li><strong>Accent tancat (&acute;)</strong> &mdash; indica que la vocal es pronuncia tancada: <em>é</em> [e], <em>ó</em> [o] (en castellà: sonido más cerrado, como la "o" de "oro")</li>
+                    <li>La vocal <strong>a</strong> sempre porta accent obert: <em>à</em></li>
+                    <li>Les vocals <strong>i</strong>, <strong>u</strong> sempre porten accent tancat: <em>í</em>, <em>ú</em></li>
+                </ul>
+
+                <h3>Regles segons el tipus de paraula</h3>
+
+                <div class="rule-box">
+                    <strong>Paraules agudes</strong> (acento en la última sílaba): s'accentuen si acaben en vocal, vocal + <em>s</em>, <em>-en</em> o <em>-in</em>.<br>
+                    Exemples: caf<strong>è</strong>, tamb<strong>é</strong>, canci<strong>ó</strong>, com<strong>ú</strong>
+                </div>
+                <div class="rule-box">
+                    <strong>Paraules planes</strong> (acento en la penúltima sílaba): s'accentuen si <strong>no</strong> acaben en vocal, vocal + <em>s</em>, <em>-en</em> o <em>-in</em>.<br>
+                    Exemples: f<strong>à</strong>cil, c<strong>à</strong>rrec, t<strong>ú</strong>nel
+                </div>
+                <div class="rule-box">
+                    <strong>Paraules esdrúixoles</strong> (acento en la antepenúltima sílaba): s'accentuen <strong>sempre</strong>.<br>
+                    Exemples: m<strong>ú</strong>sica, gr<strong>à</strong>cia, t<strong>è</strong>cnica, h<strong>ò</strong>stia
+                </div>
+
+                <h3>Exemples amb accent obert</h3>
+                <div class="ex-correct">caf<strong>è</strong>, angl<strong>è</strong>s, per<strong>ò</strong>, all<strong>ò</strong>, qu<strong>è</strong>, despr<strong>é</strong>s &rarr; <em>sempre obert en -è, -ès, -ò</em></div>
+
+                <h3>Exemples amb accent tancat</h3>
+                <div class="ex-correct">tamb<strong>é</strong>, perqu<strong>è</strong>, v<strong>ó</strong>s, com<strong>ú</strong>, mat<strong>í</strong> &rarr; <em>tancat en -é, -ó</em></div>
+
+                <h3>Confusions habituals (e oberta vs tancada)</h3>
+                <table class="grammar-table">
+                    <tr><th>Accent obert (`)</th><th>Accent tancat (&acute;)</th></tr>
+                    <tr><td>cafè, anglès, què, règim</td><td>també, perquè, féu, préssec</td></tr>
+                    <tr><td>però, allò, tòrax, fòrum</td><td>ació, donació, interès (tancat!)</td></tr>
+                </table>
+
+                <div class="note-box">
+                    <strong>Regla pràctica:</strong> La majoria de paraules acabades en <em>-è</em> i <em>-ès</em> porten accent obert. Les paraules acabades en <em>-é</em> i <em>-és</em> solen portar accent tancat. Quan dubtes, pensa en la pronúncia: si la boca s'obre més, és obert.
+                </div>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    La paraula <strong>perquè</strong> porta accent obert encara que la <em>e</em> és tancada en la pronúncia estàndard oriental. No confongueu amb <strong>per què</strong> (interrogatiu, dues paraules).<br>
+                    Atenció amb: <strong>què</strong> (accent obert) vs <strong>que</strong> (sense accent, conjunció).
+                </div>
+
+                <div class="scroll-top"><a href="#accentuacio">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             2. APOSTROFACIÓ I CONTRACCIONS
+             ============================================================ -->
+        <div class="grammar-section" id="apostrofacio">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">2</span>
+                <h2>Apostrofació i contraccions <small>L', d', contraccions al/del/pel</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>L'article: quan s'apostrofa?</h3>
+                <div class="rule-box">
+                    <strong>Regla general:</strong> L'article <em>el</em> i <em>la</em> s'apostrofen davant de vocal o <em>h</em>: <strong>l'home</strong>, <strong>l'arbre</strong>, <strong>l'escola</strong>.
+                </div>
+
+                <h3>Excepcions amb l'article femení <em>la</em></h3>
+                <p><strong>NO</strong> s'apostrofa <em>la</em> davant de <strong>i/u</strong> àtones (no acentuades):</p>
+                <div class="ex-correct"><strong>la universitat</strong> (la "u" és àtona)</div>
+                <div class="ex-correct"><strong>la idea</strong> (en registre formal, però <em>l'idea</em> també és acceptat)</div>
+                <div class="ex-incorrect"><strong>l'universitat</strong> &mdash; incorrecte! La <em>u</em> és àtona.</div>
+
+                <p><strong>SÍ</strong> s'apostrofa <em>la</em> davant de <strong>i/u</strong> tòniques (acentuades):</p>
+                <div class="ex-correct"><strong>l'única</strong> (la "ú" és tònica)</div>
+                <div class="ex-correct"><strong>l'illa</strong> (la "i" és tònica)</div>
+
+                <h3>Davant de <em>h</em></h3>
+                <div class="ex-correct"><strong>l'hora</strong>, <strong>l'home</strong>, <strong>l'herba</strong> &mdash; s'apostrofa sempre davant de <em>h</em></div>
+
+                <h3>Preposició <em>de</em></h3>
+                <div class="rule-box">
+                    <strong>d'</strong> davant de vocal o <em>h</em>: <strong>d'aquí</strong>, <strong>d'hora</strong>, <strong>d'un</strong>.
+                </div>
+
+                <h3>Contraccions obligatòries</h3>
+                <table class="grammar-table">
+                    <tr><th>Preposició + article</th><th>Contracció</th><th>Exemple</th></tr>
+                    <tr><td>a + el</td><td><strong>al</strong></td><td>Vaig al mercat.</td></tr>
+                    <tr><td>de + el</td><td><strong>del</strong></td><td>El llibre del professor.</td></tr>
+                    <tr><td>per + el</td><td><strong>pel</strong></td><td>Passejar pel carrer.</td></tr>
+                    <tr><td>per + els</td><td><strong>pels</strong></td><td>Pels carrers del barri.</td></tr>
+                    <tr><td>ca + el</td><td><strong>cal</strong></td><td>Vaig a cal metge. (a casa del metge)</td></tr>
+                </table>
+
+                <div class="note-box">
+                    Les contraccions <strong>al, del, pel</strong> mai s'apostrofen: no existeix *a l', *de l'. Es fa: <em>a l'escola</em> (preposició <em>a</em> + article apostrofat <em>l'</em>), que <strong>no</strong> és una contracció.
+                </div>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    <strong>la host</strong> vs <strong>l'host</strong>: les paraules que comencen per <em>h</em> aspirada en cultismes de vegades generen dubtes, però en català estàndard <strong>sempre</strong> s'apostrofa davant de <em>h</em>.<br>
+                    <strong>la una</strong> (hora) NO s'apostrofa perquè <em>u</em> és àtona. Però <strong>l'única</strong> SÍ perquè <em>ú</em> és tònica.
+                </div>
+
+                <div class="scroll-top"><a href="#apostrofacio">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             3. PRONOMS FEBLES
+             ============================================================ -->
+        <div class="grammar-section" id="pronoms">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">3</span>
+                <h2>Pronoms febles <small>En, hi, ho i combinacions</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>El sistema en / hi / ho</h3>
+                <p>Els pronoms febles són un dels aspectes més complexos del català. Els tres pronoms clau que no existeixen en castellà:</p>
+
+                <table class="grammar-table">
+                    <tr><th>Pronom</th><th>Funció</th><th>Exemple</th></tr>
+                    <tr><td><strong>en</strong></td><td>Substitueix complements amb <em>de</em>, partitius, quantitats</td><td>Tens pa? &mdash; Sí, <strong>en</strong> tinc. (= de pa)</td></tr>
+                    <tr><td><strong>hi</strong></td><td>Substitueix complements de lloc, complements amb <em>a/en</em></td><td>Vas a Barcelona? &mdash; Sí, <strong>hi</strong> vaig. (= a Barcelona)</td></tr>
+                    <tr><td><strong>ho</strong></td><td>Substitueix oracions senceres, atributs neutres</td><td>Saps que vindran? &mdash; Sí, <strong>ho</strong> sé. (= que vindran)</td></tr>
+                </table>
+
+                <h3>Usos detallats d'<em>en</em></h3>
+                <ul>
+                    <li><strong>Partitiu:</strong> Vols galetes? &mdash; Sí, <strong>en</strong> vull tres.</li>
+                    <li><strong>Complement amb <em>de</em>:</strong> Parles de política? &mdash; No, no <strong>en</strong> parlo.</li>
+                    <li><strong>Procedència:</strong> Vens del cinema? &mdash; Sí, <strong>en</strong> vinc.</li>
+                </ul>
+
+                <h3>Usos detallats d'<em>hi</em></h3>
+                <ul>
+                    <li><strong>Lloc (destinació/situació):</strong> Ets a casa? &mdash; Sí, <strong>hi</strong> sóc.</li>
+                    <li><strong>Complement amb <em>a/en/amb</em>:</strong> Penses en ella? &mdash; Sí, <strong>hi</strong> penso.</li>
+                    <li><strong>Amb <em>haver-hi</em>:</strong> <strong>Hi</strong> ha molts problemes.</li>
+                </ul>
+
+                <h3>Ordre de combinació dels pronoms</h3>
+                <div class="rule-box">
+                    <strong>Ordre davant del verb:</strong> se + 2a persona (et/us) + li/els + el/la/els/les/ho + en/hi<br>
+                    Mnemotècnia: <strong>SE TE LI EL EN HI</strong>
+                </div>
+
+                <table class="grammar-table">
+                    <tr><th>Combinació</th><th>Resultat</th><th>Exemple</th></tr>
+                    <tr><td>li + el</td><td><strong>l'hi</strong></td><td>L'hi dono. (= li dono el llibre)</td></tr>
+                    <tr><td>li + la</td><td><strong>la hi</strong></td><td>La hi dono. (= li dono la carta)</td></tr>
+                    <tr><td>li + els</td><td><strong>els hi</strong></td><td>Els hi dono. (= li dono els llibres)</td></tr>
+                    <tr><td>li + en</td><td><strong>li'n</strong></td><td>Li'n dono tres. (= li dono tres [coses])</td></tr>
+                    <tr><td>li + ho</td><td><strong>li ho</strong></td><td>Li ho diré. (= li diré això)</td></tr>
+                    <tr><td>els + el</td><td><strong>els el</strong></td><td>Els el dono. (= els dono el llibre)</td></tr>
+                    <tr><td>els + en</td><td><strong>els en</strong></td><td>Els en dono tres.</td></tr>
+                    <tr><td>se + en</td><td><strong>se'n</strong></td><td>Se'n va. (= se'n va d'aquí)</td></tr>
+                </table>
+
+                <h3>Posició: davant o darrere del verb</h3>
+                <div class="ex-correct"><strong>Davant</strong> (formes conjugades): <em>Li ho diré demà.</em></div>
+                <div class="ex-correct"><strong>Darrere</strong> (infinitiu, gerundi, imperatiu): <em>Dir-li-ho, dient-li-ho, digues-li-ho.</em></div>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    No confongueu <strong>en</strong> (partitiu) amb <strong>hi</strong> (locatiu). Pregunteu-vos: la frase original porta <em>de</em>? &rarr; <strong>en</strong>. Porta <em>a/en</em> (lloc)? &rarr; <strong>hi</strong>.<br>
+                    Error comú: *"Me'n vaig" &rarr; <strong>Me'n vaig</strong> (correcte!) vs *"M'hi vaig" (incorrecte per a anar-se'n).<br>
+                    Amb l'imperatiu negatiu: <strong>No li ho diguis</strong> (pronoms davant, com en formes conjugades).
+                </div>
+
+                <div class="scroll-top"><a href="#pronoms">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             4. VERBS IRREGULARS
+             ============================================================ -->
+        <div class="grammar-section" id="verbs">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">4</span>
+                <h2>Verbs irregulars <small>Conjugacions essencials per al C1</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Present d'indicatiu</h3>
+                <table class="grammar-table">
+                    <tr><th></th><th>ser</th><th>haver</th><th>fer</th><th>dir</th></tr>
+                    <tr><td><strong>jo</strong></td><td>sóc</td><td>he</td><td>faig</td><td>dic</td></tr>
+                    <tr><td><strong>tu</strong></td><td>ets</td><td>has</td><td>fas</td><td>dius</td></tr>
+                    <tr><td><strong>ell/a</strong></td><td>és</td><td>ha</td><td>fa</td><td>diu</td></tr>
+                    <tr><td><strong>nosaltres</strong></td><td>som</td><td>hem/havem</td><td>fem</td><td>diem</td></tr>
+                    <tr><td><strong>vosaltres</strong></td><td>sou</td><td>heu/haveu</td><td>feu</td><td>dieu</td></tr>
+                    <tr><td><strong>ells/es</strong></td><td>són</td><td>han</td><td>fan</td><td>diuen</td></tr>
+                </table>
+
+                <table class="grammar-table">
+                    <tr><th></th><th>veure</th><th>poder</th><th>voler</th><th>saber</th></tr>
+                    <tr><td><strong>jo</strong></td><td>veig</td><td>puc</td><td>vull</td><td>sé</td></tr>
+                    <tr><td><strong>tu</strong></td><td>veus</td><td>pots</td><td>vols</td><td>saps</td></tr>
+                    <tr><td><strong>ell/a</strong></td><td>veu</td><td>pot</td><td>vol</td><td>sap</td></tr>
+                    <tr><td><strong>nosaltres</strong></td><td>veiem</td><td>podem</td><td>volem</td><td>sabem</td></tr>
+                    <tr><td><strong>vosaltres</strong></td><td>veieu</td><td>podeu</td><td>voleu</td><td>sabeu</td></tr>
+                    <tr><td><strong>ells/es</strong></td><td>veuen</td><td>poden</td><td>volen</td><td>saben</td></tr>
+                </table>
+
+                <h3>Passat simple (pretèrit perfet simple)</h3>
+                <table class="grammar-table">
+                    <tr><th></th><th>ser</th><th>haver</th><th>fer</th><th>dir</th></tr>
+                    <tr><td><strong>jo</strong></td><td>fui</td><td>haguí</td><td>fiu</td><td>diguí</td></tr>
+                    <tr><td><strong>tu</strong></td><td>fores</td><td>hagueres</td><td>feres</td><td>digueres</td></tr>
+                    <tr><td><strong>ell/a</strong></td><td>fou</td><td>hagué</td><td>féu</td><td>digué</td></tr>
+                    <tr><td><strong>nosaltres</strong></td><td>fórem</td><td>haguérem</td><td>férem</td><td>diguérem</td></tr>
+                    <tr><td><strong>vosaltres</strong></td><td>fóreu</td><td>haguéreu</td><td>féreu</td><td>diguéreu</td></tr>
+                    <tr><td><strong>ells/es</strong></td><td>foren</td><td>hagueren</td><td>feren</td><td>digueren</td></tr>
+                </table>
+
+                <h3>Participis</h3>
+                <table class="grammar-table">
+                    <tr><th>Infinitiu</th><th>Participi</th><th>Nota</th></tr>
+                    <tr><td>ser</td><td><strong>estat / sigut</strong></td><td>Ambdós acceptats</td></tr>
+                    <tr><td>haver</td><td><strong>hagut</strong></td><td></td></tr>
+                    <tr><td>fer</td><td><strong>fet</strong></td><td></td></tr>
+                    <tr><td>dir</td><td><strong>dit</strong></td><td></td></tr>
+                    <tr><td>veure</td><td><strong>vist</strong></td><td>No *"veut"</td></tr>
+                    <tr><td>poder</td><td><strong>pogut</strong></td><td></td></tr>
+                    <tr><td>voler</td><td><strong>volgut</strong></td><td></td></tr>
+                    <tr><td>saber</td><td><strong>sabut</strong></td><td></td></tr>
+                </table>
+
+                <h3>Present de subjuntiu</h3>
+                <table class="grammar-table">
+                    <tr><th></th><th>ser</th><th>haver</th><th>fer</th><th>dir</th></tr>
+                    <tr><td><strong>jo</strong></td><td>sigui</td><td>hagi</td><td>faci</td><td>digui</td></tr>
+                    <tr><td><strong>tu</strong></td><td>siguis</td><td>hagis</td><td>facis</td><td>diguis</td></tr>
+                    <tr><td><strong>ell/a</strong></td><td>sigui</td><td>hagi</td><td>faci</td><td>digui</td></tr>
+                    <tr><td><strong>nosaltres</strong></td><td>siguem</td><td>hàgim</td><td>fem</td><td>diguem</td></tr>
+                    <tr><td><strong>vosaltres</strong></td><td>sigueu</td><td>hàgiu</td><td>feu</td><td>digueu</td></tr>
+                    <tr><td><strong>ells/es</strong></td><td>siguin</td><td>hagin</td><td>facin</td><td>diguin</td></tr>
+                </table>
+
+                <table class="grammar-table">
+                    <tr><th></th><th>veure</th><th>poder</th><th>voler</th><th>saber</th></tr>
+                    <tr><td><strong>jo</strong></td><td>vegi</td><td>pugui</td><td>vulgui</td><td>sàpiga</td></tr>
+                    <tr><td><strong>tu</strong></td><td>vegis</td><td>puguis</td><td>vulguis</td><td>sàpigues</td></tr>
+                    <tr><td><strong>ell/a</strong></td><td>vegi</td><td>pugui</td><td>vulgui</td><td>sàpiga</td></tr>
+                    <tr><td><strong>nosaltres</strong></td><td>vegem</td><td>puguem</td><td>vulguem</td><td>sapiguem</td></tr>
+                    <tr><td><strong>vosaltres</strong></td><td>vegeu</td><td>pugueu</td><td>vulgueu</td><td>sapigueu</td></tr>
+                    <tr><td><strong>ells/es</strong></td><td>vegin</td><td>puguin</td><td>vulguin</td><td>sàpiguen</td></tr>
+                </table>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    <strong>ser</strong>: el subjuntiu és <em>sigui</em>, no *"siga" (forma dialectal).<br>
+                    <strong>veure</strong>: el participi és <em>vist</em>, no *"veut" ni *"vist" amb accent.<br>
+                    <strong>haver</strong>: <em>hem</em> és normatiu, <em>havem</em> és vàlid però menys formal. En canvi, al subjuntiu <em>hàgim</em> porta accent obert!<br>
+                    No confongueu <strong>sé</strong> (saber, jo) amb <strong>se</strong> (pronom reflexiu).
+                </div>
+
+                <div class="scroll-top"><a href="#verbs">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             5. B/V
+             ============================================================ -->
+        <div class="grammar-section" id="bv">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">5</span>
+                <h2>B / V <small>Regles de distribució i paraules clau</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Regles bàsiques</h3>
+                <div class="rule-box">
+                    <strong>B</strong> s'escriu:<br>
+                    &bull; Davant de <strong>r</strong> o <strong>l</strong>: <em>bra</em>, <em>bla</em>, <em>abrir</em> &rarr; <strong>obrir</strong>, <strong>amable</strong>, <strong>braç</strong><br>
+                    &bull; Després de <strong>m</strong>: <em>tomb</em>, <em>amba</em>, <strong>combinar</strong>, <strong>embolicar</strong>
+                </div>
+                <div class="rule-box">
+                    <strong>V</strong> s'escriu:<br>
+                    &bull; Després de <strong>n</strong>: <strong>canviar</strong>, <strong>enviar</strong>, <strong>convidar</strong>, <strong>inventar</strong><br>
+                    &bull; En moltes paraules que en castellà també porten <em>v</em>: <strong>veure</strong>, <strong>viure</strong>, <strong>vendre</strong>
+                </div>
+
+                <h3>Paraules clau (diferent del castellà)</h3>
+                <table class="grammar-table">
+                    <tr><th>Català</th><th>Castellà</th><th>Nota</th></tr>
+                    <tr><td><strong>beure</strong></td><td>beber</td><td>B en ambdós</td></tr>
+                    <tr><td><strong>veure</strong></td><td>ver</td><td>V en ambdós</td></tr>
+                    <tr><td><strong>govern</strong></td><td>gobierno</td><td>V en ambdós</td></tr>
+                    <tr><td><strong>canviar</strong></td><td>cambiar</td><td>V en català, B en castellà!</td></tr>
+                    <tr><td><strong>treball</strong></td><td>trabajo</td><td>B en ambdós</td></tr>
+                    <tr><td><strong>arribar</strong></td><td>llegar</td><td>B en català (diferent arrel)</td></tr>
+                    <tr><td><strong>provar</strong></td><td>probar</td><td>V en català, B en castellà!</td></tr>
+                    <tr><td><strong>moure</strong></td><td>mover</td><td>Sense B ni V visibles, però: <em>moviment</em></td></tr>
+                    <tr><td><strong>deure</strong></td><td>deber</td><td>Sense B ni V, però: <em>devia</em> (amb V)</td></tr>
+                    <tr><td><strong>rebre</strong></td><td>recibir</td><td>B davant R</td></tr>
+                </table>
+
+                <h3>Famílies de paraules</h3>
+                <p>Fixeu-vos com la mateixa arrel manté la B o V:</p>
+                <ul>
+                    <li><strong>V:</strong> viure &rarr; vivent, vivenda, vivència, reviure</li>
+                    <li><strong>V:</strong> govern &rarr; governar, governant, governamental</li>
+                    <li><strong>B:</strong> treball &rarr; treballar, treballador, treballós</li>
+                    <li><strong>V:</strong> canvi &rarr; canviar, intercanvi, intercanviar</li>
+                </ul>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    <strong>canviar</strong> (amb V) vs <strong>cambiar</strong> (castellà amb B): és un error molt comú escriure *"cambiar" en català.<br>
+                    <strong>provar</strong> (amb V) vs <strong>probar</strong> (castellà amb B): un altre clàssic.<br>
+                    Recorda: després de <strong>n</strong> sempre <strong>v</strong> &rarr; e<strong>nv</strong>iar, co<strong>nv</strong>idar, i<strong>nv</strong>entar.
+                </div>
+
+                <div class="scroll-top"><a href="#bv">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             6. PLURALS I FEMENINS
+             ============================================================ -->
+        <div class="grammar-section" id="plurals">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">6</span>
+                <h2>Plurals i femenins <small>Regles regulars, irregulars i excepcions</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Formació del plural: regles regulars</h3>
+                <div class="rule-box">
+                    <strong>Regla general:</strong> s'afegeix <strong>-s</strong> al singular: <em>gat &rarr; gats</em>, <em>casa &rarr; cases</em>
+                </div>
+
+                <h3>Plurals especials: -os</h3>
+                <p>Les paraules que acaben en certs grups consonàntics afegeixen <strong>-os</strong>:</p>
+                <table class="grammar-table">
+                    <tr><th>Final</th><th>Singular</th><th>Plural</th></tr>
+                    <tr><td><strong>-sc</strong></td><td>bosc</td><td><strong>boscos</strong></td></tr>
+                    <tr><td><strong>-st</strong></td><td>gust</td><td><strong>gustos</strong></td></tr>
+                    <tr><td><strong>-xt</strong></td><td>text</td><td><strong>textos</strong></td></tr>
+                    <tr><td><strong>-ig</strong></td><td>desig</td><td><strong>desitjos</strong></td></tr>
+                    <tr><td><strong>-ç</strong></td><td>braç</td><td><strong>braços</strong></td></tr>
+                </table>
+
+                <div class="note-box">
+                    <strong>Atenció:</strong> no totes les paraules en <em>-st</em> fan <em>-stos</em>. Algunes fan <em>-sts</em>: <em>cost &rarr; costs</em> (però <em>gust &rarr; gustos</em>). Consulteu el diccionari en cas de dubte.
+                </div>
+
+                <h3>Masculins acabats en -a</h3>
+                <p>En català, hi ha paraules <strong>masculines</strong> que acaben en <strong>-a</strong> (no existeix en castellà):</p>
+                <ul>
+                    <li><strong>el problema</strong> &rarr; els problemes</li>
+                    <li><strong>el tema</strong> &rarr; els temes</li>
+                    <li><strong>el sistema</strong> &rarr; els sistemes</li>
+                    <li><strong>el programa</strong> &rarr; els programes</li>
+                    <li><strong>el dia</strong> &rarr; els dies</li>
+                    <li><strong>el mapa</strong> &rarr; els mapes</li>
+                    <li><strong>el poeta</strong> &rarr; els poetes</li>
+                </ul>
+                <div class="ex-correct">El plural dels masculins en -a canvia la <strong>-a</strong> per <strong>-es</strong>: <em>el problema &rarr; els problemes</em></div>
+
+                <h3>Femenins irregulars</h3>
+                <table class="grammar-table">
+                    <tr><th>Masculí</th><th>Femení</th><th>Nota</th></tr>
+                    <tr><td>actor</td><td><strong>actriu</strong></td><td>No *"actora"</td></tr>
+                    <tr><td>rei</td><td><strong>reina</strong></td><td></td></tr>
+                    <tr><td>heroi</td><td><strong>heroïna</strong></td><td>Amb dièresi</td></tr>
+                    <tr><td>gall</td><td><strong>gallina</strong></td><td></td></tr>
+                    <tr><td>ase</td><td><strong>somera</strong></td><td>Arrel diferent!</td></tr>
+                    <tr><td>home</td><td><strong>dona</strong></td><td>Arrel diferent</td></tr>
+                    <tr><td>cavall</td><td><strong>euga</strong></td><td>Arrel diferent</td></tr>
+                    <tr><td>gendre</td><td><strong>nora</strong></td><td>Arrel diferent</td></tr>
+                </table>
+
+                <h3>Adjectius: formació del femení</h3>
+                <ul>
+                    <li>-<strong>e</strong> &rarr; -<strong>a</strong>: <em>ample &rarr; ampla</em></li>
+                    <li>Consonant &rarr; + <strong>-a</strong>: <em>alt &rarr; alta</em>, <em>fort &rarr; forta</em></li>
+                    <li>Invariables (mateixa forma): <em>amable, intel&middot;ligent, feliç, gran</em></li>
+                </ul>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    <strong>el/els problema/problemes</strong>: sempre masculí en català (igual que en castellà). Però atenció: el plural canvia -a per -es, no afegeix -s.<br>
+                    <strong>actriu</strong> (no *"actora"): forma irregular que cal memoritzar.<br>
+                    <strong>bosc &rarr; boscos</strong> (no *"boscs"): el grup -sc exigeix el plural en -os.
+                </div>
+
+                <div class="scroll-top"><a href="#plurals">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             7. PREPOSICIONS
+             ============================================================ -->
+        <div class="grammar-section" id="preposicions">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">7</span>
+                <h2>Preposicions <small>Per/per a, a/en, amb</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Per vs Per a</h3>
+                <div class="rule-box">
+                    <strong>Per</strong> = causa, motiu, agent, mitjà, lloc de pas (equivale a "por" en castellà).<br>
+                    <strong>Per a</strong> = finalitat, destinatari (equivale a "para" en castellà).
+                </div>
+
+                <table class="grammar-table">
+                    <tr><th>Ús</th><th>Preposició</th><th>Exemple</th></tr>
+                    <tr><td>Causa</td><td><strong>per</strong></td><td>Ho faig <strong>per</strong> necessitat.</td></tr>
+                    <tr><td>Agent (passiva)</td><td><strong>per</strong></td><td>El llibre va ser escrit <strong>per</strong> l'autor.</td></tr>
+                    <tr><td>Mitjà</td><td><strong>per</strong></td><td>T'ho envio <strong>per</strong> correu.</td></tr>
+                    <tr><td>Lloc de pas</td><td><strong>per</strong></td><td>Passem <strong>per</strong> Girona.</td></tr>
+                    <tr><td>Finalitat</td><td><strong>per a</strong></td><td>Estudia <strong>per a</strong> aprovar.</td></tr>
+                    <tr><td>Destinatari</td><td><strong>per a</strong></td><td>Això és <strong>per a</strong> tu.</td></tr>
+                </table>
+
+                <div class="ex-correct">Treballo <strong>per</strong> viure. (causa/motiu: trabajo porque necesito vivir)</div>
+                <div class="ex-correct">Treballo <strong>per a</strong> millorar. (finalitat: trabajo para mejorar)</div>
+                <div class="ex-incorrect">Treballo <strong>per</strong> millorar. (incorrecte si el sentit és de finalitat)</div>
+
+                <div class="note-box">
+                    <strong>Davant d'infinitiu:</strong> en la pràctica, <em>per</em> + infinitiu sovint s'accepta per a la finalitat en registre informal. Però a l'examen C1, cal distingir <strong>per</strong> (causa) i <strong>per a</strong> (finalitat) rigorosament.
+                </div>
+
+                <h3>A vs En (localització)</h3>
+                <table class="grammar-table">
+                    <tr><th>Preposició</th><th>Ús</th><th>Exemple</th></tr>
+                    <tr><td><strong>a</strong></td><td>Direcció, destinació</td><td>Vaig <strong>a</strong> Barcelona.</td></tr>
+                    <tr><td><strong>a</strong></td><td>Situació (amb noms propis de lloc)</td><td>Visc <strong>a</strong> Catalunya.</td></tr>
+                    <tr><td><strong>en</strong></td><td>Situació dins d'un espai tancat</td><td>Sóc <strong>en</strong> una reunió.</td></tr>
+                    <tr><td><strong>en</strong></td><td>Mitjà de transport tancat</td><td>Viatjo <strong>en</strong> tren.</td></tr>
+                    <tr><td><strong>a</strong></td><td>Mitjà de transport obert</td><td>Vaig <strong>a</strong> peu / <strong>a</strong> cavall.</td></tr>
+                </table>
+
+                <h3>Amb (companyia i instrument)</h3>
+                <div class="rule-box">
+                    <strong>Amb</strong> = companyia i instrument (engloba "con" del castellà).<br>
+                    En català, <strong>amb</strong> mai es pot substituir per *"en" per a la companyia.
+                </div>
+                <div class="ex-correct">Vinc <strong>amb</strong> la Maria.</div>
+                <div class="ex-correct">Ho tallo <strong>amb</strong> un ganivet.</div>
+                <div class="ex-incorrect">Vinc <strong>en</strong> la Maria. (castellanisme: *"con la María" &rarr; *"en")</div>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    <strong>per a + pronom personal:</strong> <em>per a mi, per a tu, per a ell</em> (finalitat/destinatari). No confongueu amb <em>per mi</em> (= a causa de mi).<br>
+                    <strong>en vs a:</strong> <em>"sóc a casa"</em> (lloc habitual, sense article) vs <em>"sóc en una casa"</em> (dins d'un espai concret). Quan dubtes: <em>a</em> per a llocs geogràfics, <em>en</em> per a espais tancats genèrics.
+                </div>
+
+                <div class="scroll-top"><a href="#preposicions">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             8. CONNECTORS TEXTUALS
+             ============================================================ -->
+        <div class="grammar-section" id="connectors">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">8</span>
+                <h2>Connectors textuals <small>Organitzadors del discurs per funció</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Taula de connectors per funció</h3>
+
+                <table class="grammar-table">
+                    <tr><th>Funció</th><th>Connectors</th></tr>
+                    <tr>
+                        <td><strong>Addició</strong><br><small>(adición)</small></td>
+                        <td>a més (a més), també, així mateix, d'altra banda, encara més, no solament... sinó també, tant... com, igualment, a més a més</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contrast</strong><br><small>(contraste)</small></td>
+                        <td>però, tanmateix, no obstant això, malgrat que, tot i que, en canvi, ara bé, amb tot, contràriament, d'altra banda, si bé, nogensmenys</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Causa</strong><br><small>(causa)</small></td>
+                        <td>perquè, ja que, atès que, com que, a causa de, gràcies a, pel fet que, car, puix que, vist que</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Conseqüència</strong><br><small>(consecuencia)</small></td>
+                        <td>per tant, doncs, en conseqüència, així doncs, de manera que, consegüentment, per consegüent, per això, per aquesta raó</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Finalitat</strong><br><small>(finalidad)</small></td>
+                        <td>per tal que, a fi que, per tal de, amb l'objectiu de, amb la intenció de, perquè + subjuntiu, a fi de</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ordre / seqüència</strong><br><small>(orden)</small></td>
+                        <td>en primer lloc, en segon lloc, per començar, tot seguit, a continuació, finalment, per acabar, d'entrada, d'antuvi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exemplificació</strong><br><small>(ejemplificación)</small></td>
+                        <td>per exemple, com ara, és a dir, en concret, concretament, posem per cas, a tall d'exemple</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Resum / conclusió</strong><br><small>(resumen)</small></td>
+                        <td>en resum, en definitiva, en conclusió, al capdavall, fet i fet, comptat i debatut, tot plegat, en síntesi, breument</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Condició</strong><br><small>(condición)</small></td>
+                        <td>si, en cas que, sempre que, amb la condició que, posat que, a condició que, llevat que, tret que</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Temporals</strong><br><small>(temporales)</small></td>
+                        <td>quan, mentre, abans que, després que, des que, fins que, tan bon punt, tot just, d'ençà que</td>
+                    </tr>
+                </table>
+
+                <h3>Connectors de registre formal (C1)</h3>
+                <p>Per distingir-vos en l'examen, useu connectors de registre alt:</p>
+                <ul>
+                    <li><strong>nogensmenys</strong> (= no obstant) &mdash; molt formal</li>
+                    <li><strong>d'antuvi</strong> (= d'entrada, de primer) &mdash; literari</li>
+                    <li><strong>car</strong> (= perquè, ja que) &mdash; registre elevat</li>
+                    <li><strong>puix que</strong> (= ja que) &mdash; formal/arcaic</li>
+                    <li><strong>comptat i debatut</strong> (= al final, teniendo todo en cuenta)</li>
+                    <li><strong>fet i fet</strong> (= al cap i a la fi, en realidad)</li>
+                </ul>
+
+                <div class="ex-correct"><strong>Tot i que</strong> la proposta era interessant, <strong>tanmateix</strong> no la van acceptar, <strong>atès que</strong> el pressupost era insuficient.</div>
+                <div class="ex-correct"><strong>D'entrada</strong>, cal analitzar la situació; <strong>tot seguit</strong>, proposarem solucions i, <strong>finalment</strong>, establirem un calendari.</div>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    <strong>"perquè"</strong> pot ser <em>causal</em> (indicatiu) o <em>final</em> (subjuntiu):<br>
+                    &bull; Causal: <em>Ho faig <strong>perquè</strong> m'agrada.</em> (porque me gusta)<br>
+                    &bull; Final: <em>Ho faig <strong>perquè</strong> tothom ho sàpiga.</em> (para que todos lo sepan)<br>
+                    No confongueu <strong>"sinó"</strong> (conjunció adversativa) amb <strong>"si no"</strong> (condicional negativa): <em>No és blau, sinó verd</em> vs <em>Si no véns, marxarem</em>.
+                </div>
+
+                <div class="scroll-top"><a href="#connectors">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             9. CASTELLANISMES
+             ============================================================ -->
+        <div class="grammar-section" id="castellanismes">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">9</span>
+                <h2>Castellanismes <small>Errors freqüents per interferència del castellà</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Taula d'errors freqüents</h3>
+                <table class="grammar-table">
+                    <tr><th>Incorrecte</th><th>Correcte</th><th>Explicació</th></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*lo important</td><td><strong>el que és important / allò important</strong></td><td>No existeix l'article neutre "lo" en català</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*disfrutar</td><td><strong>gaudir, fruir</strong></td><td>Castellanisme pur</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*entonces</td><td><strong>aleshores, llavors, doncs</strong></td><td>Castellanisme</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*desde</td><td><strong>des de</strong></td><td>Sempre dues paraules en català</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*hasta</td><td><strong>fins a, fins</strong></td><td>Castellanisme</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*bueno</td><td><strong>bé, doncs</strong></td><td>Interjeccions castellanes</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*cumplir</td><td><strong>complir</strong></td><td>Falsa adaptació</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*apoyar</td><td><strong>donar suport, recolzar</strong></td><td>Castellanisme</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*asignatura</td><td><strong>assignatura</strong></td><td>Ortografia: doble <em>s</em></td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*tindre</td><td><strong>tenir</strong></td><td>Forma dialectal/castellanisme</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*qualsevol cosa</td><td><strong>qualsevol cosa</strong> (correcte) o *<strong>cualquier cosa</strong></td><td>Atenció: "qualsevol" sí és correcte!</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*a lo millor</td><td><strong>potser, tal vegada</strong></td><td>Calc del castellà "a lo mejor"</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*donar-se compte</td><td><strong>adonar-se</strong></td><td>Calc de "darse cuenta"</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*tenir que</td><td><strong>haver de</strong></td><td>Obligació: "haver de" + infinitiu</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*en quant a</td><td><strong>pel que fa a, quant a</strong></td><td>Calc de "en cuanto a"</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*degut a</td><td><strong>a causa de, atès que</strong></td><td>Calc de "debido a"</td></tr>
+                    <tr><td class="ex-incorrect" style="border-left:none;border-radius:0;margin:0;padding:8px 12px">*ademés</td><td><strong>a més, a més a més</strong></td><td>Castellanisme directe</td></tr>
+                </table>
+
+                <h3>L'article neutre "lo": NO existeix en català</h3>
+                <div class="rule-box">
+                    <strong>Regla fonamental:</strong> El català <strong>no</strong> té article neutre. En comptes de "lo" + adjectiu, useu:<br>
+                    &bull; <strong>el que és</strong> + adjectiu: <em>el que és important</em><br>
+                    &bull; <strong>allò</strong> + adjectiu: <em>allò important</em> (més formal)<br>
+                    &bull; <strong>la cosa</strong> + adjectiu: <em>la cosa important</em>
+                </div>
+                <div class="ex-correct"><strong>El que és</strong> millor d'aquesta ciutat és el clima.</div>
+                <div class="ex-incorrect"><strong>*Lo</strong> millor d'aquesta ciutat és el clima.</div>
+
+                <h3>Expressions catalanes genuïnes</h3>
+                <p>Expressions pròpies del català que sovint es substitueixen per castellanismes:</p>
+                <ul>
+                    <li><strong>adonar-se</strong> (no *donar-se compte) = darse cuenta</li>
+                    <li><strong>haver de</strong> + inf. (no *tenir que) = tener que</li>
+                    <li><strong>caldre</strong> (no *fer falta) = hacer falta</li>
+                    <li><strong>endreçar</strong> (no *arreglar) = ordenar</li>
+                    <li><strong>enraonar</strong> (no *charlar) = charlar</li>
+                    <li><strong>estalviar</strong> (no *ahorrar) = ahorrar</li>
+                    <li><strong>acomiadar</strong> (no *despedir) = despedir</li>
+                </ul>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    Els castellanismes són la font d'errors <strong>més penalitzada</strong> a l'examen C1. Atenció especial a:<br>
+                    &bull; <strong>*"lo"</strong>: mai com a article neutre.<br>
+                    &bull; <strong>*"tenir que"</strong>: sempre <em>haver de</em>.<br>
+                    &bull; <strong>*"donar-se compte"</strong>: sempre <em>adonar-se</em>.<br>
+                    &bull; <strong>*"disfrutar"</strong>: sempre <em>gaudir</em> o <em>fruir</em>.<br>
+                    &bull; <strong>*"desde"</strong>: sempre <em>des de</em> (dues paraules).
+                </div>
+
+                <div class="scroll-top"><a href="#castellanismes">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             10. REGISTRE FORMAL
+             ============================================================ -->
+        <div class="grammar-section" id="registre">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-badge">10</span>
+                <h2>Registre formal <small>Vostè, fórmules de cortesia i vocabulari formal</small></h2>
+                <span class="section-chevron">&#9660;</span>
+            </div>
+            <div class="section-body">
+                <h3>Vostè / Vostès</h3>
+                <div class="rule-box">
+                    <strong>Vostè</strong> (usted) i <strong>vostès</strong> (ustedes) s'usen amb la <strong>3a persona</strong> del verb, igual que en castellà.<br>
+                    En català formal, <em>vostè</em> és obligatori en textos administratius, cartes formals i situacions de cortesia.
+                </div>
+
+                <div class="ex-correct"><strong>Vostè</strong> pot presentar la sol&middot;licitud fins al dia 30.</div>
+                <div class="ex-correct"><strong>Vostès</strong> tenen dret a reclamar.</div>
+                <div class="ex-incorrect"><strong>*Tu</strong> pot presentar la sol&middot;licitud... (barreja de registres)</div>
+
+                <h3>Fórmules de cortesia en cartes formals</h3>
+                <table class="grammar-table">
+                    <tr><th>Funció</th><th>Fórmula</th></tr>
+                    <tr><td>Encapçalament</td><td><strong>Distingit senyor / Distingida senyora,</strong></td></tr>
+                    <tr><td>Encapçalament</td><td><strong>Benvolgut senyor / Benvolguda senyora,</strong></td></tr>
+                    <tr><td>Encapçalament genèric</td><td><strong>A qui correspongui,</strong></td></tr>
+                    <tr><td>Motiu de la carta</td><td><strong>Em dirigeixo a vostè per tal de...</strong></td></tr>
+                    <tr><td>Motiu de la carta</td><td><strong>El motiu d'aquesta carta és...</strong></td></tr>
+                    <tr><td>Sol&middot;licitar</td><td><strong>Li agrairia que...</strong> + subjuntiu</td></tr>
+                    <tr><td>Sol&middot;licitar</td><td><strong>Tinc l'honor de sol&middot;licitar...</strong></td></tr>
+                    <tr><td>Agraïment</td><td><strong>Li agraeixo per endavant la seva atenció.</strong></td></tr>
+                    <tr><td>Comiat</td><td><strong>Atentament, / Cordialment, / Ben cordialment,</strong></td></tr>
+                    <tr><td>Comiat formal</td><td><strong>Aprofito l'avinentesa per saludar-lo/la atentament.</strong></td></tr>
+                    <tr><td>Comiat formal</td><td><strong>Resto a la seva disposició per a qualsevol aclariment.</strong></td></tr>
+                </table>
+
+                <h3>Vocabulari formal vs informal</h3>
+                <table class="grammar-table">
+                    <tr><th>Informal / Col&middot;loquial</th><th>Formal / Estàndard</th><th>Castellà</th></tr>
+                    <tr><td>fer servir</td><td><strong>utilitzar, emprar</strong></td><td>utilizar</td></tr>
+                    <tr><td>dir</td><td><strong>manifestar, indicar, assenyalar</strong></td><td>indicar, señalar</td></tr>
+                    <tr><td>demanar</td><td><strong>sol&middot;licitar, requerir</strong></td><td>solicitar</td></tr>
+                    <tr><td>donar</td><td><strong>lliurar, proporcionar, facilitar</strong></td><td>entregar, facilitar</td></tr>
+                    <tr><td>arreglar</td><td><strong>resoldre, solucionar</strong></td><td>resolver</td></tr>
+                    <tr><td>acabar</td><td><strong>finalitzar, concloure</strong></td><td>finalizar</td></tr>
+                    <tr><td>treure</td><td><strong>obtenir, aconseguir</strong></td><td>obtener</td></tr>
+                    <tr><td>posar</td><td><strong>establir, instaurar, fixar</strong></td><td>establecer</td></tr>
+                    <tr><td>canviar</td><td><strong>modificar, alterar</strong></td><td>modificar</td></tr>
+                    <tr><td>molt</td><td><strong>considerablement, notablement</strong></td><td>considerablemente</td></tr>
+                    <tr><td>de seguida</td><td><strong>immediatament, tot seguit</strong></td><td>inmediatamente</td></tr>
+                    <tr><td>parlar de</td><td><strong>tractar sobre, versar sobre</strong></td><td>tratar sobre</td></tr>
+                </table>
+
+                <h3>Estructures formals per a la redacció C1</h3>
+                <ul>
+                    <li><strong>Impersonal:</strong> <em>Cal destacar que... / S'ha de tenir en compte que... / Convé assenyalar que...</em></li>
+                    <li><strong>Passiva reflexa:</strong> <em>S'han analitzat els resultats. / Es proposa una solució.</em></li>
+                    <li><strong>Perífrasis modal d'obligació:</strong> <em>Cal + infinitiu / S'ha de + infinitiu</em> (no *"es necessita")</li>
+                    <li><strong>Oracions subordinades:</strong> <em>Atès que... / Pel fet que... / En la mesura que...</em></li>
+                </ul>
+
+                <div class="note-box">
+                    <strong>Consell per a l'examen:</strong> en la redacció del C1, alterneu entre vocabulari formal i connectors de registre alt. No repetiu el mateix connector (per exemple, no useu "però" tres vegades: alterneu amb <em>tanmateix, no obstant això, ara bé</em>).
+                </div>
+
+                <div class="trap">
+                    <div class="trap-title">Trampa d'examen</div>
+                    <strong>"Estimat/da"</strong> no és adequat per a cartes formals administratives. Useu <strong>"Distingit/da"</strong> o <strong>"Benvolgut/da"</strong>.<br>
+                    <strong>"Atentament"</strong> és el comiat formal estàndard; <strong>"Salutacions"</strong> sol és per a comunicacions menys formals.<br>
+                    En textos formals, eviteu <strong>contraccions col&middot;loquials</strong> i formes dialectals. Useu sempre les formes normatives: <em>nosaltres</em> (no *"naltros"), <em>aquest</em> (no *"aques").
+                </div>
+
+                <div class="scroll-top"><a href="#registre">&#8593; Tornar a dalt</a></div>
+            </div>
+        </div>
+
+    </div><!-- /.grammar-container -->
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        // Toggle collapsible sections
+        function toggleSection(header) {
+            const section = header.closest('.grammar-section');
+            section.classList.toggle('open');
+        }
+
+        // Open section if navigated via anchor
+        function openAnchor() {
+            const hash = window.location.hash;
+            if (hash) {
+                const target = document.querySelector(hash);
+                if (target && target.classList.contains('grammar-section')) {
+                    target.classList.add('open');
+                    setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                }
+            }
+        }
+
+        // TOC links: open section on click
+        document.querySelectorAll('.toc-grid a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const hash = this.getAttribute('href');
+                const target = document.querySelector(hash);
+                if (target) {
+                    e.preventDefault();
+                    // Close all sections first (optional, for clean UX)
+                    // document.querySelectorAll('.grammar-section.open').forEach(s => s.classList.remove('open'));
+                    target.classList.add('open');
+                    setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+                    history.pushState(null, '', hash);
+                }
+            });
+        });
+
+        // Run on load
+        openAnchor();
+        window.addEventListener('hashchange', openAnchor);
+    </script>
+</body>
+</html>
