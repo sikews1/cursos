@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Gramàtica - C1 Català</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .cat-nav {
+            background: rgba(var(--bg-base-rgb, 240,240,243), 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .cat-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+
+        .cat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .cat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .cat-nav a.home { color: var(--accent); font-weight: 600; }
+        .cat-nav a.home:hover { background: var(--accent-soft); }
+
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(251, 191, 36, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(239, 68, 68, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+
+        /* Module selector */
+        .module-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .module-selector button {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: var(--font-sans);
+        }
+
+        .module-selector button:hover { border-color: #fbbf24; color: #fbbf24; }
+        .module-selector button.active {
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            border-color: #fbbf24;
+            color: #fff;
+        }
+
+        /* Question card */
+        .question-card {
+            background: var(--bg-raised);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .question-counter {
+            color: #ef4444;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .question-topic-tag {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(251, 191, 36, 0.2);
+            color: #d97706;
+            margin-bottom: 15px;
+        }
+
+        [data-theme="dark"] .question-topic-tag {
+            color: #fbbf24;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options { list-style: none; }
+
+        .options li {
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--border-subtle);
+            background: var(--bg-base);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .options li:hover { border-color: #fbbf24; background: rgba(251, 191, 36, 0.05); }
+
+        .options li .letter {
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .options li:hover .letter { background: #fbbf24; color: #fff; }
+
+        .options li.correct {
+            border-color: var(--green);
+            background: rgba(34, 197, 94, 0.1);
+        }
+        .options li.correct .letter { background: #22c55e; color: #fff; }
+
+        .options li.wrong {
+            border-color: var(--red);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .options li.wrong .letter { background: #ef4444; color: #fff; }
+
+        .options li.disabled { pointer-events: none; opacity: 0.6; }
+        .options li.correct.disabled, .options li.wrong.disabled { opacity: 1; }
+
+        /* Explanation */
+        .explanation {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 3px solid #fbbf24;
+            padding: 15px 18px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 18px;
+            display: none;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .explanation strong { color: #d97706; }
+        [data-theme="dark"] .explanation strong { color: #fbbf24; }
+
+        .explanation.show { display: block; animation: fadeIn 0.3s ease; }
+
+        /* Navigation */
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* Score */
+        .score-card {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .score-number {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .score-number.pass { color: var(--green); }
+        .score-number.fail { color: var(--red); }
+
+        .score-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+
+        .score-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .score-detail { text-align: center; }
+        .score-detail .number { font-size: 2rem; font-weight: 700; }
+        .score-detail .label { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-subtle);
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #ef4444);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Review section */
+        .review-item {
+            background: var(--bg-raised);
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid;
+        }
+
+        .review-item.review-correct { border-color: var(--green); }
+        .review-item.review-wrong { border-color: var(--red); }
+
+        .review-question { color: var(--text-primary); font-weight: 600; margin-bottom: 8px; }
+        .review-answer { font-size: 0.9rem; color: var(--text-secondary); }
+        .review-answer .correct-ans { color: var(--green); }
+        .review-answer .wrong-ans { color: var(--red); text-decoration: line-through; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.5rem; }
+            .container { padding: 20px 16px; }
+            .module-selector button { padding: 8px 14px; font-size: 0.78rem; }
+            .question-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="gramatica.html">Gram&agrave;tica</a>
+    <a href="quiz.html" class="active">Quiz</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="redaccio.html">Redacci&oacute;</a>
+</div>
+
+<div class="hero">
+    <h1>Quiz de <span>Gram&agrave;tica</span></h1>
+    <p>Practica per a l'examen C1</p>
+</div>
+
+<div class="container">
+    <div class="module-selector" id="moduleSelector">
+        <button class="active" data-topic="all">Tots</button>
+        <button data-topic="accentuacio">Accentuaci&oacute;</button>
+        <button data-topic="apostrofacio">Apostrofaci&oacute;</button>
+        <button data-topic="pronoms">Pronoms febles</button>
+        <button data-topic="verbs">Verbs</button>
+        <button data-topic="bv">B/V</button>
+        <button data-topic="preposicions">Preposicions</button>
+        <button data-topic="connectors">Connectors</button>
+        <button data-topic="castellanismes">Castellanismes</button>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+
+    <div id="quizArea"></div>
+    <div id="scoreCard" class="score-card"></div>
+
+    <div class="quiz-nav" id="quizNav">
+        <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">Anterior</button>
+        <span id="questionNum" style="color: var(--text-secondary); font-size: 0.9rem;"></span>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Seg&uuml;ent</button>
+    </div>
+</div>
+
+<div class="footer">C1 Catal&agrave; - Material d'estudi per a Mossos d'Esquadra</div>
+
+<script>
+const allQuestions = [
+
+    // ===================== ACCENTUACIO (7 questions) =====================
+    {
+        topic: "accentuacio", topicLabel: "Accentuaci\u00f3",
+        question: "Quina d'aquestes paraules porta accent obert (\u00e8)?",
+        options: ["Caf\u00e9", "Caf\u00e8", "Cafe", "Caf\u00ea"],
+        correct: 1,
+        explanation: "La forma correcta \u00e9s <strong>caf\u00e8</strong> (amb accent obert). Les paraules agudes acabades en -\u00e8 porten accent obert en catal\u00e0."
+    },
+    {
+        topic: "accentuacio", topicLabel: "Accentuaci\u00f3",
+        question: "Quina \u00e9s la forma correctament accentuada?",
+        options: ["Angl\u00e9s", "Angl\u00e8s", "Angles", "Angl\u00eas"],
+        correct: 1,
+        explanation: "<strong>Angl\u00e8s</strong> porta accent obert perqu\u00e8 la \u00e8 \u00e9s oberta. Regla: la majoria de mots aguts acabats en -\u00e8s porten accent greu (obert)."
+    },
+    {
+        topic: "accentuacio", topicLabel: "Accentuaci\u00f3",
+        question: "Quina paraula \u00e9s esdr\u00faixola?",
+        options: ["Cami\u00f3", "Tel\u00e8fon", "Paret", "Caf\u00e8"],
+        correct: 1,
+        explanation: "<strong>Tel\u00e8fon</strong> \u00e9s esdr\u00faixola perqu\u00e8 l'accent recau en l'antepen\u00faltima s\u00edl\u00b7laba (te-L\u00c8-fon). Totes les esdr\u00faixoles s'accentuen."
+    },
+    {
+        topic: "accentuacio", topicLabel: "Accentuaci\u00f3",
+        question: "Quina d'aquestes paraules \u00e9s correcta?",
+        options: ["Per\u00f3", "Per\u00f2", "Pero", "Perr\u00f2"],
+        correct: 1,
+        explanation: "<strong>Per\u00f2</strong> s'escriu amb accent obert (greu). \u00c9s un mot agut acabat en vocal oberta."
+    },
+    {
+        topic: "accentuacio", topicLabel: "Accentuaci\u00f3",
+        question: "Quina s\u00e8rie de paraules est\u00e0 ben accentuada?",
+        options: [
+            "\u00e9xamen, despr\u00e9s, m\u00e9s",
+            "examen, despr\u00e9s, m\u00e9s",
+            "ex\u00e0men, despr\u00e8s, m\u00e8s",
+            "examen, despr\u00e8s, m\u00e8s"
+        ],
+        correct: 1,
+        explanation: "<strong>Examen</strong> \u00e9s plana acabada en -en (no s'accentua). <strong>Despr\u00e9s</strong> i <strong>m\u00e9s</strong> s\u00f3n agudes amb e tancada (accent agut)."
+    },
+    {
+        topic: "accentuacio", topicLabel: "Accentuaci\u00f3",
+        question: "Quin mot porta accent per ser agut?",
+        options: ["Taula", "Catal\u00e0", "P\u00e0gina", "Arbre"],
+        correct: 1,
+        explanation: "<strong>Catal\u00e0</strong> \u00e9s un mot agut (l'accent recau en l'\u00faltima s\u00edl\u00b7laba) i acaba en vocal, per aix\u00f2 s'accentua."
+    },
+    {
+        topic: "accentuacio", topicLabel: "Accentuaci\u00f3",
+        question: "Quina d'aquestes paraules NO s'ha d'accentuar?",
+        options: ["\u00c0rab", "Tamb\u00e9", "Paper", "Inform\u00e0tica"],
+        correct: 2,
+        explanation: "<strong>Paper</strong> \u00e9s un mot agut acabat en -r. Els mots aguts acabats en consonant que no sigui -s, -n, -en no s'accentuen (excepte -\u00e0s, -\u00eds, -\u00fas, -\u00e9s, etc.)."
+    },
+
+    // ===================== APOSTROFACIO (6 questions) =====================
+    {
+        topic: "apostrofacio", topicLabel: "Apostrofaci\u00f3",
+        question: "Quina forma \u00e9s correcta?",
+        options: ["L'universitat", "La universitat"],
+        correct: 1,
+        explanation: "<strong>La universitat</strong> \u00e9s correcte. No s'apostrofa davant de paraules que comencen per <strong>u</strong> \u00e0tona (so [u]), ja que funciona com a semivocal/semiconsonant."
+    },
+    {
+        topic: "apostrofacio", topicLabel: "Apostrofaci\u00f3",
+        question: "Quina forma \u00e9s correcta?",
+        options: ["La hora", "L'hora"],
+        correct: 1,
+        explanation: "<strong>L'hora</strong> \u00e9s correcte. La h no compta: com que el so seg\u00fcent \u00e9s una vocal, s'apostrofa."
+    },
+    {
+        topic: "apostrofacio", topicLabel: "Apostrofaci\u00f3",
+        question: "Quina forma \u00e9s correcta?",
+        options: ["L'idea", "La idea"],
+        correct: 1,
+        explanation: "<strong>La idea</strong> \u00e9s correcte. No s'apostrofa l'article femen\u00ed davant de <strong>i</strong> \u00e0tona."
+    },
+    {
+        topic: "apostrofacio", topicLabel: "Apostrofaci\u00f3",
+        question: "Quina forma \u00e9s correcta?",
+        options: ["De intel\u00b7lig\u00e8ncia", "D'intel\u00b7lig\u00e8ncia"],
+        correct: 1,
+        explanation: "<strong>D'intel\u00b7lig\u00e8ncia</strong> \u00e9s correcte. La preposici\u00f3 <em>de</em> s'apostrofa sempre davant de vocal o h."
+    },
+    {
+        topic: "apostrofacio", topicLabel: "Apostrofaci\u00f3",
+        question: "Quina forma \u00e9s correcta?",
+        options: ["L'\u00e0rea", "La \u00e0rea"],
+        correct: 0,
+        explanation: "<strong>L'\u00e0rea</strong> \u00e9s correcte. L'article femen\u00ed s'apostrofa davant de vocal t\u00f2nica (la a d'\u00e0rea \u00e9s t\u00f2nica)."
+    },
+    {
+        topic: "apostrofacio", topicLabel: "Apostrofaci\u00f3",
+        question: "Quina forma \u00e9s correcta?",
+        options: ["La host", "L'host"],
+        correct: 0,
+        explanation: "<strong>La host</strong> \u00e9s correcte. Alguns mots femenins comen\u00e7ats per h seguida de vocal \u00e0tona s\u00f3n excepcions i no s'apostrofen."
+    },
+
+    // ===================== PRONOMS FEBLES (9 questions) =====================
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "\"Dono flors a la Maria.\" Substitu\u00efm \"flors\" per un pronom feble:",
+        options: ["Les hi dono", "Li'n dono", "En dono a la Maria", "N'hi dono"],
+        correct: 2,
+        explanation: "\"Flors\" \u00e9s un complement directe indeterminat (sense article), per tant el substitu\u00efm per <strong>en</strong>: <strong>En dono a la Maria</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "\"Vaig portar els llibres a en Pere.\" Substitu\u00efm \"els llibres\" i \"a en Pere\":",
+        options: ["Els hi vaig portar", "Li'ls vaig portar", "N'hi vaig portar", "Els en vaig portar"],
+        correct: 0,
+        explanation: "\"Els llibres\" = <strong>els</strong> (CD determinat). \"A en Pere\" = <strong>hi</strong> (CI, 3a persona). Combinaci\u00f3: <strong>Els hi vaig portar</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "\"Posa la sal a la sopa.\" Substitu\u00efm \"la sal\":",
+        options: ["Posa-n'hi", "Posa-la a la sopa", "Posa'n a la sopa", "Posa-hi la sal"],
+        correct: 1,
+        explanation: "\"La sal\" \u00e9s un complement directe determinat femen\u00ed singular: <strong>Posa-la a la sopa</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "Completa: \"Vols anar al cinema? \u2014 S\u00ed, ___ vull anar.\"",
+        options: ["ho", "hi", "en", "li"],
+        correct: 1,
+        explanation: "El pronom <strong>hi</strong> substitueix complements de lloc introdu\u00efts per <em>a</em>: \"al cinema\" \u2192 <strong>hi</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "\"Tinc tres gats.\" Substitu\u00efm \"tres gats\":",
+        options: ["Els tinc", "Ho tinc", "En tinc tres", "Hi tinc tres"],
+        correct: 2,
+        explanation: "Quan el CD \u00e9s un nom amb quantitatiu (tres gats), usem <strong>en</strong> i mantenim el numeral: <strong>En tinc tres</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "\"La Maria \u00e9s metgessa.\" Substitu\u00efm \"metgessa\":",
+        options: ["La Maria l'\u00e9s", "La Maria ho \u00e9s", "La Maria n'\u00e9s", "La Maria en \u00e9s"],
+        correct: 2,
+        explanation: "L'atribut d'un verb copulatiu (ser/estar) se substitueix per <strong>ho</strong> quan \u00e9s invariable, o per <strong>en</strong> quan \u00e9s un nom amb article indefinit o sense article. Aqu\u00ed: \"metgessa\" (sense article) \u2192 <strong>La Maria n'\u00e9s</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "\"Parla molt del seu viatge.\" Substitu\u00efm \"del seu viatge\":",
+        options: ["Hi parla molt", "Ho parla molt", "En parla molt", "Li parla molt"],
+        correct: 2,
+        explanation: "\"Del seu viatge\" \u00e9s un complement introdu\u00eft per <em>de</em>, per tant se substitueix per <strong>en</strong>: <strong>En parla molt</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "\"Diu als alumnes que estudiïn.\" Substitu\u00efm \"als alumnes\":",
+        options: ["Ho diu", "Els ho diu", "Els diu que estudi\u00efn", "Hi diu que estudi\u00efn"],
+        correct: 2,
+        explanation: "\"Als alumnes\" \u00e9s un complement indirecte plural: <strong>els</strong>. La frase queda: <strong>Els diu que estudi\u00efn</strong>."
+    },
+    {
+        topic: "pronoms", topicLabel: "Pronoms febles",
+        question: "Quina combinaci\u00f3 de pronoms \u00e9s correcta? \"Porta el pa a la \u00e0via.\"",
+        options: ["Porta-li'l", "Porta-l'hi", "Porta-lo-hi", "Porta-li-ho"],
+        correct: 1,
+        explanation: "\"El pa\" = CD (el) + \"a la \u00e0via\" = CI (li/hi). La combinaci\u00f3 correcta \u00e9s <strong>Porta-l'hi</strong> (el + hi = l'hi)."
+    },
+
+    // ===================== VERBS IRREGULARS (6 questions) =====================
+    {
+        topic: "verbs", topicLabel: "Verbs",
+        question: "Quina \u00e9s la forma correcta del present de subjuntiu del verb \"ser\" (1a persona singular)?",
+        options: ["Siga", "Sigui", "Sei", "S\u00e9s"],
+        correct: 1,
+        explanation: "La forma correcta del present de subjuntiu de \"ser\" (1a pers. sing.) \u00e9s <strong>sigui</strong>: \"Vull que jo sigui all\u00e0\"."
+    },
+    {
+        topic: "verbs", topicLabel: "Verbs",
+        question: "Completa: \"Si tu ___ (fer) els deures, aprovar\u00e0s.\"",
+        options: ["fas", "fes", "fessis", "fasses"],
+        correct: 0,
+        explanation: "Es tracta d'una condicional real (present d'indicatiu): <strong>fas</strong>. \"Si tu fas els deures, aprovar\u00e0s.\""
+    },
+    {
+        topic: "verbs", topicLabel: "Verbs",
+        question: "Quina \u00e9s la 3a persona singular del present d'indicatiu del verb \"dir\"?",
+        options: ["Dis", "Dit", "Diu", "Die"],
+        correct: 2,
+        explanation: "La forma correcta \u00e9s <strong>diu</strong>: \"Ell diu la veritat\". \u00c9s una forma irregular que cal memoritzar."
+    },
+    {
+        topic: "verbs", topicLabel: "Verbs",
+        question: "Completa: \"Espero que ells ___ (haver) acabat a temps.\"",
+        options: ["hagin", "hajen", "h\u00e0gin", "haguen"],
+        correct: 0,
+        explanation: "El present de subjuntiu de \"haver\" (3a pers. plural) \u00e9s <strong>hagin</strong>: \"Espero que hagin acabat\"."
+    },
+    {
+        topic: "verbs", topicLabel: "Verbs",
+        question: "Quina forma del verb \"anar\" \u00e9s correcta al passat perifr\u00e0stic?",
+        options: ["Jo anava anar", "Jo vaig anar", "Jo va anar", "Jo van anar"],
+        correct: 1,
+        explanation: "El passat perifr\u00e0stic de 1a persona \u00e9s <strong>vaig anar</strong>. L'auxiliar \"anar\" es conjuga: vaig, vas/vares, va, vam/v\u00e0rem, vau/v\u00e0reu, van/varen."
+    },
+    {
+        topic: "verbs", topicLabel: "Verbs",
+        question: "Completa: \"Cal que nosaltres ___ (saber) la resposta.\"",
+        options: ["sabem", "sapiguem", "s\u00e0pigam", "sabim"],
+        correct: 1,
+        explanation: "El present de subjuntiu de \"saber\" (1a pers. plural) \u00e9s <strong>sapiguem</strong>: \"Cal que sapiguem la resposta\"."
+    },
+
+    // ===================== B/V (5 questions) =====================
+    {
+        topic: "bv", topicLabel: "B/V",
+        question: "Quina \u00e9s la grafia correcta?",
+        options: ["Gobern", "Govern"],
+        correct: 1,
+        explanation: "S'escriu <strong>govern</strong> amb V. En catal\u00e0, despr\u00e9s de vocal es sol escriure V (no com en castell\u00e0, que \u00e9s \"gobierno\" amb B)."
+    },
+    {
+        topic: "bv", topicLabel: "B/V",
+        question: "Quina \u00e9s la grafia correcta?",
+        options: ["Enbiar", "Enviar"],
+        correct: 1,
+        explanation: "S'escriu <strong>enviar</strong> amb V. Davant de vocal, despr\u00e9s del prefix en-, s'escriu V."
+    },
+    {
+        topic: "bv", topicLabel: "B/V",
+        question: "Quina \u00e9s la grafia correcta?",
+        options: ["Canviar", "Canbiar"],
+        correct: 0,
+        explanation: "S'escriu <strong>canviar</strong> amb V. Regla: davant de V mai s'escriu M, sin\u00f3 N."
+    },
+    {
+        topic: "bv", topicLabel: "B/V",
+        question: "Quina \u00e9s la grafia correcta?",
+        options: ["Provar", "Probar"],
+        correct: 0,
+        explanation: "En catal\u00e0 s'escriu <strong>provar</strong> amb V (a difer\u00e8ncia del castell\u00e0 \"probar\"). Cal memoritzar-ho."
+    },
+    {
+        topic: "bv", topicLabel: "B/V",
+        question: "Quina \u00e9s la grafia correcta?",
+        options: ["Acabar", "Acavar"],
+        correct: 0,
+        explanation: "S'escriu <strong>acabar</strong> amb B. Davant de consonant i a final de s\u00edl\u00b7laba s'escriu B (ab-, ob-, sub-)."
+    },
+
+    // ===================== PREPOSICIONS (5 questions) =====================
+    {
+        topic: "preposicions", topicLabel: "Preposicions",
+        question: "Quina \u00e9s la forma correcta? \"Estudio ___ aprovar l'examen.\"",
+        options: ["per", "per a"],
+        correct: 1,
+        explanation: "Davant d'infinitiu amb sentit de finalitat, s'usa <strong>per a</strong>: \"Estudio per a aprovar\". \"Per\" indica causa: \"Ho faig per obligaci\u00f3\"."
+    },
+    {
+        topic: "preposicions", topicLabel: "Preposicions",
+        question: "Quina \u00e9s la forma correcta? \"Viu ___ Barcelona.\"",
+        options: ["en", "a"],
+        correct: 1,
+        explanation: "Per indicar resid\u00e8ncia en una ciutat, usem <strong>a</strong>: \"Viu a Barcelona\". La preposici\u00f3 \"en\" s'usa en contextos m\u00e9s generals o literals."
+    },
+    {
+        topic: "preposicions", topicLabel: "Preposicions",
+        question: "Quina \u00e9s la forma correcta? \"Pensa ___ els seus problemes.\"",
+        options: ["amb", "en"],
+        correct: 1,
+        explanation: "El verb \"pensar\" regeix la preposici\u00f3 <strong>en</strong>: \"Pensar en alg\u00fa/alguna cosa\". No \"pensar amb\" (castellanisme)."
+    },
+    {
+        topic: "preposicions", topicLabel: "Preposicions",
+        question: "Quina \u00e9s la forma correcta? \"Tinc un regal ___ tu.\"",
+        options: ["per", "per a"],
+        correct: 1,
+        explanation: "Quan el destinatari \u00e9s una persona (finalitat), s'usa <strong>per a</strong>: \"Un regal per a tu\". \"Per\" indica causa o agent."
+    },
+    {
+        topic: "preposicions", topicLabel: "Preposicions",
+        question: "Quina \u00e9s la forma correcta? \"Estic content ___ la not\u00edcia.\"",
+        options: ["de", "amb"],
+        correct: 1,
+        explanation: "L'adjectiu \"content\" regeix <strong>amb</strong> en catal\u00e0: \"Estic content amb la not\u00edcia\" (no \"de la not\u00edcia\", que \u00e9s un castellanisme)."
+    },
+
+    // ===================== CONNECTORS (5 questions) =====================
+    {
+        topic: "connectors", topicLabel: "Connectors",
+        question: "Quin connector de contrast \u00e9s correcte en catal\u00e0? \"No vindran, ___ ens avisaran.\"",
+        options: ["sin embargo", "no obstant aix\u00f2", "tanmateix", "pero"],
+        correct: 2,
+        explanation: "<strong>Tanmateix</strong> \u00e9s un connector de contrast propi del catal\u00e0. \"Sin embargo\" \u00e9s castell\u00e0. \"No obstant aix\u00f2\" tamb\u00e9 \u00e9s correcte, per\u00f2 <strong>tanmateix</strong> \u00e9s m\u00e9s natu\u00adral."
+    },
+    {
+        topic: "connectors", topicLabel: "Connectors",
+        question: "Quin connector de causa \u00e9s m\u00e9s adequat en registre formal? \"No va venir, ___ estava malalt.\"",
+        options: ["perqu\u00e8", "ja que", "porque", "com que"],
+        correct: 1,
+        explanation: "<strong>Ja que</strong> \u00e9s adequat en registre formal despr\u00e9s del verb principal. \"Com que\" s'usa a l'inici. \"Porque\" \u00e9s castell\u00e0."
+    },
+    {
+        topic: "connectors", topicLabel: "Connectors",
+        question: "Quin connector introdueix una conseq\u00fc\u00e8ncia? \"Ha plogut molt; ___, el riu s'ha desbordat.\"",
+        options: ["en canvi", "per tant", "a m\u00e9s a m\u00e9s", "d'una banda"],
+        correct: 1,
+        explanation: "<strong>Per tant</strong> \u00e9s un connector de conseq\u00fc\u00e8ncia. \"En canvi\" \u00e9s de contrast. \"A m\u00e9s a m\u00e9s\" \u00e9s additiu."
+    },
+    {
+        topic: "connectors", topicLabel: "Connectors",
+        question: "Identifica el connector que \u00e9s un castellanisme:",
+        options: ["D'altra banda", "En definitiva", "Ademés", "Tot i aix\u00f2"],
+        correct: 2,
+        explanation: "<strong>Adem\u00e9s</strong> \u00e9s un castellanisme. La forma correcta en catal\u00e0 \u00e9s <strong>a m\u00e9s</strong> o <strong>a m\u00e9s a m\u00e9s</strong>."
+    },
+    {
+        topic: "connectors", topicLabel: "Connectors",
+        question: "Quin connector afegeix informaci\u00f3? \"T\u00e9 experi\u00e8ncia. ___, parla tres idiomes.\"",
+        options: ["Per\u00f2", "A m\u00e9s", "En canvi", "Tanmateix"],
+        correct: 1,
+        explanation: "<strong>A m\u00e9s</strong> \u00e9s un connector additiu que afegeix informaci\u00f3 al que ja s'ha dit."
+    },
+
+    // ===================== CASTELLANISMES (7 questions) =====================
+    {
+        topic: "castellanismes", topicLabel: "Castellanismes",
+        question: "Quina frase cont\u00e9 un castellanisme?",
+        options: [
+            "El m\u00e9s important \u00e9s estudiar",
+            "Lo important \u00e9s estudiar",
+            "All\u00f2 important \u00e9s estudiar",
+            "La cosa important \u00e9s estudiar"
+        ],
+        correct: 1,
+        explanation: "\"<strong>Lo important</strong>\" \u00e9s un castellanisme. En catal\u00e0 s'usa l'article neutre <strong>el</strong> o <strong>all\u00f2</strong>: \"El m\u00e9s important\" o \"All\u00f2 que \u00e9s important\"."
+    },
+    {
+        topic: "castellanismes", topicLabel: "Castellanismes",
+        question: "Quina \u00e9s la forma correcta en catal\u00e0?",
+        options: ["Desde el mat\u00ed", "Des de el mat\u00ed", "Des del mat\u00ed", "Dende el mat\u00ed"],
+        correct: 2,
+        explanation: "\"Desde\" \u00e9s castell\u00e0. En catal\u00e0 \u00e9s <strong>des de</strong>, i amb contracci\u00f3: <strong>des del mat\u00ed</strong> (des de + el = des del)."
+    },
+    {
+        topic: "castellanismes", topicLabel: "Castellanismes",
+        question: "Quina frase \u00e9s incorrecta en catal\u00e0?",
+        options: [
+            "Hi ha molta gent",
+            "Tenim que anar-hi",
+            "Hem d'anar-hi",
+            "Cal que hi anem"
+        ],
+        correct: 1,
+        explanation: "\"<strong>Tenim que</strong>\" \u00e9s un calc del castell\u00e0 \"tenemos que\". En catal\u00e0 es diu <strong>hem de</strong> o <strong>cal que</strong>."
+    },
+    {
+        topic: "castellanismes", topicLabel: "Castellanismes",
+        question: "Quina forma \u00e9s un castellanisme?",
+        options: ["Qualsevol cosa", "Qualsevol cosa", "Algo", "Alguna cosa"],
+        correct: 2,
+        explanation: "\"<strong>Algo</strong>\" \u00e9s castell\u00e0. En catal\u00e0 es diu <strong>alguna cosa</strong> o <strong>quelcom</strong> (registre formal)."
+    },
+    {
+        topic: "castellanismes", topicLabel: "Castellanismes",
+        question: "Quina frase cont\u00e9 un error per influ\u00e8ncia del castell\u00e0?",
+        options: [
+            "Estic buscant les claus",
+            "Estic cercant les claus",
+            "Busco les claus",
+            "Cerco les claus"
+        ],
+        correct: 0,
+        explanation: "\"<strong>Buscant</strong>\" \u00e9s un castellanisme. El verb correcte en catal\u00e0 \u00e9s <strong>cercar</strong> o <strong>buscar</strong> (acceptat), per\u00f2 la construcci\u00f3 \"estar + gerundi\" en excesso tamb\u00e9 \u00e9s un calc. Millor: \"Cerco les claus\"."
+    },
+    {
+        topic: "castellanismes", topicLabel: "Castellanismes",
+        question: "Quina \u00e9s la forma correcta?",
+        options: ["Doncs", "Entonces", "Pues", "Llavors"],
+        correct: 3,
+        explanation: "\"Entonces\" i \"pues\" s\u00f3n castellanismes. En catal\u00e0 es diu <strong>llavors</strong> (temporal) o <strong>doncs</strong> (consecutiu/il\u00b7latiu)."
+    },
+    {
+        topic: "castellanismes", topicLabel: "Castellanismes",
+        question: "Quina d'aquestes expressions \u00e9s un castellanisme?",
+        options: [
+            "De seguida",
+            "En seguida",
+            "Ara mateix",
+            "Immediatament"
+        ],
+        correct: 1,
+        explanation: "\"<strong>En seguida</strong>\" \u00e9s un castellanisme (\"enseguida\"). En catal\u00e0 es diu <strong>de seguida</strong>, <strong>tot seguit</strong> o <strong>ara mateix</strong>."
+    }
+];
+
+let currentQuestions = [];
+let currentIndex = 0;
+let answers = {};
+let quizFinished = false;
+
+function filterQuestions(topic) {
+    if (topic === 'all') {
+        currentQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
+    } else {
+        currentQuestions = allQuestions.filter(q => q.topic === topic).sort(() => Math.random() - 0.5);
+    }
+    currentIndex = 0;
+    answers = {};
+    quizFinished = false;
+    document.getElementById('scoreCard').style.display = 'none';
+    document.getElementById('quizNav').style.display = 'flex';
+    renderQuestion();
+}
+
+function renderQuestion() {
+    if (currentQuestions.length === 0) return;
+
+    const q = currentQuestions[currentIndex];
+    const answered = answers[currentIndex] !== undefined;
+    const progress = ((currentIndex + 1) / currentQuestions.length) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+    document.getElementById('questionNum').textContent = (currentIndex + 1) + ' / ' + currentQuestions.length;
+
+    const letters = ['A', 'B', 'C', 'D'];
+    let optionsHtml = q.options.map((opt, i) => {
+        let classes = '';
+        if (answered) {
+            classes = 'disabled';
+            if (i === q.correct) classes += ' correct';
+            else if (i === answers[currentIndex] && i !== q.correct) classes += ' wrong';
+        }
+        return '<li class="' + classes + '" onclick="selectAnswer(' + i + ')"><span class="letter">' + letters[i] + '</span>' + opt + '</li>';
+    }).join('');
+
+    document.getElementById('quizArea').innerHTML =
+        '<div class="question-card">' +
+            '<div class="question-counter">Pregunta ' + (currentIndex + 1) + ' de ' + currentQuestions.length + '</div>' +
+            '<span class="question-topic-tag">' + q.topicLabel + '</span>' +
+            '<div class="question-text">' + q.question + '</div>' +
+            '<ul class="options">' + optionsHtml + '</ul>' +
+            '<div class="explanation ' + (answered ? 'show' : '') + '">' + q.explanation + '</div>' +
+        '</div>';
+
+    document.getElementById('prevBtn').style.visibility = currentIndex > 0 ? 'visible' : 'hidden';
+    document.getElementById('nextBtn').textContent = currentIndex === currentQuestions.length - 1 && answered ? 'Veure resultat' : 'Seg\u00fcent';
+}
+
+function selectAnswer(index) {
+    if (answers[currentIndex] !== undefined) return;
+    answers[currentIndex] = index;
+    renderQuestion();
+}
+
+function nextQuestion() {
+    if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+    } else if (Object.keys(answers).length === currentQuestions.length) {
+        showScore();
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+    }
+}
+
+function showScore() {
+    quizFinished = true;
+    const total = currentQuestions.length;
+    let correct = 0;
+    let reviewHtml = '';
+
+    currentQuestions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) correct++;
+        const letters = ['A', 'B', 'C', 'D'];
+        reviewHtml +=
+            '<div class="review-item ' + (isCorrect ? 'review-correct' : 'review-wrong') + '">' +
+                '<div class="review-question">' + (i + 1) + '. ' + q.question + '</div>' +
+                '<div class="review-answer">' +
+                    (isCorrect
+                        ? '<span class="correct-ans">&#10003; ' + letters[answers[i]] + ') ' + q.options[answers[i]] + '</span>'
+                        : '<span class="wrong-ans">&#10007; La teva resposta: ' + letters[answers[i]] + ') ' + q.options[answers[i]] + '</span><br><span class="correct-ans">&#10003; Correcta: ' + letters[q.correct] + ') ' + q.options[q.correct] + '</span>'
+                    ) +
+                '</div>' +
+            '</div>';
+    });
+
+    const pct = Math.round((correct / total) * 100);
+    const passed = pct >= 70;
+
+    document.getElementById('quizArea').innerHTML = '';
+    document.getElementById('quizNav').style.display = 'none';
+    document.getElementById('scoreCard').style.display = 'block';
+    document.getElementById('scoreCard').innerHTML =
+        '<div class="score-number ' + (passed ? 'pass' : 'fail') + '">' + pct + '%</div>' +
+        '<div class="score-text">' + (passed ? 'Aprovat! Bona feina!' : 'Necessites repassar una mica m\u00e9s. Tu pots!') + '</div>' +
+        '<div class="score-details">' +
+            '<div class="score-detail"><div class="number" style="color: var(--green)">' + correct + '</div><div class="label">Correctes</div></div>' +
+            '<div class="score-detail"><div class="number" style="color: var(--red)">' + (total - correct) + '</div><div class="label">Incorrectes</div></div>' +
+            '<div class="score-detail"><div class="number" style="color: var(--blue)">' + total + '</div><div class="label">Total</div></div>' +
+        '</div>' +
+        '<button class="btn btn-primary" onclick="filterQuestions(\'all\')" style="margin-right:10px">Repetir quiz</button>' +
+        '<button class="btn btn-secondary" onclick="document.getElementById(\'reviewSection\').style.display=\'block\'">Veure rep\u00e0s d\'errors</button>' +
+        '<div id="reviewSection" style="display:none; margin-top: 30px; text-align: left;">' +
+            '<h3 style="color: var(--text-primary); margin-bottom: 15px;">Rep\u00e0s de respostes</h3>' +
+            reviewHtml +
+        '</div>';
+}
+
+// Module selector events
+document.querySelectorAll('.module-selector button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.module-selector button').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        filterQuestions(btn.dataset.topic);
+    });
+});
+
+// Init
+filterQuestions('all');
+</script>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>
