@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exàmens Reals - Mossos d'Esquadra</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* === Mossos Navigation === */
+        .mossos-nav {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+        .mossos-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all var(--t-fast);
+        }
+        .mossos-nav a:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .mossos-nav a.active { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: #fff; }
+        .mossos-nav a.home { margin-right: auto; color: var(--text-muted); }
+        .mossos-nav a.home:hover { color: var(--text-primary); }
+
+        /* === Page === */
+        .exam-page { max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; }
+
+        /* === Header === */
+        .exam-header {
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            border-radius: var(--radius-xl);
+            padding: 32px 28px;
+            margin-bottom: 24px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .exam-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .exam-header h1 { font-size: 2rem; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.03em; }
+        .exam-header p { color: rgba(255,255,255,0.8); margin: 0; font-size: 1rem; }
+        .exam-header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            margin-top: 12px;
+        }
+
+        /* === Exam list === */
+        .exam-list-card {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            transition: all var(--t-fast);
+        }
+        .exam-list-card:hover { box-shadow: var(--shadow-md); }
+        .exam-info h3 { margin: 0 0 4px; font-size: 1.1rem; color: var(--text-primary); }
+        .exam-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+        .exam-meta { display: flex; gap: 12px; margin-top: 8px; }
+        .exam-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-base);
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--t-fast);
+            font-family: var(--font-sans);
+            white-space: nowrap;
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: var(--bg-overlay);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--t-fast);
+            font-family: var(--font-sans);
+        }
+        .btn-secondary:hover { background: var(--bg-hover); }
+
+        /* === Timer bar === */
+        .timer-bar-container {
+            position: sticky;
+            top: 44px;
+            z-index: 90;
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 10px 16px;
+            display: none;
+        }
+        .timer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .timer-text { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); font-family: var(--font-sans); }
+        .timer-text.warning { color: #f59e0b; }
+        .timer-text.danger { color: #ef4444; }
+        .timer-progress { height: 6px; background: var(--bg-overlay); border-radius: 3px; overflow: hidden; }
+        .timer-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #1e3a5f); border-radius: 3px; transition: width 1s linear; }
+        .timer-fill.warning { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .timer-fill.danger { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .question-counter { font-size: 0.85rem; color: var(--text-secondary); }
+
+        .real-exam-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        /* === Question dots === */
+        .question-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            padding: 12px 16px;
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border-subtle);
+            display: none;
+        }
+        .q-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--border-default);
+            background: var(--bg-base);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--t-fast);
+            font-family: var(--font-sans);
+        }
+        .q-dot:hover { border-color: #2563eb; color: #2563eb; }
+        .q-dot.current { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .q-dot.answered { background: var(--bg-overlay); border-color: #2563eb; color: #2563eb; }
+        .q-dot.correct { background: #22c55e; border-color: #22c55e; color: #fff; }
+        .q-dot.wrong { background: #ef4444; border-color: #ef4444; color: #fff; }
+        .q-dot.blank-review { background: var(--bg-overlay); border-color: var(--text-muted); color: var(--text-muted); }
+
+        /* === Question card === */
+        .question-area { display: none; }
+        .question-card {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+        .question-number { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; }
+        .question-tema { font-size: 0.75rem; color: #2563eb; font-weight: 500; margin-bottom: 12px; }
+        .question-text { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; line-height: 1.5; }
+
+        .options-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border: 2px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            background: var(--bg-base);
+            cursor: pointer;
+            transition: all var(--t-fast);
+            text-align: left;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            width: 100%;
+        }
+        .option-btn:hover { border-color: #2563eb; background: rgba(37, 99, 235, 0.05); }
+        .option-btn.selected { border-color: #2563eb; background: rgba(37, 99, 235, 0.1); }
+        .option-btn.correct-answer { border-color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+        .option-btn.wrong-answer { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .option-btn .letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-overlay);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .option-btn.selected .letter { background: #2563eb; color: #fff; }
+        .option-btn.correct-answer .letter { background: #22c55e; color: #fff; }
+        .option-btn.wrong-answer .letter { background: #ef4444; color: #fff; }
+
+        .explanation-box {
+            margin-top: 16px;
+            padding: 14px 18px;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+            display: none;
+        }
+
+        .question-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .question-nav button {
+            padding: 10px 20px;
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            background: var(--bg-raised);
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--t-fast);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+        .question-nav button:hover { background: var(--bg-hover); }
+        .question-nav .btn-finish { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: #fff; border: none; }
+        .question-nav .btn-finish:hover { transform: translateY(-1px); }
+        .btn-clear-answer { font-size: 0.8rem; color: var(--text-muted); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 4px; }
+        .btn-clear-answer:hover { color: var(--text-primary); }
+
+        /* === Results === */
+        .results-area { display: none; }
+        .results-card {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .results-card h2 { font-size: 1.5rem; margin: 0 0 8px; color: var(--text-primary); }
+        .score-big {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 16px 0;
+            letter-spacing: -0.04em;
+        }
+        .score-big.pass { color: #22c55e; }
+        .score-big.fail { color: #ef4444; }
+        .score-label { font-size: 1rem; color: var(--text-secondary); margin-bottom: 4px; }
+        .pass-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+        .pass-badge.pass { background: rgba(34, 197, 94, 0.12); color: #22c55e; }
+        .pass-badge.fail { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .stat-item {
+            background: var(--bg-base);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+        }
+        .stat-item .stat-value { font-size: 1.6rem; font-weight: 800; color: var(--text-primary); }
+        .stat-item .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .stat-item.green .stat-value { color: #22c55e; }
+        .stat-item.red .stat-value { color: #ef4444; }
+        .stat-item.gray .stat-value { color: var(--text-muted); }
+
+        .results-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+
+        .review-section { margin-top: 24px; }
+        .review-section h3 { font-size: 1.1rem; margin-bottom: 16px; color: var(--text-primary); }
+        .review-item {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+        .review-item.review-correct { border-left: 4px solid #22c55e; }
+        .review-item.review-wrong { border-left: 4px solid #ef4444; }
+        .review-item.review-blank { border-left: 4px solid var(--text-muted); }
+        .review-q { font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+        .review-answer { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 4px; }
+        .review-answer .correct-text { color: #22c55e; font-weight: 600; }
+        .review-answer .wrong-text { color: #ef4444; font-weight: 600; }
+        .review-explanation { font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+
+        @media (max-width: 600px) {
+            .exam-page { padding: 16px 12px 40px; }
+            .question-card { padding: 20px 16px; }
+            .exam-list-card { flex-direction: column; align-items: flex-start; }
+            .q-dot { width: 28px; height: 28px; font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="mossos-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+        <a href="examen.html">Simulador</a>
+        <a href="examens-reals.html" class="active">Exàmens reals</a>
+        <a href="estadistiques.html">Estad&iacute;stiques</a>
+    </nav>
+
+    <div class="timer-bar-container" id="timerBar">
+        <div class="timer-top">
+            <span class="timer-text" id="timerText">35:00</span>
+            <span class="question-counter" id="questionCounter">Pregunta 1 de 30</span>
+        </div>
+        <div class="timer-progress">
+            <div class="timer-fill" id="timerFill" style="width: 100%"></div>
+        </div>
+    </div>
+
+    <div class="question-dots" id="questionDots"></div>
+
+    <div class="exam-page">
+        <!-- EXAM LIST -->
+        <div id="examListView">
+            <div class="exam-header">
+                <h1>Exàmens Reals</h1>
+                <p>Practica amb proves oficials de convocatòries anteriors</p>
+            </div>
+
+            <div class="exam-list-card" id="card4624">
+                <div class="exam-info">
+                    <span class="real-exam-label">Examen oficial</span>
+                    <h3>Convocat&ograve;ria 46/24 — Model 01</h3>
+                    <p>Prova de coneixements de la convocat&ograve;ria 46/24 per a l'acc&eacute;s a la categoria de mosso/a de l'escala b&agrave;sica del cos de Mossos d'Esquadra.</p>
+                    <div class="exam-meta">
+                        <span>29 preguntes</span>
+                        <span>35 minuts</span>
+                        <span>Penalitzaci&oacute;: -0,25</span>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="startRealExam('46-24')">Comen&ccedil;ar</button>
+            </div>
+        </div>
+
+        <!-- QUESTION AREA -->
+        <div class="question-area" id="questionArea">
+            <div class="question-card" id="questionCard">
+                <span class="real-exam-label" id="examLabel">Examen real 46/24</span>
+                <div class="question-number" id="qNumber"></div>
+                <div class="question-tema" id="qTema"></div>
+                <div class="question-text" id="qText"></div>
+                <ul class="options-list" id="optionsList"></ul>
+                <button class="btn-clear-answer" id="btnClear" onclick="clearAnswer()" style="display:none;">Esborrar resposta</button>
+                <div class="explanation-box" id="explanationBox"></div>
+            </div>
+            <div class="question-nav">
+                <button onclick="prevQuestion()" id="btnPrev">&#8592; Anterior</button>
+                <button onclick="nextQuestion()" id="btnNext">Seg&uuml;ent &#8594;</button>
+                <button class="btn-finish" onclick="finishExam()" id="btnFinish">Finalitzar examen</button>
+            </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="results-area" id="resultsArea">
+            <div class="results-card">
+                <span class="real-exam-label">Examen real 46/24 — Resultat</span>
+                <h2>Resultat de l'examen</h2>
+                <div class="score-label">Puntuaci&oacute; (0 a 10)</div>
+                <div class="score-big" id="scoreBig">0,00</div>
+                <div class="pass-badge" id="passBadge"></div>
+
+                <div class="stats-grid">
+                    <div class="stat-item green">
+                        <div class="stat-value" id="statCorrect">0</div>
+                        <div class="stat-label">Correctes (+1)</div>
+                    </div>
+                    <div class="stat-item red">
+                        <div class="stat-value" id="statWrong">0</div>
+                        <div class="stat-label">Incorrectes (-0,25)</div>
+                    </div>
+                    <div class="stat-item gray">
+                        <div class="stat-value" id="statBlank">0</div>
+                        <div class="stat-label">En blanc (0)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statRaw">0</div>
+                        <div class="stat-label">Puntuaci&oacute; bruta</div>
+                    </div>
+                </div>
+
+                <div class="results-buttons">
+                    <button class="btn-primary" onclick="reviewAnswers()">Revisar respostes</button>
+                    <button class="btn-secondary" onclick="resetExam()">Tornar als ex&agrave;mens</button>
+                </div>
+            </div>
+
+            <div class="review-section" id="reviewSection" style="display:none;">
+                <h3>Revisi&oacute; de respostes</h3>
+                <div id="reviewList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="progress.js"></script>
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+    // =========================================================
+    // REAL EXAM DATA
+    // =========================================================
+    const EXAMENS_REALS = {
+        '46-24': {
+            title: 'Convocatòria 46/24 — Model 01',
+            year: 2024,
+            timeMinutes: 35,
+            questions: [
+                { id:'real46-1', tema:'A.7', ambit:'A', q:"Com s'anomena el dialecte del català predominant a la zona de Lleida?", options:["Oriental","Septentrional","Occidental","Litoral"], correct:2, explanation:"El dialecte occidental del català és el predominant a la zona de Lleida." },
+                { id:'real46-2', tema:'A.7', ambit:'A', q:"Quina és l'autoritat reguladora independent en l'àmbit de la comunicació audiovisual?", options:["CAC","CGPJ","Consell de Radiotelevisió","Consell de Comunicació"], correct:0, explanation:"El CAC (Consell de l'Audiovisual de Catalunya) és l'autoritat reguladora independent en l'àmbit audiovisual." },
+                { id:'real46-3', tema:'B.6', ambit:'B', q:"De quin òrgan depèn l'Àrea de Continguts de Formació Policial?", options:["Subdirecció General","Escola de Policia de Catalunya","Servei de Selecció","Oficina de Suport"], correct:1, explanation:"L'Àrea de Continguts de Formació Policial depèn de l'Escola de Policia de Catalunya." },
+                { id:'real46-4', tema:'A.4', ambit:'A', q:"Quin tenista va guanyar la medalla d'or individual als Jocs Olímpics de París 2024?", options:["Nadal","Zverev","Djokovic","Alcaraz"], correct:2, explanation:"Novak Djokovic va guanyar la medalla d'or individual de tennis als Jocs Olímpics de París 2024." },
+                { id:'real46-5', tema:'A.3', ambit:'A', q:"Quin element geogràfic separa la Serralada Prelitoral de la Litoral?", options:["Depressió Central","Depressió Prelitoral","Mar Mediterrània","Riu Ebre"], correct:1, explanation:"La Depressió Prelitoral separa la Serralada Prelitoral de la Serralada Litoral a Catalunya." },
+                { id:'real46-6', tema:'B.2', ambit:'B', q:"Quina institució protegeix els drets fonamentals a Catalunya?", options:["Síndic de Greuges","Sindicatura de Comptes","Consell de Garanties Estatutàries","Tribunal Suprem"], correct:0, explanation:"El Síndic de Greuges és la institució que protegeix els drets fonamentals dels ciutadans a Catalunya." },
+                { id:'real46-7', tema:'B.6', ambit:'B', q:"Quin és l'òrgan de coordinació entre PG-ME i FCSE?", options:["Consell de Seguretat","Junta de Seguretat","Comissió de Seguretat","Delegació del Govern"], correct:1, explanation:"La Junta de Seguretat és l'òrgan de coordinació entre la PG-ME i les FCSE a Catalunya." },
+                { id:'real46-8', tema:'A.1', ambit:'A', q:"Entre quins segles se situa el naixement de Catalunya?", options:["VIII-IX","IX-X","X-XI","XI-XII"], correct:1, explanation:"Catalunya neix entre els segles IX i X, a partir de la Marca Hispànica creada per Carlemany." },
+                { id:'real46-9', tema:'B.2', ambit:'B', q:"En quants períodes ordinaris de sessions es reuneix el Parlament de Catalunya?", options:["Dos","Tres","Quatre","Cinc"], correct:0, explanation:"El Parlament de Catalunya es reuneix en dos períodes ordinaris de sessions a l'any." },
+                { id:'real46-10', tema:'A.6', ambit:'A', q:"Quina funció és pròpia del 112 Catalunya?", options:["Coordinar forces de seguretat","Centralitzar trucades d'urgències","Notificar autoritats","Supervisar comunicacions"], correct:1, explanation:"El 112 Catalunya té com a funció principal centralitzar les trucades d'urgències." },
+                { id:'real46-11', tema:'A.4', ambit:'A', q:"Quin país va acollir la COP29 el 2024?", options:["Azerbaidjan","Egipte","Uzbekistan","Marroc"], correct:0, explanation:"Azerbaidjan va acollir la COP29 (Conferència sobre el Canvi Climàtic) el 2024." },
+                { id:'real46-12', tema:'A.3', ambit:'A', q:"Quin riu té la capçalera al Pirineu català?", options:["Francolí","Besòs","Llobregat","Ebre"], correct:2, explanation:"El Llobregat neix al Pirineu català, a les fonts del Llobregat (Berguedà)." },
+                { id:'real46-13', tema:'B.2', ambit:'B', q:"Quina funció és pròpia de la Sindicatura de Comptes?", options:["Fiscalitzar el sector públic","Aprovar pressupostos","Fiscalitzar el sector privat","Regular l'audiovisual"], correct:0, explanation:"La Sindicatura de Comptes fiscalitza la gestió econòmica i financera del sector públic de Catalunya." },
+                { id:'real46-14', tema:'B.7', ambit:'B', q:"Quins són els principis bàsics d'actuació de les forces de seguretat?", options:["Protecció, responsabilitat, ordre","Dedicació, vigilància, ordre","Auxili, tractament, confiança","Adequació a l'ordenament, relacions amb la comunitat, tractament de detinguts, dedicació, secret professional, responsabilitat"], correct:3, explanation:"Els principis bàsics d'actuació de les forces de seguretat són: adequació a l'ordenament jurídic, relacions amb la comunitat, tractament de detinguts, dedicació professional, secret professional i responsabilitat." },
+                { id:'real46-15', tema:'A.3', ambit:'A', q:"Quin és el cim més alt de Catalunya?", options:["Pedraforca","Turó de l'Home","Pica d'Estats","Puigmal"], correct:2, explanation:"La Pica d'Estats (3.143 m) és el cim més alt de Catalunya." },
+                { id:'real46-16', tema:'B.2', ambit:'B', q:"Quins són els ens locals a Catalunya segons la Generalitat?", options:["Parlament, Presidència, Govern","Vegueries, comarques, municipis","Síndic, CGE","Parlament, Síndic"], correct:1, explanation:"Els ens locals a Catalunya són les vegueries, les comarques i els municipis." },
+                { id:'real46-17', tema:'B.7', ambit:'B', q:"Quins són els principis de les relacions entre cossos de policia de Catalunya?", options:["Autonomia, exclusiva, cooperació","Auxili mutu, col·laboració, complementarietat, cooperació, coordinació","Autonomia, compartida, comandament","Autonomia, auxili, comandament"], correct:1, explanation:"Els principis que regeixen les relacions entre cossos de policia a Catalunya són: auxili mutu, col·laboració, complementarietat, cooperació i coordinació." },
+                { id:'real46-18', tema:'A.4', ambit:'A', q:"Quins són els models de convivència en la diversitat?", options:["Integració, socialisme, pluralisme","Assimilació, melting pot, pluralisme cultural","Integració, social, convivència","Integració, melting pot, convivència"], correct:1, explanation:"Els tres models clàssics de convivència en la diversitat són: assimilació, melting pot i pluralisme cultural." },
+                { id:'real46-19', tema:'B.1', ambit:'B', q:"Quines normes de govern tenen rang de llei?", options:["Llei oficial i provisional","Decret llei i decret legislatiu","Llei de bases i ordinària","Reial decret i ordre ministerial"], correct:1, explanation:"El decret llei i el decret legislatiu són les normes del Govern amb rang de llei." },
+                { id:'real46-20', tema:'B.7', ambit:'B', q:"Quines comissions de coordinació de policia judicial existeixen?", options:["Municipal i Provincial","Internacional i Nacional","Provincial i Internacional","Nacional i Provincial"], correct:3, explanation:"Les comissions de coordinació de policia judicial es constitueixen a nivell nacional i provincial." },
+                { id:'real46-21', tema:'A.1', ambit:'A', q:"Quines illes conquista Jaume I entre 1229-1235?", options:["Sardenya, Sicília i Nàpols","Mallorca, Menorca i Eivissa","València, Alacant i Múrcia","Atenes i Neopàtria"], correct:1, explanation:"Jaume I el Conqueridor va conquistar Mallorca, Menorca i Eivissa entre 1229 i 1235." },
+                { id:'real46-22', tema:'B.3', ambit:'B', q:"Quins són els principis de l'estatut dels jutges?", options:["Inamovibilitat i imparcialitat","Dependència i mobilitat","Dependència i inamovibilitat","Incompatibilitat i mobilitat"], correct:0, explanation:"Els principis fonamentals de l'estatut dels jutges són la inamovibilitat i la imparcialitat." },
+                { id:'real46-23', tema:'B.7', ambit:'B', q:"Quines funcions són pròpies de seguretat ciutadana?", options:["Vetllar per les lleis del Parlament","Protegir persones, béns i mantenir l'ordre públic","Organitzar les policies locals","Donar suport tècnic"], correct:1, explanation:"Les funcions pròpies de seguretat ciutadana inclouen protegir persones i béns i mantenir l'ordre públic." },
+                { id:'real46-24', tema:'A.4', ambit:'A', q:"Quin concepte és fonamental en la cibersocietat?", options:["Multimèdia","Realitat virtual","Telefonia mòbil","Hipermèdia"], correct:3, explanation:"L'hipermèdia és un concepte fonamental de la cibersocietat, integrant text, so, imatge i vídeo de forma interactiva." },
+                { id:'real46-25', tema:'A.5', ambit:'A', q:"Quin tipus d'estat té pluralitat de centres de poder?", options:["Unitari","Federal","Liberal","Social"], correct:1, explanation:"L'estat federal es caracteritza per la pluralitat de centres de poder." },
+                { id:'real46-26', tema:'C.2', ambit:'C', q:"Quins són els òrgans del Sistema Català de Trànsit (SCT)?", options:["Dept. Interior, Comissió Catalana, Observatori Privada","Observatori de Seguretat Viària, Comissió Catalana de Trànsit, Comissió Interdepartamental","Comissió Interdepartamental, Observatori Pública, Dept. Exterior","Comissió Espanyola, Observatori Viària, Dept. Interior"], correct:1, explanation:"Els òrgans del SCT són l'Observatori de Seguretat Viària, la Comissió Catalana de Trànsit i la Comissió Interdepartamental." },
+                { id:'real46-27', tema:'A.1', ambit:'A', q:"Quin fet va causar la Guerra dels Segadors el 1640?", options:["La Guerra de Successió","La Guerra dels Trenta Anys","La Guerra dels Cent Anys","La Revolució d'Anglaterra"], correct:1, explanation:"La Guerra dels Segadors (1640) va ser provocada en el context de la Guerra dels Trenta Anys." },
+                { id:'real46-28', tema:'B.2', ambit:'B', q:"Quin fur especial tenen els diputats pel que fa a la responsabilitat penal fora de Catalunya?", options:["Tribunal Constitucional","Sala Penal del Tribunal Suprem","TSJC","Tribunal de Comptes"], correct:1, explanation:"Els diputats del Parlament de Catalunya tenen fur de la Sala Penal del Tribunal Suprem per actes fora de Catalunya." },
+                { id:'real46-29', tema:'A.2', ambit:'A', q:"Quin president proclamà l'Estat Català el 1934?", options:["Rafael Casanova","Lluís Companys","Jiménez Arenas","Francesc Macià"], correct:1, explanation:"Lluís Companys va proclamar l'Estat Català dins la República Federal Espanyola el 6 d'octubre de 1934." },
+            ]
+        }
+    };
+
+    // =========================================================
+    // EXAM STATE
+    // =========================================================
+    let currentExamId = null;
+    let examQuestions = [];
+    let currentIndex = 0;
+    let userAnswers = [];
+    let timerInterval = null;
+    let timeRemaining = 0;
+    let totalTime = 0;
+    let examFinished = false;
+
+    // =========================================================
+    // START REAL EXAM
+    // =========================================================
+    function startRealExam(examId) {
+        const exam = EXAMENS_REALS[examId];
+        if (!exam) return;
+
+        currentExamId = examId;
+        examQuestions = [...exam.questions]; // Keep original order for real exams
+        currentIndex = 0;
+        userAnswers = new Array(examQuestions.length).fill(-1);
+        examFinished = false;
+
+        totalTime = exam.timeMinutes * 60;
+        timeRemaining = totalTime;
+
+        document.getElementById('examListView').style.display = 'none';
+        document.getElementById('resultsArea').style.display = 'none';
+        document.getElementById('questionArea').style.display = 'block';
+        document.getElementById('timerBar').style.display = 'block';
+        document.getElementById('questionDots').style.display = 'flex';
+        document.getElementById('examLabel').textContent = `Examen real — ${exam.title}`;
+
+        buildDots();
+        renderQuestion();
+        startTimer();
+    }
+
+    // =========================================================
+    // TIMER
+    // =========================================================
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                finishExam();
+            }
+        }, 1000);
+        updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+        const min = Math.floor(timeRemaining / 60);
+        const sec = timeRemaining % 60;
+        const timerText = document.getElementById('timerText');
+        timerText.textContent = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+
+        const pct = (timeRemaining / totalTime) * 100;
+        const fill = document.getElementById('timerFill');
+        fill.style.width = pct + '%';
+
+        timerText.className = 'timer-text';
+        fill.className = 'timer-fill';
+        if (pct <= 15) {
+            timerText.classList.add('danger');
+            fill.classList.add('danger');
+        } else if (pct <= 35) {
+            timerText.classList.add('warning');
+            fill.classList.add('warning');
+        }
+    }
+
+    // =========================================================
+    // DOTS
+    // =========================================================
+    function buildDots() {
+        const container = document.getElementById('questionDots');
+        container.innerHTML = '';
+        examQuestions.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'q-dot';
+            dot.textContent = i + 1;
+            dot.onclick = () => goToQuestion(i);
+            container.appendChild(dot);
+        });
+        updateDots();
+    }
+
+    function updateDots() {
+        const dots = document.querySelectorAll('.q-dot');
+        dots.forEach((dot, i) => {
+            dot.className = 'q-dot';
+            if (i === currentIndex) dot.classList.add('current');
+            else if (userAnswers[i] !== -1) dot.classList.add('answered');
+        });
+    }
+
+    function updateDotsReview() {
+        const dots = document.querySelectorAll('.q-dot');
+        dots.forEach((dot, i) => {
+            dot.className = 'q-dot';
+            if (userAnswers[i] === -1) dot.classList.add('blank-review');
+            else if (userAnswers[i] === examQuestions[i].correct) dot.classList.add('correct');
+            else dot.classList.add('wrong');
+        });
+    }
+
+    // =========================================================
+    // RENDER QUESTION
+    // =========================================================
+    function renderQuestion() {
+        const q = examQuestions[currentIndex];
+        document.getElementById('qNumber').textContent = `Pregunta ${currentIndex + 1} de ${examQuestions.length}`;
+        document.getElementById('qTema').textContent = `Tema ${q.tema}`;
+        document.getElementById('qText').textContent = q.q;
+        document.getElementById('questionCounter').textContent = `Pregunta ${currentIndex + 1} de ${examQuestions.length}`;
+
+        const list = document.getElementById('optionsList');
+        list.innerHTML = '';
+        const letters = ['A','B','C','D'];
+        q.options.forEach((opt, i) => {
+            const li = document.createElement('li');
+            const btn = document.createElement('button');
+            btn.className = 'option-btn' + (userAnswers[currentIndex] === i ? ' selected' : '');
+            btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
+            btn.onclick = () => selectOption(i);
+            if (examFinished) btn.disabled = true;
+            li.appendChild(btn);
+            list.appendChild(li);
+        });
+
+        document.getElementById('btnClear').style.display = (!examFinished && userAnswers[currentIndex] !== -1) ? 'block' : 'none';
+        document.getElementById('explanationBox').style.display = 'none';
+
+        document.getElementById('btnPrev').style.display = currentIndex > 0 ? 'inline-block' : 'none';
+        document.getElementById('btnNext').style.display = currentIndex < examQuestions.length - 1 ? 'inline-block' : 'none';
+        document.getElementById('btnFinish').style.display = examFinished ? 'none' : 'inline-block';
+
+        updateDots();
+    }
+
+    function selectOption(i) {
+        if (examFinished) return;
+        userAnswers[currentIndex] = i;
+        renderQuestion();
+    }
+
+    function clearAnswer() {
+        userAnswers[currentIndex] = -1;
+        renderQuestion();
+    }
+
+    function goToQuestion(i) {
+        currentIndex = i;
+        renderQuestion();
+        if (examFinished) showReviewForQuestion(i);
+    }
+
+    function prevQuestion() {
+        if (currentIndex > 0) { currentIndex--; renderQuestion(); if (examFinished) showReviewForQuestion(currentIndex); }
+    }
+
+    function nextQuestion() {
+        if (currentIndex < examQuestions.length - 1) { currentIndex++; renderQuestion(); if (examFinished) showReviewForQuestion(currentIndex); }
+    }
+
+    function showReviewForQuestion(i) {
+        const q = examQuestions[i];
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach((btn, j) => {
+            btn.classList.remove('selected','correct-answer','wrong-answer');
+            if (j === q.correct) btn.classList.add('correct-answer');
+            else if (j === userAnswers[i] && userAnswers[i] !== -1) btn.classList.add('wrong-answer');
+        });
+        const expBox = document.getElementById('explanationBox');
+        expBox.textContent = q.explanation;
+        expBox.style.display = 'block';
+    }
+
+    // =========================================================
+    // FINISH
+    // =========================================================
+    function finishExam() {
+        const blanks = userAnswers.filter(a => a === -1).length;
+        if (!examFinished && blanks > 0) {
+            if (!confirm(`Tens ${blanks} pregunt${blanks === 1 ? 'a' : 'es'} en blanc. Vols finalitzar l'examen?`)) return;
+        }
+
+        clearInterval(timerInterval);
+        examFinished = true;
+
+        let correct = 0, wrong = 0, blank = 0;
+        examQuestions.forEach((q, i) => {
+            if (userAnswers[i] === -1) { blank++; }
+            else if (userAnswers[i] === q.correct) {
+                correct++;
+                removeMistake(q.id);
+            } else {
+                wrong++;
+                addMistake(q.id);
+            }
+        });
+
+        const rawScore = correct - (wrong * 0.25);
+        const maxScore = examQuestions.length;
+        const nota = Math.max(0, (rawScore / maxScore) * 10);
+        const passed = nota >= 4;
+
+        document.getElementById('questionArea').style.display = 'none';
+        document.getElementById('resultsArea').style.display = 'block';
+
+        const scoreBig = document.getElementById('scoreBig');
+        scoreBig.textContent = nota.toFixed(2).replace('.', ',');
+        scoreBig.className = 'score-big ' + (passed ? 'pass' : 'fail');
+
+        const badge = document.getElementById('passBadge');
+        badge.textContent = passed ? 'APTE' : 'NO APTE';
+        badge.className = 'pass-badge ' + (passed ? 'pass' : 'fail');
+
+        document.getElementById('statCorrect').textContent = correct;
+        document.getElementById('statWrong').textContent = wrong;
+        document.getElementById('statBlank').textContent = blank;
+        document.getElementById('statRaw').textContent = rawScore.toFixed(2).replace('.', ',');
+
+        // Save to history
+        saveQuizHistory({
+            type: 'examen-real',
+            examId: currentExamId,
+            date: Date.now(),
+            total: examQuestions.length,
+            correct: correct,
+            wrong: wrong,
+            blank: blank,
+            rawScore: rawScore,
+            nota: parseFloat(nota.toFixed(2)),
+            passed: passed,
+            timeUsed: totalTime - timeRemaining
+        });
+
+        updateDotsReview();
+    }
+
+    // =========================================================
+    // REVIEW
+    // =========================================================
+    function reviewAnswers() {
+        const section = document.getElementById('reviewSection');
+        section.style.display = 'block';
+        const list = document.getElementById('reviewList');
+        list.innerHTML = '';
+        const letters = ['A','B','C','D'];
+
+        examQuestions.forEach((q, i) => {
+            const div = document.createElement('div');
+            let cls = 'review-item ';
+            if (userAnswers[i] === -1) cls += 'review-blank';
+            else if (userAnswers[i] === q.correct) cls += 'review-correct';
+            else cls += 'review-wrong';
+            div.className = cls;
+
+            let answerHtml = '';
+            if (userAnswers[i] === -1) {
+                answerHtml = `<span class="wrong-text">En blanc</span> — Correcta: <span class="correct-text">${letters[q.correct]}) ${q.options[q.correct]}</span>`;
+            } else if (userAnswers[i] === q.correct) {
+                answerHtml = `<span class="correct-text">${letters[q.correct]}) ${q.options[q.correct]}</span>`;
+            } else {
+                answerHtml = `La teva: <span class="wrong-text">${letters[userAnswers[i]]}) ${q.options[userAnswers[i]]}</span> — Correcta: <span class="correct-text">${letters[q.correct]}) ${q.options[q.correct]}</span>`;
+            }
+
+            div.innerHTML = `
+                <div class="review-q">${i+1}. ${q.q}</div>
+                <div class="review-answer">${answerHtml}</div>
+                <div class="review-explanation">${q.explanation}</div>
+            `;
+            list.appendChild(div);
+        });
+
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // =========================================================
+    // RESET
+    // =========================================================
+    function resetExam() {
+        clearInterval(timerInterval);
+        examFinished = false;
+        document.getElementById('examListView').style.display = 'block';
+        document.getElementById('questionArea').style.display = 'none';
+        document.getElementById('resultsArea').style.display = 'none';
+        document.getElementById('timerBar').style.display = 'none';
+        document.getElementById('questionDots').style.display = 'none';
+        document.getElementById('reviewSection').style.display = 'none';
+    }
+    </script>
+</body>
+</html>
