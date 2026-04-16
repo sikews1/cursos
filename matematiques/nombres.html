@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombres Enters i Decimals - Matematiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a { padding: 8px 16px; border-radius: var(--radius-full); border: none; color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.25s; background: transparent; }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+        .theory-card { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .theory-card:hover { box-shadow: var(--shadow-sm); }
+        .theory-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+        .theory-card h3 .icon { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .theory-card p, .theory-card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .theory-card ul { padding-left: 18px; }
+        .formula { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 10px 0; text-align: center; }
+        .example { background: rgba(5,150,105,0.06); border-left: 3px solid #059669; padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 10px 0; font-size: 0.88rem; color: var(--text-secondary); }
+
+        .number-line {
+            display: flex; align-items: center; justify-content: center;
+            gap: 0; margin: 16px 0; position: relative; padding: 20px 0;
+        }
+        .number-line .line { height: 2px; background: var(--text-muted); flex: 1; position: relative; }
+        .number-line .tick {
+            position: absolute; top: -6px; width: 2px; height: 14px;
+            background: var(--text-secondary);
+        }
+        .number-line .label {
+            position: absolute; top: 14px; font-size: 0.72rem; font-weight: 600;
+            color: var(--text-secondary); transform: translateX(-50%);
+        }
+        .number-line .zero-label { color: #059669; font-weight: 700; }
+
+        .practice-section { background: var(--bg-raised); border: 2px solid rgba(5,150,105,0.2); border-radius: var(--radius-xl); padding: 32px; margin-top: 32px; }
+        .practice-section h2 { font-size: 1.3rem; font-weight: 800; margin: 0 0 20px; color: var(--text-primary); }
+        .practice-section h2 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .difficulty-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .difficulty-selector button { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.25s; font-family: var(--font-sans); }
+        .difficulty-selector button:hover { border-color: #059669; color: #059669; }
+        .difficulty-selector button.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border-color: transparent; }
+
+        .exercise-display { background: var(--bg-overlay); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px; }
+        .exercise-display .problem { font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+        .exercise-display .hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        .answer-row { display: flex; gap: 10px; margin-bottom: 16px; justify-content: center; }
+        .answer-row input { width: 160px; padding: 14px 18px; border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1.1rem; font-weight: 600; font-family: var(--font-sans); outline: none; text-align: center; }
+        .answer-row input:focus { border-color: #059669; }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 24px; border-radius: var(--radius-full); border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.25s; }
+        .btn-check { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(5,150,105,0.3); }
+        .btn-new { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { background: var(--bg-hover); }
+        .btn-solution { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .btn-solution:hover { background: var(--bg-overlay); }
+
+        .feedback { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; display: none; }
+        .feedback.correct { display: block; background: var(--green-soft); color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+        .feedback.incorrect { display: block; background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .feedback.solution { display: block; background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+        .score-bar { display: flex; justify-content: center; gap: 24px; margin-top: 20px; padding: 14px; background: var(--bg-overlay); border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; }
+        .score-bar .correct-count { color: #059669; }
+        .score-bar .incorrect-count { color: var(--red); }
+        .score-bar .total-count { color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Nombres Enters i Decimals</span></h1>
+        <p>Nombres positius, negatius, decimals i arrodoniment</p>
+    </div>
+
+    <div class="container">
+        <div class="theory-card">
+            <h3><span class="icon">1</span> Nombres enters</h3>
+            <p>Els <strong>nombres enters</strong> inclouen els positius, els negatius i el zero: ..., -3, -2, -1, 0, 1, 2, 3, ...</p>
+            <div class="formula">Z = { ..., -3, -2, -1, 0, +1, +2, +3, ... }</div>
+            <p>Regles d'operacions amb enters:</p>
+            <ul>
+                <li><strong>Suma de signes iguals:</strong> Es sumen els valors absoluts i es manté el signe. (+3) + (+5) = +8</li>
+                <li><strong>Suma de signes diferents:</strong> Es resten els valors absoluts i es posa el signe del major. (+7) + (-3) = +4</li>
+                <li><strong>Multiplicacio/Divisio:</strong> Mateixos signes = positiu, signes diferents = negatiu.</li>
+            </ul>
+            <div class="example">Exemples: (-4) + (-6) = -10 | (-3) &times; (-5) = +15 | (-12) &divide; (+4) = -3</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">2</span> Nombres decimals</h3>
+            <p>Els <strong>nombres decimals</strong> tenen una part entera i una part decimal separades per una coma (o punt).</p>
+            <div class="formula">3,75 = 3 + 7/10 + 5/100</div>
+            <p>Tipus: <strong>exactes</strong> (0,5), <strong>periodics purs</strong> (0,333...), <strong>periodics mixtos</strong> (0,1666...).</p>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Arrodoniment</h3>
+            <p>Per <strong>arrodonir</strong> un nombre decimal a n xifres decimals:</p>
+            <ul>
+                <li>Si la xifra seguent es 5 o mes: s'arrodoneix cap amunt.</li>
+                <li>Si la xifra seguent es menor que 5: es manté.</li>
+            </ul>
+            <div class="example">Exemples: 3,746 arrodonit a 1 decimal = 3,7 | 3,746 arrodonit a 2 decimals = 3,75</div>
+        </div>
+
+        <div class="practice-section">
+            <h2><span>Practica</span></h2>
+
+            <div class="difficulty-selector">
+                <button class="active" onclick="setType(0)">Enters: Suma/Resta</button>
+                <button onclick="setType(1)">Enters: Multiplicacio</button>
+                <button onclick="setType(2)">Decimals</button>
+                <button onclick="setType(3)">Arrodoniment</button>
+            </div>
+
+            <div class="exercise-display">
+                <div class="problem" id="problem">--</div>
+                <div class="hint" id="hint"></div>
+            </div>
+
+            <div class="answer-row">
+                <input type="number" id="answer" step="0.01" placeholder="Resposta..." onkeydown="if(event.key==='Enter') checkAnswer()">
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+                <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+                <button class="btn btn-solution" onclick="showSolution()">Mostrar solucio</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-bar">
+                <div class="correct-count">Encerts: <span id="correct">0</span></div>
+                <div class="incorrect-count">Errors: <span id="incorrect">0</span></div>
+                <div class="total-count">Total: <span id="total">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        let exerciseType = 0;
+        let currentAnswer = null;
+        let correctCount = 0, incorrectCount = 0;
+        let answered = false;
+
+        function setType(t) {
+            exerciseType = t;
+            document.querySelectorAll('.difficulty-selector button').forEach((btn, i) => btn.classList.toggle('active', i === t));
+            newExercise();
+        }
+
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function formatSigned(n) {
+            return n >= 0 ? `(+${n})` : `(${n})`;
+        }
+
+        function newExercise() {
+            answered = false;
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('answer').value = '';
+
+            let problem, hint;
+            switch (exerciseType) {
+                case 0: { // Integer addition/subtraction
+                    const a = randInt(-20, 20);
+                    const b = randInt(-20, 20);
+                    const op = randInt(0, 1);
+                    if (op === 0) {
+                        currentAnswer = a + b;
+                        problem = `${formatSigned(a)} + ${formatSigned(b)} = ?`;
+                    } else {
+                        currentAnswer = a - b;
+                        problem = `${formatSigned(a)} \u2212 ${formatSigned(b)} = ?`;
+                    }
+                    hint = 'Recorda les regles dels signes';
+                    break;
+                }
+                case 1: { // Integer multiplication/division
+                    const op = randInt(0, 1);
+                    if (op === 0) {
+                        const a = randInt(-12, 12);
+                        const b = randInt(-12, 12);
+                        currentAnswer = a * b;
+                        problem = `${formatSigned(a)} \u00d7 ${formatSigned(b)} = ?`;
+                    } else {
+                        const b = randInt(2, 10) * (randInt(0,1) ? 1 : -1);
+                        const result = randInt(-10, 10);
+                        const a = b * result;
+                        currentAnswer = result;
+                        problem = `${formatSigned(a)} \u00f7 ${formatSigned(b)} = ?`;
+                    }
+                    hint = 'Mateixos signes = +, signes diferents = \u2212';
+                    break;
+                }
+                case 2: { // Decimal operations
+                    const a = Math.round((randInt(10, 999) / 10) * 10) / 10;
+                    const b = Math.round((randInt(10, 999) / 10) * 10) / 10;
+                    const op = randInt(0, 2);
+                    if (op === 0) {
+                        currentAnswer = Math.round((a + b) * 100) / 100;
+                        problem = `${a} + ${b} = ?`;
+                    } else if (op === 1) {
+                        const big = Math.max(a, b);
+                        const small = Math.min(a, b);
+                        currentAnswer = Math.round((big - small) * 100) / 100;
+                        problem = `${big} \u2212 ${small} = ?`;
+                    } else {
+                        const x = Math.round(randInt(11, 99) / 10 * 10) / 10;
+                        const y = Math.round(randInt(11, 99) / 10 * 10) / 10;
+                        currentAnswer = Math.round(x * y * 100) / 100;
+                        problem = `${x} \u00d7 ${y} = ?`;
+                    }
+                    hint = 'Opera amb decimals amb cura';
+                    break;
+                }
+                case 3: { // Rounding
+                    const decimals = randInt(1, 2); // round to 1 or 2 decimal places
+                    const num = Math.round(randInt(1000, 99999)) / 1000;
+                    currentAnswer = Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+                    problem = `Arrodoneix ${num} a ${decimals} decimal${decimals > 1 ? 's' : ''}.`;
+                    hint = 'Si la xifra seguent es >= 5, arrodoneix cap amunt';
+                    break;
+                }
+            }
+
+            document.getElementById('problem').textContent = problem;
+            document.getElementById('hint').textContent = hint;
+            document.getElementById('answer').focus();
+        }
+
+        function checkAnswer() {
+            if (currentAnswer === null || answered) return;
+            const userAnswer = parseFloat(document.getElementById('answer').value);
+            if (isNaN(userAnswer)) return;
+
+            answered = true;
+            const fb = document.getElementById('feedback');
+
+            if (Math.abs(userAnswer - currentAnswer) < 0.005) {
+                fb.className = 'feedback correct';
+                fb.textContent = 'Correcte! Ben fet!';
+                correctCount++;
+            } else {
+                fb.className = 'feedback incorrect';
+                fb.textContent = `Incorrecte. La resposta correcta es ${currentAnswer}.`;
+                incorrectCount++;
+            }
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('total').textContent = correctCount + incorrectCount;
+        }
+
+        function showSolution() {
+            if (currentAnswer === null) return;
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback solution';
+            fb.textContent = `Solucio: ${currentAnswer}`;
+            if (!answered) { answered = true; incorrectCount++; document.getElementById('incorrect').textContent = incorrectCount; document.getElementById('total').textContent = correctCount + incorrectCount; }
+        }
+
+        newExercise();
+    </script>
+</body>
+</html>
