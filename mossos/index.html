@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mossos d'Esquadra - Guia d'estudi</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* === Mossos Navigation === */
+        .mossos-nav {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+        .mossos-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all var(--t-fast);
+        }
+        .mossos-nav a:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .mossos-nav a.active { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: #fff; }
+        .mossos-nav a.home { margin-right: auto; color: var(--text-muted); }
+        .mossos-nav a.home:hover { color: var(--text-primary); }
+
+        /* === Page container === */
+        .mossos-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
+
+        /* === Header === */
+        .mossos-header {
+            text-align: center;
+            padding: 48px 24px 40px;
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            border-radius: var(--radius-xl);
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .mossos-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .mossos-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 0 0 8px;
+            letter-spacing: -0.03em;
+        }
+        .mossos-header .subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.05rem;
+            margin: 0 0 16px;
+        }
+        .mossos-header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+
+        /* === Progress Overview === */
+        .progress-overview {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 28px 32px;
+            margin-bottom: 32px;
+        }
+        .progress-circle-wrap {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+        }
+        .progress-circle-wrap svg { width: 120px; height: 120px; transform: rotate(-90deg); }
+        .progress-circle-wrap .track { fill: none; stroke: var(--bg-overlay); stroke-width: 10; }
+        .progress-circle-wrap .fill { fill: none; stroke: #2563eb; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.6s var(--ease); }
+        .progress-circle-wrap .pct {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .progress-stats { flex: 1; }
+        .progress-stats h3 { margin: 0 0 12px; font-size: 1.1rem; color: var(--text-primary); }
+        .stat-row { display: flex; gap: 24px; flex-wrap: wrap; }
+        .stat-item { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; color: var(--text-secondary); }
+        .stat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat-dot.mastered { background: #22c55e; }
+        .stat-dot.seen { background: #eab308; }
+        .stat-dot.not-studied { background: #ef4444; }
+        .stat-number { font-weight: 700; color: var(--text-primary); margin-left: 2px; }
+
+        /* === Export/Import === */
+        .data-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .data-actions button {
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--t-fast);
+            font-family: var(--font-sans);
+        }
+        .data-actions button:hover { background: var(--bg-hover); color: var(--text-primary); }
+        #importFile { display: none; }
+
+        /* === Ambit Sections === */
+        .ambit-section { margin-bottom: 36px; }
+        .ambit-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            margin-bottom: 16px;
+        }
+        .ambit-header .ambit-bar {
+            width: 4px;
+            height: 32px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .ambit-header .ambit-bar.a { background: #2563eb; }
+        .ambit-header .ambit-bar.b { background: #8b5cf6; }
+        .ambit-header .ambit-bar.c { background: #f97316; }
+        .ambit-header h2 { margin: 0; font-size: 1.15rem; color: var(--text-primary); font-weight: 700; }
+        .ambit-header span.count { font-size: 0.82rem; color: var(--text-muted); margin-left: auto; }
+
+        /* === Tema Cards Grid === */
+        .tema-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+        }
+        .tema-card {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all var(--t-base);
+            position: relative;
+        }
+        .tema-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .tema-card .tema-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .tema-card .tema-number {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            color: #fff;
+        }
+        .tema-number.a { background: #2563eb; }
+        .tema-number.b { background: #8b5cf6; }
+        .tema-number.c { background: #f97316; }
+        .tema-card .tema-status { font-size: 1rem; }
+        .tema-card .tema-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.35;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .tema-card .tema-score {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .tema-card .tema-score strong {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        /* === Quick Links === */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+            margin-top: 40px;
+        }
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 20px;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all var(--t-base);
+        }
+        .quick-link:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .quick-link .ql-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .quick-link .ql-icon.sim { background: linear-gradient(135deg, #1e3a5f, #2563eb); }
+        .quick-link .ql-icon.err { background: var(--red-soft); }
+        .quick-link .ql-icon.stat { background: var(--purple-soft); }
+
+        /* === Responsive === */
+        @media (max-width: 640px) {
+            .mossos-header h1 { font-size: 1.7rem; }
+            .progress-overview { flex-direction: column; text-align: center; padding: 20px; }
+            .stat-row { justify-content: center; }
+            .tema-grid { grid-template-columns: 1fr; }
+            .quick-links { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mossos-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="examen.html">Simulador</a>
+    <a href="estadistiques.html">Estad&iacute;stiques</a>
+</div>
+
+<div class="mossos-page">
+
+    <!-- Header -->
+    <div class="mossos-header">
+        <h1>Mossos d'Esquadra</h1>
+        <p class="subtitle">Guia d'estudi per a l'acc&eacute;s a la categoria de mosso/a</p>
+        <span class="badge">Edici&oacute; setembre 2024</span>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="progress-overview">
+        <div class="progress-circle-wrap">
+            <svg viewBox="0 0 120 120">
+                <circle class="track" cx="60" cy="60" r="50"/>
+                <circle class="fill" id="progressArc" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+            </svg>
+            <div class="pct" id="progressPct">0%</div>
+        </div>
+        <div class="progress-stats">
+            <h3>Progr&eacute;s global</h3>
+            <div class="stat-row">
+                <div class="stat-item">
+                    <span class="stat-dot mastered"></span>
+                    Dominat: <span class="stat-number" id="statMastered">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-dot seen"></span>
+                    Vist: <span class="stat-number" id="statSeen">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-dot not-studied"></span>
+                    Pendent: <span class="stat-number" id="statNotStudied">0</span>
+                </div>
+            </div>
+            <div class="data-actions">
+                <button onclick="exportProgress()" title="Exportar progr&eacute;s">&#128190; Exportar</button>
+                <button onclick="document.getElementById('importFile').click()" title="Importar progr&eacute;s">&#128194; Importar</button>
+                <input type="file" id="importFile" accept=".json" onchange="if(this.files[0]) importProgress(this.files[0])">
+            </div>
+        </div>
+    </div>
+
+    <!-- Ambit Sections -->
+    <div id="ambitSections"></div>
+
+    <!-- Quick Links -->
+    <div class="quick-links">
+        <a href="examen.html" class="quick-link">
+            <span class="ql-icon sim">&#128221;</span>
+            Simulador d'examen
+        </a>
+        <a href="errors.html" class="quick-link">
+            <span class="ql-icon err">&#10060;</span>
+            Els meus errors
+        </a>
+        <a href="estadistiques.html" class="quick-link">
+            <span class="ql-icon stat">&#128200;</span>
+            Estad&iacute;stiques
+        </a>
+    </div>
+
+</div>
+
+<script src="progress.js"></script>
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+// === Tema catalog ===
+const TEMES = {
+    A: {
+        title: "\u00c0mbit A \u2014 Coneixement de l'entorn",
+        temes: [
+            { id: 'a1', number: 'A.1', title: "Hist\u00f2ria de Catalunya (part I)" },
+            { id: 'a2', number: 'A.2', title: "Hist\u00f2ria de Catalunya (part II)" },
+            { id: 'a3', number: 'A.3', title: "Marc geogr\u00e0fic de Catalunya" },
+            { id: 'a4', number: 'A.4', title: "Cultura i patrimoni de Catalunya" },
+            { id: 'a5', number: 'A.5', title: "Institucions pol\u00edtiques de Catalunya" },
+            { id: 'a6', number: 'A.6', title: "La Uni\u00f3 Europea" },
+            { id: 'a7', number: 'A.7', title: "Actualitat pol\u00edtica i social" },
+        ]
+    },
+    B: {
+        title: "\u00c0mbit B \u2014 Institucional",
+        temes: [
+            { id: 'b1', number: 'B.1', title: "La Constituci\u00f3 espanyola de 1978" },
+            { id: 'b2', number: 'B.2', title: "L'Estatut d'autonomia de Catalunya" },
+            { id: 'b3', number: 'B.3', title: "El Govern i l'Administraci\u00f3 de la Generalitat" },
+            { id: 'b4', number: 'B.4', title: "El Departament d'Interior" },
+            { id: 'b5', number: 'B.5', title: "La policia a Catalunya" },
+            { id: 'b6', number: 'B.6', title: "Drets i deures de la ciutadania" },
+            { id: 'b7', number: 'B.7', title: "Dret penal i processal" },
+            { id: 'b8', number: 'B.8', title: "Seguretat vi\u00e0ria i prevenci\u00f3" },
+        ]
+    },
+    C: {
+        title: "\u00c0mbit C \u2014 Seguretat i policia",
+        temes: [
+            { id: 'c1', number: 'C.1', title: "Models policials comparats" },
+            { id: 'c2', number: 'C.2', title: "\u00c8tica i deontologia policial" },
+            { id: 'c3', number: 'C.3', title: "Habilitats socials i comunicaci\u00f3" },
+            { id: 'c4', number: 'C.4', title: "Diversitat i igualtat" },
+            { id: 'c5', number: 'C.5', title: "Seguretat ciutadana i prevenci\u00f3" },
+        ]
+    }
+};
+
+const STATUS_ICON = { 'mastered': '\uD83D\uDFE2', 'seen': '\uD83D\uDFE1', 'not-studied': '\uD83D\uDD34' };
+
+function renderDashboard() {
+    // Progress circle
+    const stats = getOverallStats();
+    const pct = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
+    const circumference = 314;
+    const offset = circumference - (circumference * pct / 100);
+    document.getElementById('progressArc').style.strokeDashoffset = offset;
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('statMastered').textContent = stats.mastered;
+    document.getElementById('statSeen').textContent = stats.seen;
+    document.getElementById('statNotStudied').textContent = stats.notStudied;
+
+    // Ambit sections
+    const container = document.getElementById('ambitSections');
+    container.innerHTML = '';
+
+    for (const [key, ambit] of Object.entries(TEMES)) {
+        const section = document.createElement('div');
+        section.className = 'ambit-section';
+
+        const lk = key.toLowerCase();
+        const masteredCount = ambit.temes.filter(t => getTemaStatus(t.id) === 'mastered').length;
+
+        section.innerHTML = `
+            <div class="ambit-header">
+                <div class="ambit-bar ${lk}"></div>
+                <h2>${ambit.title}</h2>
+                <span class="count">${masteredCount}/${ambit.temes.length} dominats</span>
+            </div>
+            <div class="tema-grid">
+                ${ambit.temes.map(t => {
+                    const status = getTemaStatus(t.id);
+                    const best = getBestScore(t.id);
+                    const scoreHtml = best !== null
+                        ? `<div class="tema-score">Millor puntuaci\u00f3: <strong>${best}%</strong></div>`
+                        : `<div class="tema-score">Sense intents</div>`;
+                    return `
+                        <a href="tema.html?id=${t.id}" class="tema-card">
+                            <div class="tema-top">
+                                <span class="tema-number ${lk}">${t.number}</span>
+                                <span class="tema-status">${STATUS_ICON[status]}</span>
+                            </div>
+                            <div class="tema-title">${t.title}</div>
+                            ${scoreHtml}
+                        </a>`;
+                }).join('')}
+            </div>
+        `;
+        container.appendChild(section);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', renderDashboard);
+</script>
+
+</body>
+</html>
