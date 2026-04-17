@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logaritmes - Matemàtiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a { padding: 8px 16px; border-radius: var(--radius-full); border: none; color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.25s; background: transparent; }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+        .theory-card { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .theory-card:hover { box-shadow: var(--shadow-sm); }
+        .theory-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+        .theory-card h3 .icon { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .theory-card p, .theory-card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .formula { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 10px 0; text-align: center; }
+        .example { background: rgba(5,150,105,0.06); border-left: 3px solid #059669; padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 10px 0; font-size: 0.88rem; color: var(--text-secondary); }
+
+        .identity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 14px 0; }
+        .identity-item { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+        .identity-item .name { font-size: 0.8rem; font-weight: 700; color: #059669; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .identity-item .expr { font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+
+        .practice-section { background: var(--bg-raised); border: 2px solid rgba(5,150,105,0.2); border-radius: var(--radius-xl); padding: 32px; margin-top: 32px; }
+        .practice-section h2 { font-size: 1.3rem; font-weight: 800; margin: 0 0 20px; color: var(--text-primary); }
+        .practice-section h2 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .difficulty-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .difficulty-selector button { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.25s; font-family: var(--font-sans); }
+        .difficulty-selector button:hover { border-color: #059669; color: #059669; }
+        .difficulty-selector button.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border-color: transparent; }
+
+        .exercise-display { background: var(--bg-overlay); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px; }
+        .exercise-display .problem { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+        .exercise-display .hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        .answer-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; justify-content: center; align-items: center; }
+        .answer-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+        .answer-group input { width: 120px; padding: 12px 14px; border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1rem; font-weight: 600; font-family: var(--font-sans); outline: none; text-align: center; }
+        .answer-group input:focus { border-color: #059669; }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 24px; border-radius: var(--radius-full); border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.25s; }
+        .btn-check { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(5,150,105,0.3); }
+        .btn-new { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { background: var(--bg-hover); }
+        .btn-solution { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .btn-solution:hover { background: var(--bg-overlay); }
+
+        .feedback { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; display: none; }
+        .feedback.correct { display: block; background: var(--green-soft); color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+        .feedback.incorrect { display: block; background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .feedback.solution { display: block; background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+        .score-bar { display: flex; justify-content: center; gap: 24px; margin-top: 20px; padding: 14px; background: var(--bg-overlay); border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; }
+        .score-bar .correct-count { color: #059669; }
+        .score-bar .incorrect-count { color: var(--red); }
+        .score-bar .total-count { color: var(--text-secondary); }
+
+        sup { font-size: 0.7em; vertical-align: super; }
+        sub { font-size: 0.7em; vertical-align: sub; }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Logaritmes</span></h1>
+        <p>Definicio, propietats i canvi de base</p>
+    </div>
+
+    <div class="container">
+
+        <!-- THEORY 1: Definicio -->
+        <div class="theory-card">
+            <h3><span class="icon">1</span> Definicio de logaritme</h3>
+            <p>El <strong>logaritme en base b de x</strong> es l'exponent al qual hem d'elevar la base b per obtenir x.</p>
+            <div class="formula">log<sub>b</sub>(x) = n &nbsp;&nbsp;&hArr;&nbsp;&nbsp; b<sup>n</sup> = x</div>
+            <p style="margin-top: 8px;">Condicions: b &gt; 0, b &ne; 1, x &gt; 0</p>
+            <div class="example">
+                <strong>Exemples:</strong><br>
+                log<sub>2</sub>(8) = 3 &nbsp; perque &nbsp; 2<sup>3</sup> = 8<br>
+                log<sub>3</sub>(81) = 4 &nbsp; perque &nbsp; 3<sup>4</sup> = 81<br>
+                log<sub>10</sub>(1000) = 3 &nbsp; perque &nbsp; 10<sup>3</sup> = 1000<br>
+                log<sub>5</sub>(1) = 0 &nbsp; perque &nbsp; 5<sup>0</sup> = 1
+            </div>
+        </div>
+
+        <!-- THEORY 2: Propietats -->
+        <div class="theory-card">
+            <h3><span class="icon">2</span> Propietats dels logaritmes</h3>
+
+            <div class="identity-grid">
+                <div class="identity-item">
+                    <div class="name">Logaritme d'un producte</div>
+                    <div class="expr">log<sub>b</sub>(a &middot; c) =<br>log<sub>b</sub>(a) + log<sub>b</sub>(c)</div>
+                </div>
+                <div class="identity-item">
+                    <div class="name">Logaritme d'un quocient</div>
+                    <div class="expr">log<sub>b</sub>(a / c) =<br>log<sub>b</sub>(a) - log<sub>b</sub>(c)</div>
+                </div>
+                <div class="identity-item">
+                    <div class="name">Logaritme d'una potencia</div>
+                    <div class="expr">log<sub>b</sub>(a<sup>n</sup>) =<br>n &middot; log<sub>b</sub>(a)</div>
+                </div>
+            </div>
+
+            <div class="example">
+                <strong>Exemples:</strong><br>
+                log<sub>2</sub>(4 &middot; 8) = log<sub>2</sub>(4) + log<sub>2</sub>(8) = 2 + 3 = <strong>5</strong><br>
+                log<sub>3</sub>(81/3) = log<sub>3</sub>(81) - log<sub>3</sub>(3) = 4 - 1 = <strong>3</strong><br>
+                log<sub>2</sub>(4<sup>3</sup>) = 3 &middot; log<sub>2</sub>(4) = 3 &middot; 2 = <strong>6</strong>
+            </div>
+        </div>
+
+        <!-- THEORY 3: Logaritmes especials -->
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Logaritmes especials i valors basics</h3>
+            <ul style="margin: 0 0 0 20px;">
+                <li><strong>log<sub>b</sub>(1) = 0</strong> &nbsp; (qualsevol base elevada a 0 dona 1)</li>
+                <li><strong>log<sub>b</sub>(b) = 1</strong> &nbsp; (la base elevada a 1 dona la mateixa base)</li>
+                <li><strong>log<sub>b</sub>(b<sup>n</sup>) = n</strong></li>
+                <li><strong>Logaritme decimal (log):</strong> base 10. Escrivim simplement "log".</li>
+                <li><strong>Logaritme natural (ln):</strong> base e (&asymp; 2.718...).</li>
+            </ul>
+        </div>
+
+        <!-- THEORY 4: Canvi de base -->
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Canvi de base</h3>
+            <p>Si necessitem calcular un logaritme en una base diferent de la que tenim disponible, usem la formula de canvi de base:</p>
+            <div class="formula">log<sub>b</sub>(x) = log<sub>a</sub>(x) / log<sub>a</sub>(b)</div>
+            <div class="example">
+                <strong>Exemple:</strong> Calcular log<sub>2</sub>(10) usant logaritmes decimals:<br>
+                log<sub>2</sub>(10) = log(10) / log(2) = 1 / 0.301 &asymp; <strong>3.322</strong>
+            </div>
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Consell:</strong> A la calculadora normalment tens log (base 10) i ln (base e). Amb el canvi de base pots calcular qualsevol logaritme!
+            </div>
+        </div>
+
+        <!-- PRACTICE -->
+        <div class="practice-section">
+            <h2><span>Practica</span></h2>
+
+            <div class="difficulty-selector">
+                <button class="active" onclick="setType(0)">Log directe</button>
+                <button onclick="setType(1)">Producte/Quocient</button>
+                <button onclick="setType(2)">Potencia</button>
+                <button onclick="setType(3)">Mixt</button>
+            </div>
+
+            <div class="exercise-display">
+                <div class="problem" id="problem">--</div>
+                <div class="hint" id="hint"></div>
+            </div>
+
+            <div id="answer-area"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+                <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+                <button class="btn btn-solution" onclick="showSolution()">Mostrar solucio</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-bar">
+                <div class="correct-count">Encerts: <span id="correct">0</span></div>
+                <div class="incorrect-count">Errors: <span id="incorrect">0</span></div>
+                <div class="total-count">Total: <span id="total">0</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        let exerciseType = 0;
+        let currentAnswers = {};
+        let correctCount = 0, incorrectCount = 0;
+        let answered = false;
+
+        function setType(t) {
+            exerciseType = t;
+            document.querySelectorAll('.difficulty-selector button').forEach((btn, i) => btn.classList.toggle('active', i === t));
+            newExercise();
+        }
+
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function renderAnswerInputs(fields) {
+            const area = document.getElementById('answer-area');
+            let html = '<div class="answer-group">';
+            fields.forEach((f, i) => {
+                html += `<label>${f.label}</label>`;
+                html += `<input type="number" step="any" id="ans${i}" placeholder="${f.placeholder || '?'}" onkeydown="if(event.key==='Enter') checkAnswer()">`;
+            });
+            html += '</div>';
+            area.innerHTML = html;
+            document.getElementById('ans0').focus();
+        }
+
+        // Pre-built base-power pairs for clean integer answers
+        const basePowers = [
+            { b: 2, powers: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024] },
+            { b: 3, powers: [1, 3, 9, 27, 81, 243, 729] },
+            { b: 5, powers: [1, 5, 25, 125, 625] },
+            { b: 10, powers: [1, 10, 100, 1000, 10000] },
+            { b: 4, powers: [1, 4, 16, 64, 256] },
+            { b: 6, powers: [1, 6, 36, 216] },
+            { b: 7, powers: [1, 7, 49, 343] },
+        ];
+
+        function getLogPair() {
+            const bp = basePowers[randInt(0, basePowers.length - 1)];
+            const expIdx = randInt(1, bp.powers.length - 1); // skip index 0 (=1, exponent=0 is too easy sometimes)
+            return { base: bp.b, value: bp.powers[expIdx], exponent: expIdx };
+        }
+
+        function newExercise() {
+            answered = false;
+            document.getElementById('feedback').className = 'feedback';
+            const probEl = document.getElementById('problem');
+            let hint = '';
+
+            switch (exerciseType) {
+                case 0: { // Log directe
+                    const pair = getLogPair();
+                    currentAnswers = { ans0: pair.exponent };
+                    currentAnswers._solution = `log base ${pair.base} de ${pair.value} = ${pair.exponent}, perque ${pair.base}^${pair.exponent} = ${pair.value}`;
+                    probEl.innerHTML = `log<sub>${pair.base}</sub>(${pair.value}) = ?`;
+                    hint = `Pensa: ${pair.base} elevat a quin nombre dona ${pair.value}?`;
+                    renderAnswerInputs([{ label: 'Resultat =', placeholder: '?' }]);
+                    break;
+                }
+                case 1: { // Producte o quocient
+                    const bp = basePowers[randInt(0, basePowers.length - 1)];
+                    const e1 = randInt(1, Math.min(bp.powers.length - 1, 4));
+                    const e2 = randInt(1, Math.min(bp.powers.length - 1, 4));
+                    const isProduct = randInt(0, 1) === 0;
+                    const v1 = bp.powers[e1];
+                    const v2 = bp.powers[e2];
+
+                    if (isProduct) {
+                        const result = e1 + e2;
+                        currentAnswers = { ans0: result };
+                        currentAnswers._solution = `log base ${bp.b}(${v1} × ${v2}) = log base ${bp.b}(${v1}) + log base ${bp.b}(${v2}) = ${e1} + ${e2} = ${result}`;
+                        probEl.innerHTML = `log<sub>${bp.b}</sub>(${v1} &times; ${v2}) = ?`;
+                        hint = `Usa: log(a·b) = log(a) + log(b)`;
+                    } else {
+                        const result = e1 - e2;
+                        currentAnswers = { ans0: result };
+                        currentAnswers._solution = `log base ${bp.b}(${v1} / ${v2}) = log base ${bp.b}(${v1}) - log base ${bp.b}(${v2}) = ${e1} - ${e2} = ${result}`;
+                        probEl.innerHTML = `log<sub>${bp.b}</sub>(${v1} / ${v2}) = ?`;
+                        hint = `Usa: log(a/b) = log(a) - log(b)`;
+                    }
+                    renderAnswerInputs([{ label: 'Resultat =', placeholder: '?' }]);
+                    break;
+                }
+                case 2: { // Potencia
+                    const bp = basePowers[randInt(0, basePowers.length - 1)];
+                    const e1 = randInt(1, Math.min(bp.powers.length - 1, 3));
+                    const n = randInt(2, 5);
+                    const v1 = bp.powers[e1];
+                    const result = n * e1;
+                    currentAnswers = { ans0: result };
+                    currentAnswers._solution = `log base ${bp.b}(${v1}^${n}) = ${n} · log base ${bp.b}(${v1}) = ${n} × ${e1} = ${result}`;
+                    probEl.innerHTML = `log<sub>${bp.b}</sub>(${v1}<sup>${n}</sup>) = ?`;
+                    hint = `Usa: log(a^n) = n · log(a)`;
+                    renderAnswerInputs([{ label: 'Resultat =', placeholder: '?' }]);
+                    break;
+                }
+                case 3: { // Mixt - combina propietats
+                    const types = [0, 1, 2];
+                    const t = types[randInt(0, 2)];
+
+                    if (t === 0) {
+                        // log_b(b^n) = n
+                        const b = [2, 3, 5, 10][randInt(0, 3)];
+                        const n = randInt(2, 7);
+                        currentAnswers = { ans0: n };
+                        currentAnswers._solution = `log base ${b}(${b}^${n}) = ${n}`;
+                        probEl.innerHTML = `log<sub>${b}</sub>(${b}<sup>${n}</sup>) = ?`;
+                        hint = `Recorda: log base b de b^n = n`;
+                    } else if (t === 1) {
+                        // log_b(1) = 0
+                        const b = [2, 3, 5, 7, 10][randInt(0, 4)];
+                        currentAnswers = { ans0: 0 };
+                        currentAnswers._solution = `log base ${b}(1) = 0, perque ${b}^0 = 1`;
+                        probEl.innerHTML = `log<sub>${b}</sub>(1) = ?`;
+                        hint = `Qualsevol nombre elevat a 0 dona 1`;
+                    } else {
+                        // Combinat: log_b(a^n * c)
+                        const bp = basePowers[randInt(0, 3)];
+                        const e1 = randInt(1, 2);
+                        const e2 = randInt(1, 3);
+                        const n = randInt(2, 3);
+                        const v1 = bp.powers[e1];
+                        const v2 = bp.powers[e2];
+                        const result = n * e1 + e2;
+                        currentAnswers = { ans0: result };
+                        currentAnswers._solution = `log base ${bp.b}(${v1}^${n} × ${v2}) = ${n}·log base ${bp.b}(${v1}) + log base ${bp.b}(${v2}) = ${n}×${e1} + ${e2} = ${result}`;
+                        probEl.innerHTML = `log<sub>${bp.b}</sub>(${v1}<sup>${n}</sup> &times; ${v2}) = ?`;
+                        hint = `Combina: log(a^n · b) = n·log(a) + log(b)`;
+                    }
+                    renderAnswerInputs([{ label: 'Resultat =', placeholder: '?' }]);
+                    break;
+                }
+            }
+            document.getElementById('hint').innerHTML = hint;
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            const el = document.getElementById('ans0');
+            if (!el || el.value === '') return;
+            const userVal = parseFloat(el.value);
+            if (isNaN(userVal)) return;
+
+            answered = true;
+            const fb = document.getElementById('feedback');
+
+            if (Math.abs(userVal - currentAnswers.ans0) < 0.01) {
+                fb.className = 'feedback correct';
+                fb.textContent = 'Correcte! Ben fet!';
+                correctCount++;
+            } else {
+                fb.className = 'feedback incorrect';
+                fb.textContent = 'Incorrecte. ' + currentAnswers._solution;
+                incorrectCount++;
+            }
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('total').textContent = correctCount + incorrectCount;
+        }
+
+        function showSolution() {
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback solution';
+            fb.textContent = 'Solucio: ' + currentAnswers._solution;
+            if (!answered) {
+                answered = true;
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                document.getElementById('total').textContent = correctCount + incorrectCount;
+            }
+        }
+
+        newExercise();
+    </script>
+</body>
+</html>

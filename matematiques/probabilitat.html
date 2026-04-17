@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probabilitat - Matemàtiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a { padding: 8px 16px; border-radius: var(--radius-full); border: none; color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.25s; background: transparent; }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+        .theory-card { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .theory-card:hover { box-shadow: var(--shadow-sm); }
+        .theory-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+        .theory-card h3 .icon { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .theory-card p, .theory-card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .formula { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 10px 0; text-align: center; }
+        .example { background: rgba(5,150,105,0.06); border-left: 3px solid #059669; padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 10px 0; font-size: 0.88rem; color: var(--text-secondary); }
+
+        .practice-section { background: var(--bg-raised); border: 2px solid rgba(5,150,105,0.2); border-radius: var(--radius-xl); padding: 32px; margin-top: 32px; }
+        .practice-section h2 { font-size: 1.3rem; font-weight: 800; margin: 0 0 20px; color: var(--text-primary); }
+        .practice-section h2 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .difficulty-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .difficulty-selector button { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.25s; font-family: var(--font-sans); }
+        .difficulty-selector button:hover { border-color: #059669; color: #059669; }
+        .difficulty-selector button.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border-color: transparent; }
+
+        .exercise-display { background: var(--bg-overlay); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px; }
+        .exercise-display .problem { font-size: 1.3rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+        .exercise-display .hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        .answer-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; justify-content: center; align-items: center; }
+        .answer-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+        .answer-group input { width: 80px; padding: 12px 14px; border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1rem; font-weight: 600; font-family: var(--font-sans); outline: none; text-align: center; }
+        .answer-group input:focus { border-color: #059669; }
+        .answer-group .frac-sep { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 24px; border-radius: var(--radius-full); border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.25s; }
+        .btn-check { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(5,150,105,0.3); }
+        .btn-new { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { background: var(--bg-hover); }
+        .btn-solution { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .btn-solution:hover { background: var(--bg-overlay); }
+
+        .feedback { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; display: none; }
+        .feedback.correct { display: block; background: var(--green-soft); color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+        .feedback.incorrect { display: block; background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .feedback.solution { display: block; background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+        .score-bar { display: flex; justify-content: center; gap: 24px; margin-top: 20px; padding: 14px; background: var(--bg-overlay); border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; }
+        .score-bar .correct-count { color: #059669; }
+        .score-bar .incorrect-count { color: var(--red); }
+        .score-bar .total-count { color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Probabilitat</span></h1>
+        <p>Experiments aleatoris, espai mostral, successos i regla de Laplace</p>
+    </div>
+
+    <div class="container">
+
+        <!-- THEORY 1 -->
+        <div class="theory-card">
+            <h3><span class="icon">1</span> Experiment aleatori i espai mostral</h3>
+            <p>Un <strong>experiment aleatori</strong> es aquell en que no podem predir amb certesa el resultat, tot i que coneguem totes les possibilitats.</p>
+            <ul style="margin: 8px 0 0 20px;">
+                <li><strong>Espai mostral (E):</strong> Conjunt de tots els resultats possibles.</li>
+                <li><strong>Succes:</strong> Qualsevol subconjunt de l'espai mostral.</li>
+            </ul>
+            <div class="example">
+                <strong>Exemple - Llancar un dau:</strong><br>
+                Espai mostral: E = {1, 2, 3, 4, 5, 6}<br>
+                Succes "obtenir parell": A = {2, 4, 6}<br>
+                Succes "obtenir mes de 4": B = {5, 6}
+            </div>
+        </div>
+
+        <!-- THEORY 2 -->
+        <div class="theory-card">
+            <h3><span class="icon">2</span> Regla de Laplace</h3>
+            <p>Quan tots els resultats son <strong>equiprobables</strong> (mateixa probabilitat), usem la regla de Laplace:</p>
+            <div class="formula">P(A) = casos favorables / casos possibles</div>
+            <div class="example">
+                <strong>Exemple:</strong> Probabilitat d'obtenir un 3 amb un dau:<br>
+                Casos favorables = 1 (nomes el 3)<br>
+                Casos possibles = 6<br>
+                P(3) = <strong>1/6</strong>
+            </div>
+        </div>
+
+        <!-- THEORY 3 -->
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Succes complementari</h3>
+            <p>El <strong>succes complementari</strong> de A (escrit A&#x0304;) esta format pels resultats que <em>no</em> pertanyen a A.</p>
+            <div class="formula">P(A&#x0304;) = 1 - P(A)</div>
+            <div class="example">
+                <strong>Exemple:</strong> Si P(plou) = 2/5, llavors P(no plou) = 1 - 2/5 = <strong>3/5</strong>
+            </div>
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> La probabilitat sempre esta entre 0 i 1. La suma de les probabilitats de tots els successos de l'espai mostral es 1.
+            </div>
+        </div>
+
+        <!-- THEORY 4 -->
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Exemples classics</h3>
+            <ul style="margin: 0 0 0 20px;">
+                <li><strong>Dau de 6 cares:</strong> E = {1,2,3,4,5,6}, cada cara te probabilitat 1/6.</li>
+                <li><strong>Moneda:</strong> E = {cara, creu}, cada resultat te probabilitat 1/2.</li>
+                <li><strong>Boles en una bossa:</strong> Si hi ha 3 vermelles i 5 blaves (8 total), P(vermella) = 3/8.</li>
+                <li><strong>Dos daus:</strong> Espai mostral te 6 &times; 6 = 36 resultats possibles.</li>
+            </ul>
+        </div>
+
+        <!-- PRACTICE -->
+        <div class="practice-section">
+            <h2><span>Practica</span></h2>
+
+            <div class="difficulty-selector">
+                <button class="active" onclick="setType(0)">Dau</button>
+                <button onclick="setType(1)">Monedes</button>
+                <button onclick="setType(2)">Boles</button>
+                <button onclick="setType(3)">Complementari</button>
+            </div>
+
+            <div class="exercise-display">
+                <div class="problem" id="problem">--</div>
+                <div class="hint" id="hint"></div>
+            </div>
+
+            <div id="answer-area"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+                <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+                <button class="btn btn-solution" onclick="showSolution()">Mostrar solucio</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-bar">
+                <div class="correct-count">Encerts: <span id="correct">0</span></div>
+                <div class="incorrect-count">Errors: <span id="incorrect">0</span></div>
+                <div class="total-count">Total: <span id="total">0</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        let exerciseType = 0;
+        let currentAnswers = {};
+        let correctCount = 0, incorrectCount = 0;
+        let answered = false;
+
+        function setType(t) {
+            exerciseType = t;
+            document.querySelectorAll('.difficulty-selector button').forEach((btn, i) => btn.classList.toggle('active', i === t));
+            newExercise();
+        }
+
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+
+        function renderFractionInputs() {
+            const area = document.getElementById('answer-area');
+            area.innerHTML = `<div class="answer-group">
+                <label>P =</label>
+                <input type="number" id="ans0" placeholder="num" min="0" onkeydown="if(event.key==='Enter') checkAnswer()">
+                <span class="frac-sep">/</span>
+                <input type="number" id="ans1" placeholder="den" min="1" onkeydown="if(event.key==='Enter') checkAnswer()">
+            </div>`;
+            document.getElementById('ans0').focus();
+        }
+
+        function newExercise() {
+            answered = false;
+            document.getElementById('feedback').className = 'feedback';
+            const probEl = document.getElementById('problem');
+            let hint = '';
+
+            switch (exerciseType) {
+                case 0: { // Dau
+                    const questions = [
+                        { q: 'obtenir un nombre parell', fav: 3, pos: 6 },
+                        { q: 'obtenir un nombre senar', fav: 3, pos: 6 },
+                        { q: 'obtenir un nombre mes gran que 4', fav: 2, pos: 6 },
+                        { q: 'obtenir un nombre menor que 3', fav: 2, pos: 6 },
+                        { q: 'obtenir un 6', fav: 1, pos: 6 },
+                        { q: 'obtenir un nombre mes gran que 2', fav: 4, pos: 6 },
+                        { q: 'obtenir un nombre menor o igual a 4', fav: 4, pos: 6 },
+                        { q: 'obtenir un multiple de 3', fav: 2, pos: 6 },
+                        { q: 'obtenir un nombre primer (2,3,5)', fav: 3, pos: 6 },
+                        { q: 'obtenir un nombre mes gran o igual a 5', fav: 2, pos: 6 },
+                    ];
+                    const chosen = questions[randInt(0, questions.length - 1)];
+                    const g = gcd(chosen.fav, chosen.pos);
+                    currentAnswers = { ans0: chosen.fav / g, ans1: chosen.pos / g };
+                    currentAnswers._solution = `Favorables = ${chosen.fav}, Possibles = ${chosen.pos}, P = ${chosen.fav / g}/${chosen.pos / g}`;
+                    probEl.innerHTML = `Llancem un dau de 6 cares. Quina es la probabilitat de <strong>${chosen.q}</strong>?`;
+                    hint = 'Expressa la probabilitat com a fraccio simplificada';
+                    renderFractionInputs();
+                    break;
+                }
+                case 1: { // Monedes
+                    const questions = [
+                        { q: 'obtenir dues cares al llancar 2 monedes', fav: 1, pos: 4, hint: 'Espai: {CC, CX, XC, XX}' },
+                        { q: 'obtenir almenys una cara al llancar 2 monedes', fav: 3, pos: 4, hint: 'Espai: {CC, CX, XC, XX}' },
+                        { q: 'obtenir exactament una cara al llancar 2 monedes', fav: 2, pos: 4, hint: 'Espai: {CC, CX, XC, XX}' },
+                        { q: 'obtenir dues creus al llancar 2 monedes', fav: 1, pos: 4, hint: 'Espai: {CC, CX, XC, XX}' },
+                        { q: 'obtenir cara al llancar 1 moneda', fav: 1, pos: 2, hint: 'Espai: {C, X}' },
+                        { q: 'obtenir tres cares al llancar 3 monedes', fav: 1, pos: 8, hint: 'Espai: 2³ = 8 resultats' },
+                        { q: 'obtenir almenys una creu al llancar 3 monedes', fav: 7, pos: 8, hint: 'Espai: 8 resultats. Complementari de tot cares' },
+                    ];
+                    const chosen = questions[randInt(0, questions.length - 1)];
+                    const g = gcd(chosen.fav, chosen.pos);
+                    currentAnswers = { ans0: chosen.fav / g, ans1: chosen.pos / g };
+                    currentAnswers._solution = `Favorables = ${chosen.fav}, Possibles = ${chosen.pos}, P = ${chosen.fav / g}/${chosen.pos / g}`;
+                    probEl.innerHTML = `Quina es la probabilitat de <strong>${chosen.q}</strong>?`;
+                    hint = chosen.hint;
+                    renderFractionInputs();
+                    break;
+                }
+                case 2: { // Boles
+                    const colors = ['vermelles', 'blaves', 'verdes', 'grogues', 'blanques', 'negres'];
+                    const c1 = colors[randInt(0, 2)];
+                    let c2 = colors[randInt(3, 5)];
+                    const n1 = randInt(2, 8);
+                    const n2 = randInt(2, 8);
+                    const total = n1 + n2;
+                    const askFirst = randInt(0, 1) === 0;
+                    const fav = askFirst ? n1 : n2;
+                    const colorAsked = askFirst ? c1 : c2;
+                    const g = gcd(fav, total);
+                    currentAnswers = { ans0: fav / g, ans1: total / g };
+                    currentAnswers._solution = `Favorables (${colorAsked}) = ${fav}, Total = ${total}, P = ${fav / g}/${total / g}`;
+                    probEl.innerHTML = `Una bossa te <strong>${n1} boles ${c1}</strong> i <strong>${n2} boles ${c2}</strong>. Quina es la probabilitat de treure una bola <strong>${colorAsked}</strong>?`;
+                    hint = `Total de boles = ${n1} + ${n2} = ${total}. Fraccio simplificada.`;
+                    renderFractionInputs();
+                    break;
+                }
+                case 3: { // Complementari
+                    const num = randInt(1, 5);
+                    const den = randInt(num + 1, 9);
+                    const g = gcd(num, den);
+                    const sNum = num / g;
+                    const sDen = den / g;
+                    const cNum = sDen - sNum;
+                    const g2 = gcd(cNum, sDen);
+                    currentAnswers = { ans0: cNum / g2, ans1: sDen / g2 };
+                    currentAnswers._solution = `P(A) = ${sNum}/${sDen}, P(A complementari) = 1 - ${sNum}/${sDen} = ${cNum / g2}/${sDen / g2}`;
+                    probEl.innerHTML = `Si P(A) = <strong>${sNum}/${sDen}</strong>, quant val <strong>P(A&#x0304;)</strong> (el complementari)?`;
+                    hint = 'P(A complementari) = 1 - P(A)';
+                    renderFractionInputs();
+                    break;
+                }
+            }
+            document.getElementById('hint').innerHTML = hint;
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            const el0 = document.getElementById('ans0');
+            const el1 = document.getElementById('ans1');
+            if (!el0 || !el1 || el0.value === '' || el1.value === '') return;
+
+            const userNum = parseInt(el0.value);
+            const userDen = parseInt(el1.value);
+            if (isNaN(userNum) || isNaN(userDen) || userDen === 0) return;
+
+            answered = true;
+            const fb = document.getElementById('feedback');
+
+            // Check if fractions are equivalent
+            const userVal = userNum / userDen;
+            const correctVal = currentAnswers.ans0 / currentAnswers.ans1;
+
+            if (Math.abs(userVal - correctVal) < 0.001) {
+                // Check if simplified
+                const g = gcd(Math.abs(userNum), Math.abs(userDen));
+                if (g === 1) {
+                    fb.className = 'feedback correct';
+                    fb.textContent = 'Correcte! Ben fet!';
+                } else {
+                    fb.className = 'feedback correct';
+                    fb.textContent = `Correcte! Pero recorda simplificar: ${userNum/g}/${userDen/g}`;
+                }
+                correctCount++;
+            } else {
+                fb.className = 'feedback incorrect';
+                fb.textContent = 'Incorrecte. ' + currentAnswers._solution;
+                incorrectCount++;
+            }
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('total').textContent = correctCount + incorrectCount;
+        }
+
+        function showSolution() {
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback solution';
+            fb.textContent = 'Solucio: ' + currentAnswers._solution;
+            if (!answered) {
+                answered = true;
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                document.getElementById('total').textContent = correctCount + incorrectCount;
+            }
+        }
+
+        newExercise();
+    </script>
+</body>
+</html>
