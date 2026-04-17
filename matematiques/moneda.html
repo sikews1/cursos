@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moneda i canvi - Matemàtiques</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+.math-nav{background:rgba(240,240,243,.85);backdrop-filter:blur(20px);padding:12px 20px;display:flex;justify-content:center;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border-subtle);position:sticky;top:0;z-index:200}
+.math-nav a{padding:8px 16px;border-radius:9999px;color:var(--text-secondary);text-decoration:none;font-size:.82rem;font-weight:500;background:0 0}
+.math-nav a:hover{color:var(--text-primary);background:var(--bg-hover)}
+.math-nav a.home{color:#059669;font-weight:600}
+.hero{text-align:center;padding:40px 24px;border-bottom:1px solid var(--border-subtle);background:var(--bg-base);position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 30% 0%,rgba(5,150,105,.06) 0%,transparent 60%);pointer-events:none}
+.hero h1{font-size:1.8rem;font-weight:800;letter-spacing:-.03em;position:relative}
+.hero h1 span{background:linear-gradient(135deg,#059669,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text-secondary);font-size:.9rem;position:relative}
+.container{max-width:800px;margin:0 auto;padding:24px 20px}
+.card{background:var(--bg-raised);border-radius:16px;padding:24px;margin-bottom:16px;border:1px solid var(--border-subtle);box-shadow:var(--shadow-sm)}
+.card h2{font-size:1.1rem;font-weight:700;margin-bottom:12px;color:var(--text-primary)}
+.problem-box{font-size:1rem;padding:18px;background:rgba(234,179,8,.06);border-left:4px solid #eab308;border-radius:8px;margin:12px 0;line-height:1.6}
+.answer-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.answer-row input{max-width:140px;padding:10px;border:1px solid var(--border-default);border-radius:8px;font-size:16px;background:var(--bg-base);color:var(--text-primary)}
+.answer-row input:focus{outline:2px solid #059669;border-color:transparent}
+.btn{padding:10px 18px;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500}
+.btn-check{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
+.btn-new{background:var(--bg-overlay);color:var(--text-primary);border:1px solid var(--border-default)}
+.btn-sol{background:var(--bg-overlay);color:var(--text-primary);border:1px solid var(--border-default)}
+.feedback{margin:12px 0;padding:12px;border-radius:8px;font-weight:500}
+.feedback.ok{background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.2)}
+.feedback.ko{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.2)}
+.feedback.info{background:rgba(59,130,246,.1);color:#2563eb;border:1px solid rgba(59,130,246,.2)}
+.stats{display:flex;gap:16px;font-size:14px;color:var(--text-secondary);margin-top:8px}
+.stats strong{color:var(--text-primary)}
+.step{padding:8px 12px;margin:4px 0;background:var(--bg-overlay);border-left:3px solid #059669;border-radius:4px}
+.coins{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.coin{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-weight:700;font-size:.75rem;border:2px solid}
+.coin-sm{width:36px;height:36px;background:rgba(234,179,8,.15);border-color:#eab308;color:#854d0e}
+.coin-lg{width:44px;height:44px;background:rgba(59,130,246,.1);border-color:#3b82f6;color:#1d4ed8}
+.bill{display:inline-flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:6px;font-weight:700;font-size:.8rem;background:rgba(34,197,94,.1);border:2px solid #22c55e;color:#166534}
+.remember-box{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.2);border-radius:8px;padding:12px 16px;margin:12px 0}
+.remember-box strong{color:#ca8a04}
+</style>
+</head>
+<body>
+<div class="math-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+</div>
+
+<div class="hero">
+    <h1><span>Moneda</span> i canvi</h1>
+    <p>Aprèn a calcular el canvi amb euros</p>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h2>Les monedes i bitllets d'euro</h2>
+        <p><strong>Monedes:</strong></p>
+        <div class="coins">
+            <span class="coin coin-sm">1c</span>
+            <span class="coin coin-sm">2c</span>
+            <span class="coin coin-sm">5c</span>
+            <span class="coin coin-sm">10c</span>
+            <span class="coin coin-sm">20c</span>
+            <span class="coin coin-sm">50c</span>
+            <span class="coin coin-lg">1€</span>
+            <span class="coin coin-lg">2€</span>
+        </div>
+        <p style="margin-top:12px"><strong>Bitllets:</strong></p>
+        <div class="coins">
+            <span class="bill">5€</span>
+            <span class="bill">10€</span>
+            <span class="bill">20€</span>
+            <span class="bill">50€</span>
+            <span class="bill" style="background:rgba(139,92,246,.1);border-color:#8b5cf6;color:#5b21b6">100€</span>
+        </div>
+        <div class="remember-box" style="margin-top:16px">
+            <strong>Com calcular el canvi:</strong><br>
+            Canvi = Diners que pagues − Preu total<br>
+            Exemple: Compres una llibreta de 3,50€ i pagues amb 5€ → Canvi = 5 − 3,50 = <strong>1,50€</strong>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Practica!</h2>
+        <div class="problem-box" id="prob-display">—</div>
+        <div class="answer-row">
+            <label>Canvi: </label>
+            <input type="text" id="answer" placeholder="€">
+            <button class="btn btn-check" id="btn-check">Comprovar</button>
+            <button class="btn btn-new" id="btn-new">Nou</button>
+            <button class="btn btn-sol" id="btn-sol">Solució</button>
+        </div>
+        <div id="feedback"></div>
+        <div class="stats">
+            <span>Encerts: <strong id="ok">0</strong></span>
+            <span>Errors: <strong id="ko">0</strong></span>
+        </div>
+    </div>
+</div>
+
+<script>
+let prob, ok=0, ko=0;
+const items = [
+    {nom:'pa',min:1,max:3},{nom:'llet',min:0.8,max:2},{nom:'llibreta',min:1.5,max:5},
+    {nom:'bolígraf',min:0.5,max:3},{nom:'xocolata',min:1,max:4},{nom:'suc',min:1,max:3},
+    {nom:'galetes',min:1.5,max:4},{nom:'sabó',min:1,max:3.5},{nom:'revista',min:2,max:6},
+    {nom:'pila',min:1,max:5},{nom:'aigua',min:0.5,max:2},{nom:'fruita',min:1,max:4}
+];
+const pays = [5,10,20,50];
+
+function r2(n){return Math.round(n*100)/100}
+function randItem(){const i=items[Math.floor(Math.random()*items.length)];return{nom:i.nom,preu:r2(i.min+Math.random()*(i.max-i.min))};}
+
+function gen(){
+    const n=Math.random()<0.5?1:(Math.random()<0.5?2:3);
+    const compra=[];
+    let total=0;
+    for(let i=0;i<n;i++){const it=randItem();compra.push(it);total+=it.preu;}
+    total=r2(total);
+    const validPays=pays.filter(p=>p>=total);
+    const paga=validPays[Math.floor(Math.random()*validPays.length)]||50;
+    const canvi=r2(paga-total);
+    let text='Compres: ';
+    text+=compra.map(c=>c.nom+' ('+c.preu.toFixed(2)+'€)').join(', ');
+    text+='. Total: <strong>'+total.toFixed(2)+'€</strong>. Pagues amb <strong>'+paga+'€</strong>. Quin canvi reps?';
+    return {text,canvi,total,paga,compra};
+}
+
+function show(){prob=gen();document.getElementById('prob-display').innerHTML=prob.text;document.getElementById('answer').value='';document.getElementById('feedback').innerHTML='';}
+
+function check(){
+    const v=parseFloat((document.getElementById('answer').value||'').replace(',','.'));
+    if(isNaN(v)){setFb('ko','Escriu un nombre vàlid.');return;}
+    if(Math.abs(v-prob.canvi)<0.01){ok++;document.getElementById('ok').textContent=ok;setFb('ok','✓ Correcte! Canvi: '+prob.canvi.toFixed(2)+'€');}
+    else{ko++;document.getElementById('ko').textContent=ko;setFb('ko','✗ Incorrecte.');}
+}
+
+function sol(){
+    setFb('info','<strong>Solució:</strong><div class="step">Total compra: '+prob.total.toFixed(2)+'€</div><div class="step">Pagues: '+prob.paga+'€</div><div class="step">Canvi = '+prob.paga+' − '+prob.total.toFixed(2)+' = <strong>'+prob.canvi.toFixed(2)+'€</strong></div>');
+}
+
+function setFb(cls,html){const el=document.getElementById('feedback');el.className='feedback '+cls;el.innerHTML=html;}
+
+document.getElementById('btn-check').onclick=check;
+document.getElementById('btn-new').onclick=show;
+document.getElementById('btn-sol').onclick=sol;
+document.getElementById('answer').addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+show();
+</script>
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>
