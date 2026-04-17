@@ -77,6 +77,27 @@
         .score-bar .correct-count { color: #059669; }
         .score-bar .incorrect-count { color: var(--red); }
         .score-bar .total-count { color: var(--text-secondary); }
+
+        /* Enhanced theory styles */
+        .visual-box { background: var(--bg-overlay); border: 2px solid rgba(5,150,105,0.15); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; text-align: center; }
+        .visual-box .step { font-size: 0.92rem; color: var(--text-secondary); margin: 6px 0; line-height: 1.8; }
+        .visual-box .step strong { color: #059669; }
+        .visual-box .result { font-size: 1.15rem; font-weight: 800; color: #059669; margin-top: 8px; }
+        .analogy { background: rgba(59,130,246,0.06); border-left: 3px solid #3b82f6; padding: 12px 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 12px 0; font-size: 0.88rem; color: var(--text-secondary); }
+        .analogy strong { color: #3b82f6; }
+        .remember-box { background: rgba(245,158,11,0.07); border: 2px solid rgba(245,158,11,0.25); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; }
+        .remember-box .title { font-weight: 800; color: #d97706; font-size: 0.92rem; margin-bottom: 8px; }
+        .remember-box p, .remember-box li { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; }
+        .remember-box li strong { color: #d97706; }
+        .mistake-box { background: rgba(239,68,68,0.06); border: 2px solid rgba(239,68,68,0.2); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; }
+        .mistake-box .title { font-weight: 800; color: #ef4444; font-size: 0.92rem; margin-bottom: 8px; }
+        .mistake-box p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; }
+        .subtopic-title { font-size: 1rem; font-weight: 700; color: #059669; margin: 18px 0 6px; padding-left: 2px; }
+        .real-life-box { background: rgba(139,92,246,0.06); border: 2px solid rgba(139,92,246,0.2); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; }
+        .real-life-box .title { font-weight: 800; color: #7c3aed; font-size: 0.92rem; margin-bottom: 8px; }
+        .real-life-box p, .real-life-box .step { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.8; margin: 4px 0; }
+        .real-life-box .step strong { color: #7c3aed; }
+        .trig-diagram { display: flex; justify-content: center; margin: 12px 0; }
     </style>
 </head>
 <body>
@@ -91,40 +112,268 @@
     </div>
 
     <div class="container">
+        <!-- TRIANGLE RECTANGLE -->
         <div class="theory-card">
-            <h3><span class="icon">1</span> Triangle rectangle</h3>
-            <p>Un <strong>triangle rectangle</strong> te un angle de 90 graus. Els costats que formen l'angle recte son els <strong>catets</strong> (a, b) i el costat oposat es la <strong>hipotenusa</strong> (c).</p>
+            <h3><span class="icon">1</span> Qu&egrave; &eacute;s un triangle rectangle?</h3>
+            <div class="analogy">
+                <strong>Mira al teu voltant:</strong> Una cantonada d'un full de paper, la cantonada d'una porta, una escala recolzada a una paret... tots formen triangles rectangles!
+            </div>
+            <p>Un <strong>triangle rectangle</strong> t&eacute; un angle de exactament <strong>90&deg;</strong> (angle recte, com una "L"). Les seves parts s&oacute;n:</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><strong style="color: #059669;">Catets (a, b):</strong> Els dos costats que formen l'angle recte (els costats de la "L").</li>
+                <li><strong style="color: #ef4444;">Hipotenusa (c):</strong> El costat m&eacute;s LLARG, el que est&agrave; enfront de l'angle recte. SEMPRE &eacute;s el m&eacute;s gran!</li>
+            </ul>
             <div class="triangle-visual">
-                <svg class="triangle-svg" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="10,150 190,150 10,10" fill="rgba(5,150,105,0.1)" stroke="#059669" stroke-width="2.5"/>
-                    <rect x="10" y="130" width="20" height="20" fill="none" stroke="#059669" stroke-width="1.5"/>
-                    <text x="100" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="#059669">a (catet)</text>
-                    <text x="-5" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#059669" transform="rotate(-90, -5, 85)">b (catet)</text>
-                    <text x="115" y="72" text-anchor="middle" font-size="14" font-weight="700" fill="#ef4444">c (hip.)</text>
+                <svg class="triangle-svg" viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" style="max-width: 260px;">
+                    <!-- Triangle fill -->
+                    <polygon points="20,180 240,180 20,20" fill="rgba(5,150,105,0.08)" stroke="#059669" stroke-width="2.5"/>
+                    <!-- Right angle square -->
+                    <rect x="20" y="155" width="25" height="25" fill="none" stroke="#059669" stroke-width="2"/>
+                    <!-- Labels -->
+                    <text x="130" y="198" text-anchor="middle" font-size="15" font-weight="800" fill="#059669">a (catet inferior)</text>
+                    <text x="12" y="105" text-anchor="middle" font-size="15" font-weight="800" fill="#059669" transform="rotate(-90, 12, 105)">b (catet lateral)</text>
+                    <text x="148" y="88" text-anchor="middle" font-size="16" font-weight="800" fill="#ef4444">c (hipotenusa)</text>
+                    <!-- Angle arc -->
+                    <path d="M 220,180 A 20,20 0 0,0 216,164" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                    <text x="206" y="170" font-size="13" font-weight="700" fill="#3b82f6">&alpha;</text>
+                    <!-- 90 degree label -->
+                    <text x="50" y="175" font-size="12" font-weight="600" fill="#059669">90&deg;</text>
                 </svg>
+            </div>
+            <div class="remember-box">
+                <div class="title">Recorda!</div>
+                <p>La hipotenusa SEMPRE &eacute;s el costat m&eacute;s llarg i SEMPRE est&agrave; davant de l'angle de 90&deg;. Mai et pots equivocar si busques el costat m&eacute;s gran!</p>
             </div>
         </div>
 
+        <!-- PITAGORES -->
         <div class="theory-card">
-            <h3><span class="icon">2</span> Teorema de Pitagores</h3>
-            <p>En un triangle rectangle, el quadrat de la hipotenusa es igual a la suma dels quadrats dels catets.</p>
+            <h3><span class="icon">2</span> Teorema de Pit&agrave;gores</h3>
+            <div class="analogy">
+                <strong>Imagina aix&ograve;:</strong> Si dibuixes un QUADRAT a cada costat del triangle, el quadrat gran (de la hipotenusa) t&eacute; la mateixa &agrave;rea que els dos quadrats petits (dels catets) junts!
+            </div>
             <div class="formula">c&sup2; = a&sup2; + b&sup2;</div>
-            <div class="example">Exemple: Si a = 3 i b = 4, llavors c = &radic;(9+16) = &radic;25 = 5</div>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem;">O tamb&eacute;: hipotenusa&sup2; = catet&sup2; + catet&sup2;</p>
+
+            <div class="visual-box">
+                <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" style="max-width: 340px; margin: 0 auto; display: block;">
+                    <!-- Triangle -->
+                    <polygon points="80,160 200,160 80,80" fill="rgba(5,150,105,0.1)" stroke="#059669" stroke-width="2"/>
+                    <!-- Square on a (bottom) -->
+                    <rect x="80" y="160" width="120" height="30" fill="rgba(5,150,105,0.15)" stroke="#059669" stroke-width="1.5" rx="2"/>
+                    <text x="140" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#059669">a&sup2; = 16</text>
+                    <!-- Square on b (left) -->
+                    <rect x="50" y="80" width="30" height="80" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="1.5" rx="2"/>
+                    <text x="65" y="124" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6">b&sup2;=9</text>
+                    <!-- Square on c (hypotenuse label) -->
+                    <rect x="210" y="60" width="50" height="50" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5" rx="2"/>
+                    <text x="235" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="#ef4444">c&sup2;=25</text>
+                    <!-- Labels on triangle -->
+                    <text x="140" y="155" text-anchor="middle" font-size="13" font-weight="700" fill="#059669">a = 4</text>
+                    <text x="72" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#3b82f6" transform="rotate(-90,72,124)">b = 3</text>
+                    <text x="150" y="112" text-anchor="middle" font-size="14" font-weight="800" fill="#ef4444">c = 5</text>
+                    <!-- Equation -->
+                    <text x="235" y="140" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">9 + 16 = 25</text>
+                </svg>
+            </div>
+
+            <div class="visual-box">
+                <div class="step"><strong>Exemple pas a pas:</strong> Catets a = 3 i b = 4. Troba la hipotenusa.</div>
+                <div class="step"><strong>Pas 1:</strong> c&sup2; = a&sup2; + b&sup2; = 3&sup2; + 4&sup2;</div>
+                <div class="step"><strong>Pas 2:</strong> c&sup2; = 9 + 16 = <strong>25</strong></div>
+                <div class="step"><strong>Pas 3:</strong> c = &radic;25 = <strong>5</strong></div>
+                <div class="result">Hipotenusa = 5</div>
+            </div>
+
+            <div class="remember-box">
+                <div class="title">Tamb&eacute; serveix per trobar un catet!</div>
+                <p>Si coneixes la hipotenusa (c=13) i un catet (a=5):</p>
+                <p>b&sup2; = c&sup2; &minus; a&sup2; = 169 &minus; 25 = 144 &rarr; b = &radic;144 = <strong>12</strong></p>
+            </div>
+
+            <div class="mistake-box">
+                <div class="title">Error com&uacute;</div>
+                <p>NO sumis els costats directament! c &ne; a + b. Has de sumar els QUADRATS i despr&eacute;s fer l'arrel quadrada.</p>
+                <p>Incorrecte: 3 + 4 = 7 | Correcte: &radic;(9+16) = &radic;25 = 5</p>
+            </div>
         </div>
 
+        <!-- FUNCIONS TRIGONOMETRIQUES -->
         <div class="theory-card">
-            <h3><span class="icon">3</span> Funcions trigonometriques</h3>
-            <p>Per un angle &alpha; d'un triangle rectangle:</p>
-            <div class="formula">sin(&alpha;) = catet oposat / hipotenusa</div>
-            <div class="formula">cos(&alpha;) = catet adjacent / hipotenusa</div>
-            <div class="formula">tan(&alpha;) = catet oposat / catet adjacent</div>
+            <h3><span class="icon">3</span> Funcions trigonom&egrave;triques: SOH-CAH-TOA</h3>
+            <div class="analogy">
+                <strong>Truc m&agrave;gic &mdash; SOH-CAH-TOA:</strong> Aquesta paraula m&agrave;gica t'ajuda a recordar les tres funcions. Repeteix-la fins que la recordis: <strong style="color: #059669; font-size: 1.1em;">SOH - CAH - TOA</strong>
+            </div>
+
+            <div class="remember-box">
+                <div class="title">Qu&egrave; vol dir SOH-CAH-TOA?</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li><strong>S</strong>OH &rarr; <strong>S</strong>inus = <strong>O</strong>posat / <strong>H</strong>ipotenusa</li>
+                    <li style="margin-top: 6px;"><strong>C</strong>AH &rarr; <strong>C</strong>osinus = <strong>A</strong>djacent / <strong>H</strong>ipotenusa</li>
+                    <li style="margin-top: 6px;"><strong>T</strong>OA &rarr; <strong>T</strong>angent = <strong>O</strong>posat / <strong>A</strong>djacent</li>
+                </ul>
+            </div>
+
+            <!-- SINUS diagram -->
+            <div class="subtopic-title">Sinus (sin) &mdash; SOH</div>
+            <div class="visual-box">
+                <div class="trig-diagram">
+                    <svg viewBox="0 0 240 170" xmlns="http://www.w3.org/2000/svg" style="max-width: 220px;">
+                        <polygon points="20,150 200,150 20,30" fill="rgba(5,150,105,0.06)" stroke="#ccc" stroke-width="1.5"/>
+                        <!-- Highlight oposat (left side) -->
+                        <line x1="20" y1="30" x2="20" y2="150" stroke="#ef4444" stroke-width="4"/>
+                        <!-- Highlight hipotenusa -->
+                        <line x1="20" y1="30" x2="200" y2="150" stroke="#3b82f6" stroke-width="4"/>
+                        <!-- Angle arc -->
+                        <path d="M 180,150 A 20,20 0 0,0 185,137" fill="none" stroke="#059669" stroke-width="2"/>
+                        <text x="172" y="142" font-size="14" font-weight="700" fill="#059669">&alpha;</text>
+                        <!-- Labels -->
+                        <text x="8" y="95" text-anchor="middle" font-size="13" font-weight="800" fill="#ef4444" transform="rotate(-90,8,95)">OPOSAT</text>
+                        <text x="120" y="80" text-anchor="middle" font-size="13" font-weight="800" fill="#3b82f6">HIPOTENUSA</text>
+                        <text x="110" y="167" text-anchor="middle" font-size="12" fill="#999">adjacent</text>
+                    </svg>
+                </div>
+                <div class="formula" style="border-color: #ef4444; background: rgba(239,68,68,0.04);">sin(&alpha;) = Catet oposat &divide; Hipotenusa</div>
+            </div>
+
+            <!-- COSINUS diagram -->
+            <div class="subtopic-title">Cosinus (cos) &mdash; CAH</div>
+            <div class="visual-box">
+                <div class="trig-diagram">
+                    <svg viewBox="0 0 240 170" xmlns="http://www.w3.org/2000/svg" style="max-width: 220px;">
+                        <polygon points="20,150 200,150 20,30" fill="rgba(5,150,105,0.06)" stroke="#ccc" stroke-width="1.5"/>
+                        <!-- Highlight adjacent (bottom) -->
+                        <line x1="20" y1="150" x2="200" y2="150" stroke="#059669" stroke-width="4"/>
+                        <!-- Highlight hipotenusa -->
+                        <line x1="20" y1="30" x2="200" y2="150" stroke="#3b82f6" stroke-width="4"/>
+                        <!-- Angle arc -->
+                        <path d="M 180,150 A 20,20 0 0,0 185,137" fill="none" stroke="#059669" stroke-width="2"/>
+                        <text x="172" y="142" font-size="14" font-weight="700" fill="#059669">&alpha;</text>
+                        <!-- Labels -->
+                        <text x="8" y="95" text-anchor="middle" font-size="12" fill="#999" transform="rotate(-90,8,95)">oposat</text>
+                        <text x="120" y="80" text-anchor="middle" font-size="13" font-weight="800" fill="#3b82f6">HIPOTENUSA</text>
+                        <text x="110" y="167" text-anchor="middle" font-size="13" font-weight="800" fill="#059669">ADJACENT</text>
+                    </svg>
+                </div>
+                <div class="formula" style="border-color: #059669; background: rgba(5,150,105,0.04);">cos(&alpha;) = Catet adjacent &divide; Hipotenusa</div>
+            </div>
+
+            <!-- TANGENT diagram -->
+            <div class="subtopic-title">Tangent (tan) &mdash; TOA</div>
+            <div class="visual-box">
+                <div class="trig-diagram">
+                    <svg viewBox="0 0 240 170" xmlns="http://www.w3.org/2000/svg" style="max-width: 220px;">
+                        <polygon points="20,150 200,150 20,30" fill="rgba(5,150,105,0.06)" stroke="#ccc" stroke-width="1.5"/>
+                        <!-- Highlight oposat (left side) -->
+                        <line x1="20" y1="30" x2="20" y2="150" stroke="#ef4444" stroke-width="4"/>
+                        <!-- Highlight adjacent (bottom) -->
+                        <line x1="20" y1="150" x2="200" y2="150" stroke="#059669" stroke-width="4"/>
+                        <!-- Angle arc -->
+                        <path d="M 180,150 A 20,20 0 0,0 185,137" fill="none" stroke="#059669" stroke-width="2"/>
+                        <text x="172" y="142" font-size="14" font-weight="700" fill="#059669">&alpha;</text>
+                        <!-- Labels -->
+                        <text x="8" y="95" text-anchor="middle" font-size="13" font-weight="800" fill="#ef4444" transform="rotate(-90,8,95)">OPOSAT</text>
+                        <text x="120" y="80" text-anchor="middle" font-size="12" fill="#999">hipotenusa</text>
+                        <text x="110" y="167" text-anchor="middle" font-size="13" font-weight="800" fill="#059669">ADJACENT</text>
+                    </svg>
+                </div>
+                <div class="formula" style="border-color: #d97706; background: rgba(245,158,11,0.04);">tan(&alpha;) = Catet oposat &divide; Catet adjacent</div>
+            </div>
+        </div>
+
+        <!-- TAULA ANGLES ESPECIALS -->
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Angles especials: 30&deg;, 45&deg;, 60&deg;</h3>
+            <p>Aquests tres angles apareixen constantment. Val la pena aprendre els seus valors de mem&ograve;ria:</p>
 
             <table class="trig-table">
-                <tr><th>Angle</th><th>sin</th><th>cos</th><th>tan</th></tr>
-                <tr><td>30&deg;</td><td>0.500</td><td>0.866</td><td>0.577</td></tr>
-                <tr><td>45&deg;</td><td>0.707</td><td>0.707</td><td>1.000</td></tr>
-                <tr><td>60&deg;</td><td>0.866</td><td>0.500</td><td>1.732</td></tr>
+                <tr><th>Angle</th><th>sin</th><th>cos</th><th>tan</th><th>Descripci&oacute;</th></tr>
+                <tr>
+                    <td><strong>30&deg;</strong></td><td>0,500</td><td>0,866</td><td>0,577</td>
+                    <td style="font-size: 0.8rem; text-align: left;">Triangle meitat d'equil&agrave;ter</td>
+                </tr>
+                <tr>
+                    <td><strong>45&deg;</strong></td><td>0,707</td><td>0,707</td><td>1,000</td>
+                    <td style="font-size: 0.8rem; text-align: left;">Triangle is&ograve;sceles: catets iguals!</td>
+                </tr>
+                <tr>
+                    <td><strong>60&deg;</strong></td><td>0,866</td><td>0,500</td><td>1,732</td>
+                    <td style="font-size: 0.8rem; text-align: left;">Triangle meitat d'equil&agrave;ter (l'altre angle)</td>
+                </tr>
             </table>
+
+            <div class="remember-box">
+                <div class="title">Trucs per recordar la taula:</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li><strong>sin(30&deg;) = 0,5</strong> &rarr; La meitat! F&agrave;cil de recordar.</li>
+                    <li><strong>sin i cos de 45&deg;</strong> &rarr; S&oacute;n iguals! (0,707)</li>
+                    <li><strong>tan(45&deg;) = 1</strong> &rarr; Oposat i adjacent s&oacute;n iguals, i dividir algo entre si mateix d&oacute;na 1.</li>
+                    <li><strong>sin(30&deg;) = cos(60&deg;)</strong> &rarr; S&oacute;n "complementaris" (sumen 90&deg;). Sempre funciona: sin(x) = cos(90&deg;&minus;x)</li>
+                </ul>
+            </div>
+
+            <div class="visual-box">
+                <div class="trig-diagram" style="gap: 30px; flex-wrap: wrap;">
+                    <!-- 30-60-90 triangle -->
+                    <svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg" style="max-width: 150px;">
+                        <polygon points="10,130 130,130 10,30" fill="rgba(5,150,105,0.08)" stroke="#059669" stroke-width="2"/>
+                        <rect x="10" y="110" width="18" height="18" fill="none" stroke="#059669" stroke-width="1.5"/>
+                        <text x="70" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="#059669">&radic;3</text>
+                        <text x="4" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#3b82f6" transform="rotate(-90,4,85)">1</text>
+                        <text x="82" y="72" text-anchor="middle" font-size="11" font-weight="700" fill="#ef4444">2</text>
+                        <text x="55" y="125" font-size="10" font-weight="600" fill="#d97706">30&deg;</text>
+                        <text x="20" y="42" font-size="10" font-weight="600" fill="#d97706">60&deg;</text>
+                    </svg>
+                    <!-- 45-45-90 triangle -->
+                    <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" style="max-width: 130px;">
+                        <polygon points="10,130 130,130 10,10" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="2"/>
+                        <rect x="10" y="110" width="18" height="18" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+                        <text x="70" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="#059669">1</text>
+                        <text x="4" y="75" text-anchor="middle" font-size="11" font-weight="700" fill="#059669" transform="rotate(-90,4,75)">1</text>
+                        <text x="82" y="62" text-anchor="middle" font-size="11" font-weight="700" fill="#ef4444">&radic;2</text>
+                        <text x="55" y="125" font-size="10" font-weight="600" fill="#d97706">45&deg;</text>
+                        <text x="20" y="28" font-size="10" font-weight="600" fill="#d97706">45&deg;</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXEMPLE VIDA REAL -->
+        <div class="theory-card">
+            <h3><span class="icon">5</span> Exemple de la vida real</h3>
+            <div class="real-life-box">
+                <div class="title">Quina al&ccedil;ada t&eacute; un arbre si l'ombra fa 5 m i l'angle del sol &eacute;s 60&deg;?</div>
+                <div class="trig-diagram">
+                    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" style="max-width: 270px;">
+                        <!-- Ground -->
+                        <line x1="20" y1="170" x2="260" y2="170" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+                        <!-- Tree (oposat) -->
+                        <line x1="40" y1="170" x2="40" y2="30" stroke="#059669" stroke-width="4"/>
+                        <text x="28" y="105" text-anchor="middle" font-size="13" font-weight="800" fill="#059669" transform="rotate(-90,28,105)">al&ccedil;ada = ?</text>
+                        <!-- Shadow (adjacent) -->
+                        <line x1="40" y1="170" x2="200" y2="170" stroke="#d97706" stroke-width="3"/>
+                        <text x="120" y="188" text-anchor="middle" font-size="13" font-weight="700" fill="#d97706">ombra = 5 m</text>
+                        <!-- Sun ray (hypotenusa) -->
+                        <line x1="40" y1="30" x2="200" y2="170" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,3"/>
+                        <!-- Angle -->
+                        <path d="M 175,170 A 25,25 0 0,0 183,152" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                        <text x="195" y="162" font-size="14" font-weight="700" fill="#3b82f6">60&deg;</text>
+                        <!-- Tree top -->
+                        <circle cx="40" cy="25" r="12" fill="rgba(5,150,105,0.2)" stroke="#059669" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="step"><strong>Pas 1:</strong> Identifica: catet oposat = al&ccedil;ada (?), catet adjacent = ombra (5m), angle = 60&deg;</div>
+                <div class="step"><strong>Pas 2:</strong> Necessitem oposat i adjacent &rarr; usem <strong>tangent</strong> (TOA!)</div>
+                <div class="step"><strong>Pas 3:</strong> tan(60&deg;) = oposat / adjacent &rarr; 1,732 = al&ccedil;ada / 5</div>
+                <div class="step"><strong>Pas 4:</strong> al&ccedil;ada = 5 &times; 1,732 = <strong>8,66 metres</strong></div>
+            </div>
+
+            <div class="mistake-box">
+                <div class="title">Errors comuns en trigonometria</div>
+                <p>1. Confondre "oposat" i "adjacent" &rarr; Dep&egrave;n de QUIN angle mires! L'oposat &eacute;s el costat que est&agrave; ENFRONT de l'angle.</p>
+                <p>2. Oblidar que la calculadora ha d'estar en GRAUS (no radians).</p>
+                <p>3. Usar Pit&agrave;gores quan necessites trigonometria (i al rev&eacute;s). Pit&agrave;gores: quan tens 2 costats. Trigo: quan tens 1 costat + 1 angle.</p>
+            </div>
         </div>
 
         <div class="practice-section">

@@ -81,6 +81,32 @@
         .score-bar .correct-count { color: #059669; }
         .score-bar .incorrect-count { color: var(--red); }
         .score-bar .total-count { color: var(--text-secondary); }
+
+        /* Enhanced theory styles */
+        .visual-box { background: var(--bg-overlay); border: 2px solid rgba(5,150,105,0.15); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; text-align: center; }
+        .visual-box .step { font-size: 0.92rem; color: var(--text-secondary); margin: 6px 0; line-height: 1.8; }
+        .visual-box .step strong { color: #059669; }
+        .visual-box .numbers { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .visual-box .num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-sm); background: rgba(5,150,105,0.1); border: 2px solid rgba(5,150,105,0.25); font-weight: 800; font-size: 1.05rem; color: #059669; }
+        .visual-box .num.highlight { background: #059669; color: #fff; border-color: #059669; transform: scale(1.15); }
+        .visual-box .num.dim { opacity: 0.45; }
+        .visual-box .arrow { font-size: 1.3rem; color: #059669; margin: 0 4px; display: inline-flex; align-items: center; }
+        .visual-box .result { font-size: 1.15rem; font-weight: 800; color: #059669; margin-top: 8px; }
+        .analogy { background: rgba(59,130,246,0.06); border-left: 3px solid #3b82f6; padding: 12px 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 12px 0; font-size: 0.88rem; color: var(--text-secondary); }
+        .analogy strong { color: #3b82f6; }
+        .remember-box { background: rgba(245,158,11,0.07); border: 2px solid rgba(245,158,11,0.25); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; }
+        .remember-box .title { font-weight: 800; color: #d97706; font-size: 0.92rem; margin-bottom: 8px; }
+        .remember-box p, .remember-box li { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; }
+        .remember-box li strong { color: #d97706; }
+        .mistake-box { background: rgba(239,68,68,0.06); border: 2px solid rgba(239,68,68,0.2); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; }
+        .mistake-box .title { font-weight: 800; color: #ef4444; font-size: 0.92rem; margin-bottom: 8px; }
+        .mistake-box p, .mistake-box li { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; }
+        .freq-dots { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 10px 0; }
+        .freq-col { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+        .freq-col .dot { width: 14px; height: 14px; border-radius: 50%; background: #10b981; }
+        .freq-col .dot.winner { background: #059669; box-shadow: 0 0 6px rgba(5,150,105,0.5); }
+        .freq-col .val { font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-top: 4px; }
+        .subtopic-title { font-size: 1rem; font-weight: 700; color: #059669; margin: 18px 0 6px; padding-left: 2px; }
     </style>
 </head>
 <body>
@@ -97,27 +123,177 @@
     <div class="container">
         <div class="theory-card">
             <h3><span class="icon">1</span> Conceptes basics</h3>
-            <p><strong>Poblacio:</strong> Conjunt total d'elements que volem estudiar.</p>
-            <p><strong>Mostra:</strong> Subconjunt representatiu de la poblacio.</p>
-            <p><strong>Variable:</strong> Caracteristica que mesurem (quantitativa o qualitativa).</p>
-            <p><strong>Frequencia absoluta:</strong> Nombre de vegades que apareix un valor.</p>
-            <p><strong>Frequencia relativa:</strong> Frequencia absoluta dividida pel total.</p>
+            <p><strong>Poblacio:</strong> Conjunt total d'elements que volem estudiar. Per exemple, tots els alumnes d'un institut.</p>
+            <p><strong>Mostra:</strong> Un grup petit que representa el total. Per exemple, 30 alumnes escollits a l'atzar.</p>
+            <p><strong>Variable:</strong> El que mesurem &mdash; pot ser un nombre (quantitativa: altures, notes) o una categoria (qualitativa: color d'ulls).</p>
+            <p><strong>Frequ&egrave;ncia absoluta:</strong> Quantes vegades apareix un valor. Si al llarg del dia menges 3 pomes, la frequ&egrave;ncia absoluta de "poma" &eacute;s 3.</p>
+            <p><strong>Frequ&egrave;ncia relativa:</strong> Frequ&egrave;ncia absoluta dividida pel total (un percentatge del total).</p>
         </div>
 
+        <!-- MITJANA -->
         <div class="theory-card">
-            <h3><span class="icon">2</span> Mesures de tendencia central</h3>
-            <p><strong>Mitjana aritmetica:</strong> Suma de tots els valors dividida pel nombre total.</p>
-            <div class="formula">Mitjana = (x1 + x2 + ... + xn) / n</div>
-            <p><strong>Mediana:</strong> Valor central quan les dades estan ordenades. Si n es parell, es la mitjana dels dos valors centrals.</p>
-            <p><strong>Moda:</strong> Valor que mes es repeteix.</p>
-            <div class="example">Exemple: Dades = {2, 3, 3, 5, 7} &rarr; Mitjana = 4, Mediana = 3, Moda = 3</div>
+            <h3><span class="icon">2</span> Mitjana aritm&egrave;tica (Media)</h3>
+            <div class="analogy">
+                <strong>Imagina aix&ograve;:</strong> 5 amics tenen: 2, 4, 6, 8 i 10 caramels. Si els repartissin IGUAL entre tots, quants en tindria cadascun? Aix&ograve; &eacute;s la mitjana!
+            </div>
+            <div class="formula">Mitjana = Suma de tots els valors &divide; Quants valors hi ha</div>
+
+            <div class="visual-box">
+                <div class="step"><strong>Pas 1:</strong> Agafa tots els n&uacute;meros</div>
+                <div class="numbers">
+                    <span class="num">2</span>
+                    <span class="num">4</span>
+                    <span class="num">6</span>
+                    <span class="num">8</span>
+                    <span class="num">10</span>
+                </div>
+                <div class="step"><strong>Pas 2:</strong> Suma'ls tots &rarr; 2 + 4 + 6 + 8 + 10 = <strong>30</strong></div>
+                <div class="step"><strong>Pas 3:</strong> Divideix pel total de valors &rarr; 30 &divide; 5 = <strong>6</strong></div>
+                <div class="result">Mitjana = 6</div>
+            </div>
+
+            <div class="example">
+                Altre exemple: Notes d'un examen: 7, 5, 8, 6, 9 &rarr; Suma = 35 &rarr; 35 &divide; 5 = <strong>Mitjana = 7</strong>
+            </div>
+
+            <div class="mistake-box">
+                <div class="title">Error com&uacute;</div>
+                <p>No oblidis dividir pel nombre TOTAL de valors, no nom&eacute;s pels que et semblin importants. Si hi ha un zero, tamb&eacute; compta!</p>
+                <p>Exemple: 0, 10, 10, 10, 10 &rarr; Suma = 40 &rarr; 40 &divide; <strong>5</strong> (no 4!) = 8</p>
+            </div>
         </div>
 
+        <!-- MEDIANA -->
         <div class="theory-card">
-            <h3><span class="icon">3</span> Mesures de dispersio</h3>
-            <p><strong>Rang:</strong> Diferencia entre el valor maxim i el minim.</p>
-            <div class="formula">Rang = Valor maxim &minus; Valor minim</div>
-            <div class="example">Exemple: Dades = {2, 3, 3, 5, 7} &rarr; Rang = 7 &minus; 2 = 5</div>
+            <h3><span class="icon">3</span> Mediana</h3>
+            <div class="analogy">
+                <strong>Pensa aix&iacute;:</strong> Ordena tots els n&uacute;meros de petit a gran i agafa el del MIG. Com quan fas una fila per al&ccedil;ada i la persona del mig &eacute;s la mediana!
+            </div>
+            <div class="formula">Mediana = El valor central de les dades ORDENADES</div>
+
+            <div class="subtopic-title">Cas 1: Quantitat SENAR de dades (f&agrave;cil!)</div>
+            <div class="visual-box">
+                <div class="step"><strong>Dades:</strong> 9, 3, 7, 5, 11 &rarr; <strong>Ordenem:</strong></div>
+                <div class="numbers">
+                    <span class="num dim">3</span>
+                    <span class="num dim">5</span>
+                    <span class="num highlight">7</span>
+                    <span class="num dim">9</span>
+                    <span class="num dim">11</span>
+                </div>
+                <div class="step">&uarr; El del MIG!</div>
+                <div class="result">Mediana = 7</div>
+            </div>
+
+            <div class="subtopic-title">Cas 2: Quantitat PARELL de dades</div>
+            <div class="visual-box">
+                <div class="step"><strong>Dades:</strong> 8, 2, 6, 4 &rarr; <strong>Ordenem:</strong></div>
+                <div class="numbers">
+                    <span class="num dim">2</span>
+                    <span class="num highlight">4</span>
+                    <span class="num highlight">6</span>
+                    <span class="num dim">8</span>
+                </div>
+                <div class="step">No hi ha un &uacute;nic valor central! Agafa els dos del mig i fes la seva mitjana:</div>
+                <div class="step">(4 + 6) &divide; 2 = <strong>5</strong></div>
+                <div class="result">Mediana = 5</div>
+            </div>
+
+            <div class="mistake-box">
+                <div class="title">Error com&uacute;</div>
+                <p>SEMPRE has d'ORDENAR les dades primer! Si no les ordenes, trobar&agrave;s un valor incorrecte.</p>
+                <p>Dades: 9, 1, 5 &rarr; Sense ordenar agafaries el 1 (incorrecte!). Ordenat: 1, 5, 9 &rarr; Mediana = 5</p>
+            </div>
+        </div>
+
+        <!-- MODA -->
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Moda</h3>
+            <div class="analogy">
+                <strong>Pensa en la MODA de roba:</strong> La moda &eacute;s el que M&Eacute;S porta la gent, el m&eacute;s popular. En estad&iacute;stica, la moda &eacute;s el n&uacute;mero que M&Eacute;S ES REPETEIX!
+            </div>
+            <div class="formula">Moda = El valor que apareix M&Eacute;S vegades</div>
+
+            <div class="subtopic-title">Exemple amb moda</div>
+            <div class="visual-box">
+                <div class="step"><strong>Dades:</strong> 2, 3, 3, 5, 7</div>
+                <div class="step">Comptem quantes vegades apareix cada n&uacute;mero:</div>
+                <div class="freq-dots">
+                    <div class="freq-col"><div class="dot"></div><div class="val">2 (x1)</div></div>
+                    <div class="freq-col"><div class="dot winner"></div><div class="dot winner"></div><div class="val">3 (x2)</div></div>
+                    <div class="freq-col"><div class="dot"></div><div class="val">5 (x1)</div></div>
+                    <div class="freq-col"><div class="dot"></div><div class="val">7 (x1)</div></div>
+                </div>
+                <div class="result">Moda = 3 (apareix 2 vegades, m&eacute;s que cap altre!)</div>
+            </div>
+
+            <div class="subtopic-title">Exemple SENSE moda</div>
+            <div class="visual-box">
+                <div class="step"><strong>Dades:</strong> 1, 2, 3, 4, 5</div>
+                <div class="freq-dots">
+                    <div class="freq-col"><div class="dot"></div><div class="val">1 (x1)</div></div>
+                    <div class="freq-col"><div class="dot"></div><div class="val">2 (x1)</div></div>
+                    <div class="freq-col"><div class="dot"></div><div class="val">3 (x1)</div></div>
+                    <div class="freq-col"><div class="dot"></div><div class="val">4 (x1)</div></div>
+                    <div class="freq-col"><div class="dot"></div><div class="val">5 (x1)</div></div>
+                </div>
+                <div class="step">Tots apareixen el mateix nombre de vegades &rarr; <strong>NO hi ha moda!</strong></div>
+            </div>
+
+            <div class="mistake-box">
+                <div class="title">Error com&uacute;</div>
+                <p>La moda NO &eacute;s el n&uacute;mero m&eacute;s gran! &Eacute;s el que M&Eacute;S ES REPETEIX.</p>
+                <p>Dades: 1, 1, 1, 100 &rarr; Moda = 1 (no 100!)</p>
+            </div>
+        </div>
+
+        <!-- RANG -->
+        <div class="theory-card">
+            <h3><span class="icon">5</span> Rang (Mesura de dispersi&oacute;)</h3>
+            <div class="analogy">
+                <strong>Imagina un term&ograve;metre:</strong> El rang &eacute;s la dist&agrave;ncia entre la temperatura m&eacute;s freda i la m&eacute;s calenta del dia. Et diu com de "escampades" estan les dades.
+            </div>
+            <div class="formula">Rang = Valor M&Eacute;S GRAN &minus; Valor M&Eacute;S PETIT</div>
+
+            <div class="visual-box">
+                <div class="step"><strong>Dades:</strong> 2, 5, 8, 12</div>
+                <div class="numbers">
+                    <span class="num highlight">2</span>
+                    <span class="num dim">5</span>
+                    <span class="num dim">8</span>
+                    <span class="num highlight">12</span>
+                </div>
+                <div class="step">El m&eacute;s petit = <strong>2</strong> | El m&eacute;s gran = <strong>12</strong></div>
+                <div class="step">Rang = 12 &minus; 2 = <strong>10</strong></div>
+                <div class="result">Rang = 10</div>
+            </div>
+
+            <div class="example">
+                Altre exemple: Edats d'un grup: 14, 15, 15, 16, 18 &rarr; Rang = 18 &minus; 14 = <strong>4 anys</strong>
+            </div>
+        </div>
+
+        <!-- TRUC PER RECORDAR -->
+        <div class="theory-card">
+            <h3><span class="icon">&#9733;</span> Truc per recordar</h3>
+            <div class="remember-box">
+                <div class="title">Com recordar cada concepte:</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li><strong>MITJANA = repartir igual</strong> &rarr; MITJANA ve de MITJA (meitat). Imagina que reparteixes tot a parts iguals.</li>
+                    <li style="margin-top: 8px;"><strong>MEDIANA = el del MIG</strong> &rarr; MEDIANA ve de MEDI (mig). Ordena i agafa el central.</li>
+                    <li style="margin-top: 8px;"><strong>MODA = el m&eacute;s de MODA</strong> &rarr; Com la roba de moda: el que m&eacute;s porta tothom, el m&eacute;s repetit!</li>
+                    <li style="margin-top: 8px;"><strong>RANG = dist&agrave;ncia total</strong> &rarr; Del m&eacute;s petit al m&eacute;s gran. Com el rang d'un coet: fins on arriba.</li>
+                </ul>
+            </div>
+            <div class="remember-box" style="border-color: rgba(5,150,105,0.3); background: rgba(5,150,105,0.05);">
+                <div class="title" style="color: #059669;">Resum r&agrave;pid amb les dades: 2, 3, 3, 5, 7</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li><strong style="color: #059669;">Mitjana</strong> = (2+3+3+5+7) &divide; 5 = 20 &divide; 5 = <strong>4</strong></li>
+                    <li><strong style="color: #059669;">Mediana</strong> = Ordenat: 2, 3, <u>3</u>, 5, 7 &rarr; <strong>3</strong> (el del mig)</li>
+                    <li><strong style="color: #059669;">Moda</strong> = <strong>3</strong> (apareix 2 cops)</li>
+                    <li><strong style="color: #059669;">Rang</strong> = 7 &minus; 2 = <strong>5</strong></li>
+                </ul>
+            </div>
         </div>
 
         <div class="practice-section">

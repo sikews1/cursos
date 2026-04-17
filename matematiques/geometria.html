@@ -105,6 +105,28 @@
         .score-bar .correct-count { color: #059669; }
         .score-bar .incorrect-count { color: var(--red); }
         .score-bar .total-count { color: var(--text-secondary); }
+
+        /* Enhanced theory styles */
+        .shape-with-formula { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: center; margin: 14px 0; padding: 16px; background: var(--bg-overlay); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
+        .shape-with-formula .shape-draw { flex-shrink: 0; }
+        .shape-with-formula .formula-side { text-align: left; flex: 1; min-width: 200px; }
+        .shape-with-formula .formula-side .formula { text-align: left; margin: 6px 0; font-size: 0.92rem; }
+        .shape-with-formula .formula-side .worked { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; margin: 8px 0 0; }
+        .shape-with-formula .formula-side .worked strong { color: #059669; }
+        .visual-box { background: var(--bg-overlay); border: 2px solid rgba(5,150,105,0.15); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; text-align: center; }
+        .visual-box .step { font-size: 0.92rem; color: var(--text-secondary); margin: 6px 0; line-height: 1.8; }
+        .visual-box .step strong { color: #059669; }
+        .visual-box .result { font-size: 1.15rem; font-weight: 800; color: #059669; margin-top: 8px; }
+        .analogy { background: rgba(59,130,246,0.06); border-left: 3px solid #3b82f6; padding: 12px 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 12px 0; font-size: 0.88rem; color: var(--text-secondary); }
+        .analogy strong { color: #3b82f6; }
+        .remember-box { background: rgba(245,158,11,0.07); border: 2px solid rgba(245,158,11,0.25); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; }
+        .remember-box .title { font-weight: 800; color: #d97706; font-size: 0.92rem; margin-bottom: 8px; }
+        .remember-box p, .remember-box li { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; }
+        .remember-box li strong { color: #d97706; }
+        .mistake-box { background: rgba(239,68,68,0.06); border: 2px solid rgba(239,68,68,0.2); border-radius: var(--radius-md); padding: 16px 20px; margin: 14px 0; }
+        .mistake-box .title { font-weight: 800; color: #ef4444; font-size: 0.92rem; margin-bottom: 8px; }
+        .mistake-box p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; }
+        .subtopic-title { font-size: 1rem; font-weight: 700; color: #059669; margin: 18px 0 6px; padding-left: 2px; }
     </style>
 </head>
 <body>
@@ -119,25 +141,196 @@
     </div>
 
     <div class="container">
+        <!-- QUE ES PI? -->
         <div class="theory-card">
-            <h3><span class="icon">1</span> Arees i perimetres (2D)</h3>
-            <div class="formulas-grid">
-                <div class="formula-item"><strong>Quadrat (costat a)</strong><code>Area = a&sup2; | Perimetre = 4a</code></div>
-                <div class="formula-item"><strong>Rectangle (a &times; b)</strong><code>Area = a&times;b | Perimetre = 2(a+b)</code></div>
-                <div class="formula-item"><strong>Triangle (base b, altura h)</strong><code>Area = (b&times;h)/2 | Perimetre = a+b+c</code></div>
-                <div class="formula-item"><strong>Cercle (radi r)</strong><code>Area = &pi;r&sup2; | Perimetre = 2&pi;r</code></div>
+            <h3><span class="icon">&pi;</span> Qu&egrave; &eacute;s Pi (&pi;)?</h3>
+            <div class="analogy">
+                <strong>Imagina aix&ograve;:</strong> Agafa una roda de bicicleta. Mesura el di&agrave;metre (d'un costat a l'altre passant pel centre). Ara mesura tot el voltant (la circumfer&egrave;ncia). La circumfer&egrave;ncia &eacute;s <strong>3,14 vegades</strong> el di&agrave;metre. Sempre! Aquesta proporcionalitat m&agrave;gica &eacute;s <strong>Pi</strong>.
             </div>
-            <div class="example">Exemple: Rectangle 5&times;3 &rarr; Area = 15, Perimetre = 16</div>
+            <div class="formula">&pi; &asymp; 3,14159... &asymp; 3,14</div>
+            <p style="text-align: center; font-size: 0.88rem; color: var(--text-secondary);">Pi &eacute;s quantes vegades cap el di&agrave;metre dins el per&iacute;metre del cercle. Funciona amb qualsevol cercle de qualsevol mida!</p>
         </div>
 
+        <!-- AREES I PERIMETRES 2D -->
+        <div class="theory-card">
+            <h3><span class="icon">1</span> &Agrave;rees i per&iacute;metres (2D)</h3>
+
+            <div class="subtopic-title">Quadrat</div>
+            <div class="shape-with-formula">
+                <div class="shape-draw">
+                    <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" style="width: 100px; height: 100px;">
+                        <rect x="5" y="5" width="100" height="100" fill="rgba(5,150,105,0.1)" stroke="#059669" stroke-width="3" rx="2"/>
+                        <text x="55" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#059669">a = 6</text>
+                        <text x="118" y="60" text-anchor="middle" font-size="14" font-weight="700" fill="#059669" transform="rotate(90,118,60)">a = 6</text>
+                    </svg>
+                </div>
+                <div class="formula-side">
+                    <div class="formula">&Agrave;rea = a &times; a = a&sup2;</div>
+                    <div class="formula">Per&iacute;metre = 4 &times; a</div>
+                    <div class="worked"><strong>Exemple (a = 6 cm):</strong><br>&Agrave;rea = 6&sup2; = <strong>36 cm&sup2;</strong><br>Per&iacute;metre = 4 &times; 6 = <strong>24 cm</strong></div>
+                </div>
+            </div>
+
+            <div class="subtopic-title">Rectangle</div>
+            <div class="shape-with-formula">
+                <div class="shape-draw">
+                    <svg viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg" style="width: 140px; height: 90px;">
+                        <rect x="5" y="5" width="140" height="80" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="3" rx="2"/>
+                        <text x="75" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#3b82f6">a = 8</text>
+                        <text x="155" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#3b82f6" transform="rotate(90,155,50)">b = 5</text>
+                    </svg>
+                </div>
+                <div class="formula-side">
+                    <div class="formula">&Agrave;rea = a &times; b</div>
+                    <div class="formula">Per&iacute;metre = 2 &times; (a + b)</div>
+                    <div class="worked"><strong>Exemple (a = 8, b = 5 cm):</strong><br>&Agrave;rea = 8 &times; 5 = <strong>40 cm&sup2;</strong><br>Per&iacute;metre = 2 &times; (8 + 5) = 2 &times; 13 = <strong>26 cm</strong></div>
+                </div>
+            </div>
+
+            <div class="subtopic-title">Triangle</div>
+            <div class="shape-with-formula">
+                <div class="shape-draw">
+                    <svg viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg" style="width: 130px; height: 110px;">
+                        <polygon points="70,10 10,110 130,110" fill="rgba(245,158,11,0.1)" stroke="#d97706" stroke-width="3"/>
+                        <!-- Height dashed line -->
+                        <line x1="70" y1="10" x2="70" y2="110" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,4"/>
+                        <text x="70" y="126" text-anchor="middle" font-size="13" font-weight="700" fill="#d97706">b = 10</text>
+                        <text x="80" y="65" font-size="12" font-weight="700" fill="#d97706">h = 7</text>
+                    </svg>
+                </div>
+                <div class="formula-side">
+                    <div class="formula">&Agrave;rea = (base &times; al&ccedil;ada) &divide; 2</div>
+                    <div class="formula">Per&iacute;metre = costat + costat + costat</div>
+                    <div class="worked"><strong>Exemple (b = 10, h = 7 cm):</strong><br>&Agrave;rea = (10 &times; 7) &divide; 2 = 70 &divide; 2 = <strong>35 cm&sup2;</strong></div>
+                </div>
+            </div>
+
+            <div class="remember-box">
+                <div class="title">Truc per recordar l'&agrave;rea del triangle:</div>
+                <p>Un triangle &eacute;s MIG rectangle! Per aix&ograve; fem base &times; al&ccedil;ada (com un rectangle) i despr&eacute;s dividim per 2.</p>
+            </div>
+
+            <div class="subtopic-title">Cercle</div>
+            <div class="shape-with-formula">
+                <div class="shape-draw">
+                    <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" style="width: 120px; height: 120px;">
+                        <circle cx="65" cy="65" r="55" fill="rgba(139,92,246,0.1)" stroke="#7c3aed" stroke-width="3"/>
+                        <!-- Radius -->
+                        <line x1="65" y1="65" x2="120" y2="65" stroke="#7c3aed" stroke-width="2"/>
+                        <circle cx="65" cy="65" r="3" fill="#7c3aed"/>
+                        <text x="92" y="58" font-size="14" font-weight="700" fill="#7c3aed">r = 4</text>
+                    </svg>
+                </div>
+                <div class="formula-side">
+                    <div class="formula">&Agrave;rea = &pi; &times; r&sup2;</div>
+                    <div class="formula">Per&iacute;metre (circumfer&egrave;ncia) = 2 &times; &pi; &times; r</div>
+                    <div class="worked"><strong>Exemple (r = 4 cm, &pi; &asymp; 3,14):</strong><br>&Agrave;rea = 3,14 &times; 4&sup2; = 3,14 &times; 16 = <strong>50,24 cm&sup2;</strong><br>Per&iacute;metre = 2 &times; 3,14 &times; 4 = <strong>25,12 cm</strong></div>
+                </div>
+            </div>
+
+            <div class="remember-box">
+                <div class="title">Trucs per recordar les f&oacute;rmules del cercle:</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li><strong>&Agrave;rea = &pi;r&sup2;</strong> &rarr; "Pizza r quadrat" (imagina una pizza rodona, el radi al quadrat &times; pi!)</li>
+                    <li style="margin-top: 4px;"><strong>Per&iacute;metre = 2&pi;r</strong> &rarr; "2 pizzes de radi" (el voltant del cercle)</li>
+                </ul>
+            </div>
+
+            <div class="mistake-box">
+                <div class="title">Errors comuns en 2D</div>
+                <p>1. Confondre RADI i DI&Agrave;METRE! El di&agrave;metre &eacute;s el DOBLE del radi (d = 2r). Si et donen el di&agrave;metre, divideix per 2 primer!</p>
+                <p>2. En el triangle, l'al&ccedil;ada ha de ser PERPENDICULAR a la base (a 90&deg;), no un costat qualsevol.</p>
+                <p>3. L'&agrave;rea es mesura en cm&sup2; (quadrat!) i el per&iacute;metre en cm (lineal).</p>
+            </div>
+        </div>
+
+        <!-- VOLUMS 3D -->
         <div class="theory-card">
             <h3><span class="icon">2</span> Volums (3D)</h3>
-            <div class="formulas-grid">
-                <div class="formula-item"><strong>Cub (aresta a)</strong><code>Volum = a&sup3;</code></div>
-                <div class="formula-item"><strong>Prisma rectangular (a&times;b&times;c)</strong><code>Volum = a&times;b&times;c</code></div>
-                <div class="formula-item"><strong>Cilindre (radi r, altura h)</strong><code>Volum = &pi;r&sup2;h</code></div>
+            <div class="analogy">
+                <strong>Qu&egrave; &eacute;s el volum?</strong> &Eacute;s la quantitat d'espai que ocupa un objecte. Per exemple, quanta aigua cap dins una capsa. Es mesura en cm&sup3; (cent&iacute;metres c&uacute;bics) o litres.
             </div>
-            <div class="example">Exemple: Cub d'aresta 4 &rarr; Volum = 64</div>
+
+            <div class="subtopic-title">Cub</div>
+            <div class="shape-with-formula">
+                <div class="shape-draw">
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 110px; height: 110px;">
+                        <!-- Front face -->
+                        <rect x="15" y="35" width="70" height="70" fill="rgba(5,150,105,0.15)" stroke="#059669" stroke-width="2"/>
+                        <!-- Top face -->
+                        <polygon points="15,35 45,10 115,10 85,35" fill="rgba(5,150,105,0.08)" stroke="#059669" stroke-width="2"/>
+                        <!-- Right face -->
+                        <polygon points="85,35 115,10 115,80 85,105" fill="rgba(5,150,105,0.12)" stroke="#059669" stroke-width="2"/>
+                        <text x="50" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#059669">a = 4</text>
+                    </svg>
+                </div>
+                <div class="formula-side">
+                    <div class="formula">Volum = a &times; a &times; a = a&sup3;</div>
+                    <div class="worked"><strong>Exemple (a = 4 cm):</strong><br>Volum = 4&sup3; = 4 &times; 4 &times; 4 = <strong>64 cm&sup3;</strong></div>
+                </div>
+            </div>
+
+            <div class="subtopic-title">Prisma rectangular (caixa)</div>
+            <div class="shape-with-formula">
+                <div class="shape-draw">
+                    <svg viewBox="0 0 150 120" xmlns="http://www.w3.org/2000/svg" style="width: 140px; height: 110px;">
+                        <!-- Front face -->
+                        <rect x="10" y="40" width="100" height="65" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="2"/>
+                        <!-- Top face -->
+                        <polygon points="10,40 40,15 140,15 110,40" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="2"/>
+                        <!-- Right face -->
+                        <polygon points="110,40 140,15 140,80 110,105" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="2"/>
+                        <text x="55" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">a = 6</text>
+                        <text x="130" y="65" font-size="12" font-weight="700" fill="#3b82f6">b = 3</text>
+                        <text x="75" y="12" font-size="12" font-weight="700" fill="#3b82f6">c = 4</text>
+                    </svg>
+                </div>
+                <div class="formula-side">
+                    <div class="formula">Volum = a &times; b &times; c</div>
+                    <div class="worked"><strong>Exemple (6 &times; 3 &times; 4 cm):</strong><br>Volum = 6 &times; 3 &times; 4 = <strong>72 cm&sup3;</strong></div>
+                </div>
+            </div>
+
+            <div class="subtopic-title">Cilindre</div>
+            <div class="shape-with-formula">
+                <div class="shape-draw">
+                    <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg" style="width: 110px; height: 130px;">
+                        <!-- Body -->
+                        <rect x="15" y="25" width="90" height="85" fill="rgba(139,92,246,0.1)" stroke="none"/>
+                        <line x1="15" y1="25" x2="15" y2="110" stroke="#7c3aed" stroke-width="2"/>
+                        <line x1="105" y1="25" x2="105" y2="110" stroke="#7c3aed" stroke-width="2"/>
+                        <!-- Top ellipse -->
+                        <ellipse cx="60" cy="25" rx="45" ry="15" fill="rgba(139,92,246,0.15)" stroke="#7c3aed" stroke-width="2"/>
+                        <!-- Bottom ellipse -->
+                        <ellipse cx="60" cy="110" rx="45" ry="15" fill="rgba(139,92,246,0.1)" stroke="#7c3aed" stroke-width="2"/>
+                        <!-- Radius -->
+                        <line x1="60" y1="25" x2="105" y2="25" stroke="#ef4444" stroke-width="2"/>
+                        <text x="82" y="20" font-size="12" font-weight="700" fill="#ef4444">r=3</text>
+                        <!-- Height -->
+                        <text x="12" y="72" font-size="12" font-weight="700" fill="#7c3aed" transform="rotate(-90,12,72)">h = 8</text>
+                    </svg>
+                </div>
+                <div class="formula-side">
+                    <div class="formula">Volum = &pi; &times; r&sup2; &times; h</div>
+                    <div class="worked"><strong>Exemple (r = 3, h = 8 cm):</strong><br>Volum = 3,14 &times; 3&sup2; &times; 8 = 3,14 &times; 9 &times; 8<br>= 3,14 &times; 72 = <strong>226,08 cm&sup3;</strong></div>
+                </div>
+            </div>
+
+            <div class="remember-box">
+                <div class="title">Trucs per recordar volums:</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li><strong>Cub:</strong> Tot igual &rarr; a &times; a &times; a. Com un dau!</li>
+                    <li style="margin-top: 4px;"><strong>Prisma:</strong> Llarg &times; ample &times; alt. Com una capsa de sabates!</li>
+                    <li style="margin-top: 4px;"><strong>Cilindre:</strong> &Agrave;rea del cercle de la base (&pi;r&sup2;) &times; al&ccedil;ada. Com apilar monedes una sobre l'altra!</li>
+                </ul>
+            </div>
+
+            <div class="mistake-box">
+                <div class="title">Errors comuns en volums</div>
+                <p>1. El volum es mesura en cm&sup3; (c&uacute;bic!), no cm&sup2;.</p>
+                <p>2. Al cilindre, recorda elevar el radi al quadrat PRIMER, i despr&eacute;s multiplicar per l'al&ccedil;ada i per &pi;.</p>
+                <p>3. No confonguis aresta (costat del cub) amb di&agrave;metre o radi!</p>
+            </div>
         </div>
 
         <div class="practice-section">
