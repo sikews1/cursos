@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulari - Matematiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a { padding: 8px 16px; border-radius: var(--radius-full); border: none; color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.25s; background: transparent; }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .toolbar { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 16px 20px; flex-wrap: wrap; }
+        .search-box { position: relative; max-width: 400px; width: 100%; }
+        .search-box input { width: 100%; padding: 12px 18px 12px 42px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-primary); font-size: 0.9rem; font-family: var(--font-sans); outline: none; transition: all 0.25s; }
+        .search-box input:focus { border-color: #059669; box-shadow: 0 0 0 4px rgba(5,150,105,0.1); }
+        .search-box input::placeholder { color: var(--text-muted); }
+        .search-box .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem; pointer-events: none; }
+        .btn-print { padding: 10px 22px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.25s; display: flex; align-items: center; gap: 6px; }
+        .btn-print:hover { border-color: #059669; color: #059669; background: rgba(5,150,105,0.05); }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 24px 20px 80px; }
+
+        .section-block { margin-bottom: 32px; }
+        .section-block h2 { font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin: 0 0 16px; padding-bottom: 10px; border-bottom: 2px solid rgba(5,150,105,0.2); display: flex; align-items: center; gap: 10px; }
+        .section-block h2 .sec-icon { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+
+        .formula-card { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 14px; transition: box-shadow 0.25s; }
+        .formula-card:hover { box-shadow: var(--shadow-sm); }
+        .formula-card h3 { font-size: 1rem; font-weight: 700; color: #059669; margin: 0 0 10px; }
+        .formula-card .f { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 16px; font-family: 'Courier New', monospace; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin: 8px 0; text-align: center; line-height: 1.8; }
+        .formula-card .note { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; margin-top: 6px; }
+
+        .formula-table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+        .formula-table th { background: rgba(5,150,105,0.08); color: #059669; font-size: 0.82rem; font-weight: 700; padding: 8px 12px; text-align: left; border-bottom: 2px solid rgba(5,150,105,0.2); }
+        .formula-table td { padding: 8px 12px; font-size: 0.88rem; color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle); font-family: 'Courier New', monospace; font-weight: 500; }
+        .formula-table tr:last-child td { border-bottom: none; }
+        .formula-table td:first-child { color: var(--text-primary); font-weight: 600; }
+
+        .trig-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 6px; margin: 8px 0; }
+        .trig-cell { background: var(--bg-overlay); border-radius: var(--radius-sm); padding: 8px; text-align: center; font-family: 'Courier New', monospace; font-size: 0.82rem; font-weight: 600; color: var(--text-primary); }
+        .trig-cell.header { background: rgba(5,150,105,0.1); color: #059669; font-weight: 700; font-family: var(--font-sans); }
+
+        .no-results { text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 1rem; display: none; }
+
+        /* Print styles */
+        @media print {
+            .math-nav, .toolbar, .btn-print, .no-results { display: none !important; }
+            .hero { padding: 20px 10px 16px; }
+            .hero::before { display: none; }
+            .hero h1 span { -webkit-text-fill-color: #059669; color: #059669; }
+            body { background: #fff !important; color: #000 !important; }
+            .container { max-width: 100%; padding: 10px; }
+            .formula-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; margin-bottom: 10px; padding: 14px; }
+            .section-block { break-inside: avoid; }
+            .section-block h2 .sec-icon { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .formula-card .f { background: #f5f5f5 !important; }
+            .formula-table th { background: #e8e8e8 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Formulari de Matematiques</span></h1>
+        <p>Referencia rapida de formules i propietats</p>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="searchInput" placeholder="Cerca formules..." oninput="filterFormulas()">
+        </div>
+        <button class="btn-print" onclick="window.print()">&#128424; Imprimir</button>
+    </div>
+
+    <div class="container" id="formulaContainer">
+
+        <!-- ===================== 1. ARITMETICA ===================== -->
+        <div class="section-block" data-section="aritmetica">
+            <h2><span class="sec-icon">1</span> Aritmetica</h2>
+
+            <div class="formula-card" data-keywords="mcd maxim comu divisor">
+                <h3>Maxim Comu Divisor (MCD)</h3>
+                <div class="f">MCD(a, b) = producte dels factors primers comuns amb el menor exponent</div>
+                <p class="note">Tambe es pot calcular amb l'algorisme d'Euclides: MCD(a, b) = MCD(b, a mod b)</p>
+            </div>
+
+            <div class="formula-card" data-keywords="mcm minim comu multiple">
+                <h3>Minim Comu Multiple (MCM)</h3>
+                <div class="f">MCM(a, b) = (a &times; b) / MCD(a, b)</div>
+                <p class="note">Producte de tots els factors primers amb el major exponent.</p>
+            </div>
+
+            <div class="formula-card" data-keywords="potencies producte quocient">
+                <h3>Propietats de les potencies</h3>
+                <div class="f">
+                    a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup><br>
+                    a<sup>m</sup> / a<sup>n</sup> = a<sup>m&minus;n</sup><br>
+                    (a<sup>m</sup>)<sup>n</sup> = a<sup>m&times;n</sup><br>
+                    a<sup>0</sup> = 1 &nbsp;(a &ne; 0)<br>
+                    a<sup>&minus;n</sup> = 1 / a<sup>n</sup>
+                </div>
+            </div>
+
+            <div class="formula-card" data-keywords="arrels radical">
+                <h3>Arrels</h3>
+                <div class="f">
+                    &radic;a = a<sup>1/2</sup><br>
+                    <sup>n</sup>&radic;a = a<sup>1/n</sup><br>
+                    &radic;(a &times; b) = &radic;a &times; &radic;b<br>
+                    &radic;(a / b) = &radic;a / &radic;b
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== 2. ALGEBRA ===================== -->
+        <div class="section-block" data-section="algebra">
+            <h2><span class="sec-icon">2</span> Algebra</h2>
+
+            <div class="formula-card" data-keywords="identitats notables quadrat suma diferencia">
+                <h3>Identitats notables</h3>
+                <div class="f">
+                    (a + b)<sup>2</sup> = a<sup>2</sup> + 2ab + b<sup>2</sup><br>
+                    (a &minus; b)<sup>2</sup> = a<sup>2</sup> &minus; 2ab + b<sup>2</sup><br>
+                    (a + b)(a &minus; b) = a<sup>2</sup> &minus; b<sup>2</sup>
+                </div>
+            </div>
+
+            <div class="formula-card" data-keywords="equacio primer grau lineal">
+                <h3>Equacio de 1r grau</h3>
+                <div class="f">ax + b = 0 &nbsp;&rArr;&nbsp; x = &minus;b / a</div>
+            </div>
+
+            <div class="formula-card" data-keywords="equacio segon grau quadratica discriminant">
+                <h3>Equacio de 2n grau</h3>
+                <div class="f">
+                    ax<sup>2</sup> + bx + c = 0<br><br>
+                    x = (&minus;b &plusmn; &radic;(b<sup>2</sup> &minus; 4ac)) / 2a<br><br>
+                    Discriminant: &Delta; = b<sup>2</sup> &minus; 4ac
+                </div>
+                <p class="note">&Delta; &gt; 0: dues solucions reals &bull; &Delta; = 0: una solucio doble &bull; &Delta; &lt; 0: sense solucio real</p>
+            </div>
+
+            <div class="formula-card" data-keywords="logaritmes propietats base">
+                <h3>Logaritmes</h3>
+                <div class="f">
+                    log<sub>a</sub>(x &times; y) = log<sub>a</sub>x + log<sub>a</sub>y<br>
+                    log<sub>a</sub>(x / y) = log<sub>a</sub>x &minus; log<sub>a</sub>y<br>
+                    log<sub>a</sub>(x<sup>n</sup>) = n &times; log<sub>a</sub>x<br>
+                    log<sub>a</sub>x = log<sub>b</sub>x / log<sub>b</sub>a &nbsp;(canvi de base)<br>
+                    log<sub>a</sub>a = 1 &nbsp;&bull;&nbsp; log<sub>a</sub>1 = 0
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== 3. GEOMETRIA 2D ===================== -->
+        <div class="section-block" data-section="geometria2d">
+            <h2><span class="sec-icon">3</span> Geometria 2D</h2>
+
+            <div class="formula-card" data-keywords="quadrat area perimetre costat">
+                <h3>Quadrat</h3>
+                <div class="f">A = l<sup>2</sup> &nbsp;&nbsp;&bull;&nbsp;&nbsp; P = 4l</div>
+                <p class="note">l = costat</p>
+            </div>
+
+            <div class="formula-card" data-keywords="rectangle area perimetre base altura">
+                <h3>Rectangle</h3>
+                <div class="f">A = b &times; h &nbsp;&nbsp;&bull;&nbsp;&nbsp; P = 2(b + h)</div>
+                <p class="note">b = base, h = altura</p>
+            </div>
+
+            <div class="formula-card" data-keywords="triangle area perimetre base altura">
+                <h3>Triangle</h3>
+                <div class="f">A = (b &times; h) / 2 &nbsp;&nbsp;&bull;&nbsp;&nbsp; P = a + b + c</div>
+                <p class="note">Formula de Heron: A = &radic;(s(s&minus;a)(s&minus;b)(s&minus;c)), on s = (a+b+c)/2</p>
+            </div>
+
+            <div class="formula-card" data-keywords="cercle circumferencia area radi pi">
+                <h3>Cercle</h3>
+                <div class="f">A = &pi;r<sup>2</sup> &nbsp;&nbsp;&bull;&nbsp;&nbsp; C = 2&pi;r</div>
+                <p class="note">r = radi, &pi; &asymp; 3,14159</p>
+            </div>
+
+            <div class="formula-card" data-keywords="trapezi area bases altura">
+                <h3>Trapezi</h3>
+                <div class="f">A = ((B + b) &times; h) / 2</div>
+                <p class="note">B = base major, b = base menor, h = altura</p>
+            </div>
+        </div>
+
+        <!-- ===================== 4. GEOMETRIA 3D ===================== -->
+        <div class="section-block" data-section="geometria3d">
+            <h2><span class="sec-icon">4</span> Geometria 3D</h2>
+
+            <div class="formula-card" data-keywords="cub volum costat">
+                <h3>Cub</h3>
+                <div class="f">V = l<sup>3</sup> &nbsp;&nbsp;&bull;&nbsp;&nbsp; S = 6l<sup>2</sup></div>
+                <p class="note">l = aresta</p>
+            </div>
+
+            <div class="formula-card" data-keywords="prisma volum base altura">
+                <h3>Prisma</h3>
+                <div class="f">V = A<sub>base</sub> &times; h</div>
+                <p class="note">A<sub>base</sub> = area de la base, h = altura</p>
+            </div>
+
+            <div class="formula-card" data-keywords="cilindre volum radi altura">
+                <h3>Cilindre</h3>
+                <div class="f">V = &pi;r<sup>2</sup>h &nbsp;&nbsp;&bull;&nbsp;&nbsp; S<sub>lat</sub> = 2&pi;rh</div>
+            </div>
+
+            <div class="formula-card" data-keywords="con volum radi altura">
+                <h3>Con</h3>
+                <div class="f">V = (&pi;r<sup>2</sup>h) / 3 &nbsp;&nbsp;&bull;&nbsp;&nbsp; S<sub>lat</sub> = &pi;r&radic;(r<sup>2</sup> + h<sup>2</sup>)</div>
+            </div>
+
+            <div class="formula-card" data-keywords="esfera volum radi superficie">
+                <h3>Esfera</h3>
+                <div class="f">V = (4/3)&pi;r<sup>3</sup> &nbsp;&nbsp;&bull;&nbsp;&nbsp; S = 4&pi;r<sup>2</sup></div>
+            </div>
+        </div>
+
+        <!-- ===================== 5. TRIGONOMETRIA ===================== -->
+        <div class="section-block" data-section="trigonometria">
+            <h2><span class="sec-icon">5</span> Trigonometria</h2>
+
+            <div class="formula-card" data-keywords="sinus cosinus tangent definicio">
+                <h3>Definicions basiques</h3>
+                <div class="f">
+                    sin &alpha; = catet oposat / hipotenusa<br>
+                    cos &alpha; = catet adjacent / hipotenusa<br>
+                    tan &alpha; = catet oposat / catet adjacent = sin &alpha; / cos &alpha;
+                </div>
+            </div>
+
+            <div class="formula-card" data-keywords="valors notables 30 45 60 taula">
+                <h3>Valors notables</h3>
+                <table class="formula-table">
+                    <tr><th>&alpha;</th><th>30&deg;</th><th>45&deg;</th><th>60&deg;</th><th>90&deg;</th></tr>
+                    <tr><td>sin &alpha;</td><td>1/2</td><td>&radic;2/2</td><td>&radic;3/2</td><td>1</td></tr>
+                    <tr><td>cos &alpha;</td><td>&radic;3/2</td><td>&radic;2/2</td><td>1/2</td><td>0</td></tr>
+                    <tr><td>tan &alpha;</td><td>&radic;3/3</td><td>1</td><td>&radic;3</td><td>&mdash;</td></tr>
+                </table>
+            </div>
+
+            <div class="formula-card" data-keywords="pitagores teorema hipotenusa catets">
+                <h3>Teorema de Pitagores</h3>
+                <div class="f">a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup></div>
+                <p class="note">c = hipotenusa, a i b = catets</p>
+            </div>
+
+            <div class="formula-card" data-keywords="llei sinus cosinus triangle">
+                <h3>Llei dels sinus i cosinus</h3>
+                <div class="f">
+                    a / sin A = b / sin B = c / sin C<br><br>
+                    c<sup>2</sup> = a<sup>2</sup> + b<sup>2</sup> &minus; 2ab &times; cos C
+                </div>
+            </div>
+
+            <div class="formula-card" data-keywords="identitat fonamental pitagorica">
+                <h3>Identitat fonamental</h3>
+                <div class="f">sin<sup>2</sup>&alpha; + cos<sup>2</sup>&alpha; = 1</div>
+            </div>
+        </div>
+
+        <!-- ===================== 6. ESTADISTICA ===================== -->
+        <div class="section-block" data-section="estadistica">
+            <h2><span class="sec-icon">6</span> Estadistica</h2>
+
+            <div class="formula-card" data-keywords="mitjana aritmetica promig">
+                <h3>Mitjana aritmetica</h3>
+                <div class="f">x&#772; = (x<sub>1</sub> + x<sub>2</sub> + ... + x<sub>n</sub>) / n = &Sigma;x<sub>i</sub> / n</div>
+            </div>
+
+            <div class="formula-card" data-keywords="mediana central ordenat">
+                <h3>Mediana</h3>
+                <div class="f">
+                    Si n senar: Me = x<sub>(n+1)/2</sub><br>
+                    Si n parell: Me = (x<sub>n/2</sub> + x<sub>n/2+1</sub>) / 2
+                </div>
+                <p class="note">Les dades han d'estar ordenades de menor a major.</p>
+            </div>
+
+            <div class="formula-card" data-keywords="moda frequent valor">
+                <h3>Moda</h3>
+                <div class="f">Mo = valor que mes es repeteix</div>
+                <p class="note">Pot haver-hi una moda (unimodal), diverses (multimodal) o cap (amodal).</p>
+            </div>
+
+            <div class="formula-card" data-keywords="varianca dispersio quadrat">
+                <h3>Varianca</h3>
+                <div class="f">&sigma;<sup>2</sup> = &Sigma;(x<sub>i</sub> &minus; x&#772;)<sup>2</sup> / n</div>
+            </div>
+
+            <div class="formula-card" data-keywords="desviacio tipica estandard arrel">
+                <h3>Desviacio tipica</h3>
+                <div class="f">&sigma; = &radic;(&Sigma;(x<sub>i</sub> &minus; x&#772;)<sup>2</sup> / n)</div>
+                <p class="note">Arrel quadrada de la varianca. Com mes gran, mes dispersio.</p>
+            </div>
+        </div>
+
+        <!-- ===================== 7. PROBABILITAT ===================== -->
+        <div class="section-block" data-section="probabilitat">
+            <h2><span class="sec-icon">7</span> Probabilitat</h2>
+
+            <div class="formula-card" data-keywords="laplace probabilitat favorable possible">
+                <h3>Regla de Laplace</h3>
+                <div class="f">P(A) = casos favorables / casos possibles</div>
+            </div>
+
+            <div class="formula-card" data-keywords="permutacions factorial ordre">
+                <h3>Permutacions</h3>
+                <div class="f">P(n) = n!</div>
+                <p class="note">Nombre d'ordenacions possibles de n elements.</p>
+            </div>
+
+            <div class="formula-card" data-keywords="variacions ordre repeticio">
+                <h3>Variacions</h3>
+                <div class="f">
+                    V(n, r) = n! / (n &minus; r)! &nbsp;(sense repeticio)<br>
+                    VR(n, r) = n<sup>r</sup> &nbsp;(amb repeticio)
+                </div>
+                <p class="note">Grups ordenats de r elements extrets de n.</p>
+            </div>
+
+            <div class="formula-card" data-keywords="combinacions sense ordre binomial">
+                <h3>Combinacions</h3>
+                <div class="f">C(n, r) = n! / (r! &times; (n &minus; r)!)</div>
+                <p class="note">Grups NO ordenats de r elements extrets de n.</p>
+            </div>
+
+            <div class="formula-card" data-keywords="complementari unio interseccio">
+                <h3>Propietats basiques</h3>
+                <div class="f">
+                    P(A&#773;) = 1 &minus; P(A)<br>
+                    P(A &cup; B) = P(A) + P(B) &minus; P(A &cap; B)<br>
+                    P(A &cap; B) = P(A) &times; P(B) &nbsp;(si independents)
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== 8. DERIVADES ===================== -->
+        <div class="section-block" data-section="derivades">
+            <h2><span class="sec-icon">8</span> Derivades</h2>
+
+            <div class="formula-card" data-keywords="regles derivacio suma producte quocient cadena">
+                <h3>Regles de derivacio</h3>
+                <div class="f">
+                    (f + g)' = f' + g'<br>
+                    (k &times; f)' = k &times; f'<br>
+                    (f &times; g)' = f' &times; g + f &times; g'<br>
+                    (f / g)' = (f' &times; g &minus; f &times; g') / g<sup>2</sup><br>
+                    (f(g(x)))' = f'(g(x)) &times; g'(x) &nbsp;(regla de la cadena)
+                </div>
+            </div>
+
+            <div class="formula-card" data-keywords="taula derivades comunes funcions">
+                <h3>Taula de derivades comunes</h3>
+                <table class="formula-table">
+                    <tr><th>f(x)</th><th>f'(x)</th></tr>
+                    <tr><td>k (constant)</td><td>0</td></tr>
+                    <tr><td>x<sup>n</sup></td><td>n &times; x<sup>n&minus;1</sup></td></tr>
+                    <tr><td>&radic;x</td><td>1 / (2&radic;x)</td></tr>
+                    <tr><td>1/x</td><td>&minus;1 / x<sup>2</sup></td></tr>
+                    <tr><td>e<sup>x</sup></td><td>e<sup>x</sup></td></tr>
+                    <tr><td>a<sup>x</sup></td><td>a<sup>x</sup> &times; ln a</td></tr>
+                    <tr><td>ln x</td><td>1 / x</td></tr>
+                    <tr><td>log<sub>a</sub> x</td><td>1 / (x &times; ln a)</td></tr>
+                    <tr><td>sin x</td><td>cos x</td></tr>
+                    <tr><td>cos x</td><td>&minus;sin x</td></tr>
+                    <tr><td>tan x</td><td>1 / cos<sup>2</sup>x = 1 + tan<sup>2</sup>x</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===================== 9. INTEGRALS ===================== -->
+        <div class="section-block" data-section="integrals">
+            <h2><span class="sec-icon">9</span> Integrals</h2>
+
+            <div class="formula-card" data-keywords="regles integracio linealitat suma">
+                <h3>Regles d'integracio</h3>
+                <div class="f">
+                    &int; k &times; f(x) dx = k &times; &int; f(x) dx<br>
+                    &int; (f + g) dx = &int; f dx + &int; g dx<br>
+                    &int;<sub>a</sub><sup>b</sup> f(x) dx = F(b) &minus; F(a) &nbsp;(Teorema fonamental)
+                </div>
+            </div>
+
+            <div class="formula-card" data-keywords="taula integrals comunes funcions primitiva">
+                <h3>Taula d'integrals comunes</h3>
+                <table class="formula-table">
+                    <tr><th>f(x)</th><th>&int; f(x) dx</th></tr>
+                    <tr><td>k</td><td>kx + C</td></tr>
+                    <tr><td>x<sup>n</sup> (n &ne; &minus;1)</td><td>x<sup>n+1</sup> / (n+1) + C</td></tr>
+                    <tr><td>1/x</td><td>ln |x| + C</td></tr>
+                    <tr><td>e<sup>x</sup></td><td>e<sup>x</sup> + C</td></tr>
+                    <tr><td>a<sup>x</sup></td><td>a<sup>x</sup> / ln a + C</td></tr>
+                    <tr><td>sin x</td><td>&minus;cos x + C</td></tr>
+                    <tr><td>cos x</td><td>sin x + C</td></tr>
+                    <tr><td>1/cos<sup>2</sup>x</td><td>tan x + C</td></tr>
+                    <tr><td>1/&radic;(1 &minus; x<sup>2</sup>)</td><td>arcsin x + C</td></tr>
+                    <tr><td>1/(1 + x<sup>2</sup>)</td><td>arctan x + C</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">Cap formula coincideix amb la cerca.</div>
+
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        // Apply stored theme
+        (function() {
+            const t = localStorage.getItem('falcon_theme');
+            if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+
+        // Search / filter
+        function filterFormulas() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const sections = document.querySelectorAll('.section-block');
+            let anyVisible = false;
+
+            sections.forEach(section => {
+                const cards = section.querySelectorAll('.formula-card');
+                let sectionVisible = false;
+
+                cards.forEach(card => {
+                    const text = (card.textContent + ' ' + (card.dataset.keywords || '')).toLowerCase();
+                    const match = !query || text.includes(query);
+                    card.style.display = match ? '' : 'none';
+                    if (match) sectionVisible = true;
+                });
+
+                section.style.display = sectionVisible ? '' : 'none';
+                if (sectionVisible) anyVisible = true;
+            });
+
+            document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
