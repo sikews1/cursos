@@ -1,101 +1,116 @@
-// Floating whiteboard (pissarra) widget
+// Pissarra màgica - scrollable, persistent, clear icons
 (function() {
     let isOpen = false;
     let isDrawing = false;
     let ctx, canvas;
     let color = '#1d1d1f';
     let lineWidth = 3;
+    let savedData = null; // persist drawing when closing
     let history = [];
     let historyIdx = -1;
+    let showGrid = false;
 
-    // Create floating button
+    // Floating button - pencil icon with label
     const btn = document.createElement('button');
     btn.id = 'pissarra-btn';
-    btn.innerHTML = '&#x270D;&#xFE0F;';
-    btn.title = 'Obrir pissarra';
-    btn.style.cssText = 'position:fixed;bottom:24px;right:90px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;border:none;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(59,130,246,0.3);z-index:9000;transition:all 0.3s;display:flex;align-items:center;justify-content:center;';
+    btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>';
+    btn.title = 'Pissarra';
+    btn.style.cssText = 'position:fixed;bottom:24px;right:90px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;border:none;font-size:1rem;cursor:pointer;box-shadow:0 4px 20px rgba(59,130,246,0.3);z-index:9000;transition:all .3s;display:flex;align-items:center;justify-content:center;';
     btn.onmouseover = function() { this.style.transform = 'scale(1.1)'; };
     btn.onmouseout = function() { this.style.transform = ''; };
 
-    // Create overlay
+    // Overlay
     const overlay = document.createElement('div');
-    overlay.id = 'pissarra-overlay';
     overlay.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9500;backdrop-filter:blur(4px);';
 
-    // Create popup
+    // Popup
     const popup = document.createElement('div');
-    popup.id = 'pissarra-popup';
-    popup.style.cssText = 'display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:95%;max-width:900px;background:var(--bg-raised,#fff);border-radius:20px;box-shadow:0 25px 80px rgba(0,0,0,0.3);z-index:9600;overflow:hidden;';
+    popup.style.cssText = 'display:none;position:fixed;top:3%;left:50%;transform:translateX(-50%);width:95%;max-width:900px;height:92vh;background:var(--bg-raised,#fff);border-radius:20px;box-shadow:0 25px 80px rgba(0,0,0,0.3);z-index:9600;overflow:hidden;display:none;flex-direction:column;';
 
     popup.innerHTML = `
-        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-subtle,#e5e5e5);flex-wrap:wrap;gap:8px;">
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                <span style="font-weight:700;font-size:.9rem;color:var(--text-primary,#1d1d1f);">&#x270D;&#xFE0F; Pissarra</span>
-                <div style="display:flex;gap:4px;" id="pissarra-colors"></div>
-                <div style="display:flex;align-items:center;gap:4px;margin-left:8px;">
-                    <span style="font-size:.7rem;color:var(--text-muted,#888);">Gruix:</span>
-                    <input type="range" min="1" max="12" value="3" id="pissarra-width" style="width:60px;accent-color:#3b82f6;">
+        <div id="pissarra-toolbar" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-subtle,#e5e5e5);flex-wrap:wrap;gap:6px;flex-shrink:0;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="font-weight:700;font-size:.85rem;color:var(--text-primary,#1d1d1f);">Pissarra</span>
+                <div style="display:flex;gap:3px;align-items:center;" id="p-colors"></div>
+                <div style="width:1px;height:20px;background:var(--border-subtle,#ddd);margin:0 4px;"></div>
+                <div style="display:flex;align-items:center;gap:4px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted,#999);"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <input type="range" min="1" max="15" value="3" id="p-width" style="width:50px;accent-color:#3b82f6;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color:var(--text-muted,#999);"><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </div>
             </div>
-            <div style="display:flex;gap:6px;">
-                <button id="pissarra-undo" style="padding:6px 12px;border-radius:6px;border:1px solid var(--border-default,#ddd);background:var(--bg-base,#f5f5f5);cursor:pointer;font-size:.8rem;color:var(--text-secondary,#666);" title="Desfer">&#x21A9;</button>
-                <button id="pissarra-clear" style="padding:6px 12px;border-radius:6px;border:1px solid var(--border-default,#ddd);background:var(--bg-base,#f5f5f5);cursor:pointer;font-size:.8rem;color:var(--text-secondary,#666);" title="Esborrar tot">&#x1F5D1;</button>
-                <button id="pissarra-grid" style="padding:6px 12px;border-radius:6px;border:1px solid var(--border-default,#ddd);background:var(--bg-base,#f5f5f5);cursor:pointer;font-size:.8rem;color:var(--text-secondary,#666);" title="Quadrícula">&#x25A6;</button>
-                <button id="pissarra-close" style="padding:6px 12px;border-radius:6px;border:1px solid var(--border-default,#ddd);background:var(--bg-base,#f5f5f5);cursor:pointer;font-size:1.1rem;color:var(--text-secondary,#666);line-height:1;" title="Tancar">&times;</button>
+            <div style="display:flex;gap:4px;">
+                <button id="p-undo" class="p-tool-btn" title="Desfer">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    <span>Desfer</span>
+                </button>
+                <button id="p-grid" class="p-tool-btn" title="Quadrícula">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+                    <span>Quadrícula</span>
+                </button>
+                <button id="p-clear" class="p-tool-btn" title="Esborrar tot" style="color:#ef4444;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    <span>Esborrar</span>
+                </button>
+                <button id="p-close" class="p-tool-btn" title="Tancar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <span>Tancar</span>
+                </button>
             </div>
         </div>
-        <div style="padding:8px;background:var(--bg-base,#fafafa);">
-            <canvas id="pissarra-canvas" style="width:100%;border-radius:12px;cursor:crosshair;background:#fff;display:block;touch-action:none;"></canvas>
+        <div id="p-scroll" style="flex:1;overflow-y:auto;padding:8px;background:var(--bg-overlay,#f0f0f0);">
+            <canvas id="p-canvas" style="width:100%;border-radius:12px;cursor:crosshair;background:#fff;display:block;touch-action:none;box-shadow:0 2px 10px rgba(0,0,0,0.1);"></canvas>
         </div>
     `;
 
+    // Inject toolbar button styles
+    const style = document.createElement('style');
+    style.textContent = `.p-tool-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:8px;border:1px solid var(--border-default,#ddd);background:var(--bg-base,#f5f5f5);cursor:pointer;font-size:.72rem;font-weight:500;color:var(--text-secondary,#666);transition:all .2s;font-family:inherit;}.p-tool-btn:hover{background:var(--bg-hover,#e5e5e5);}.p-tool-btn.active{background:#3b82f6;color:#fff;border-color:#3b82f6;}.p-tool-btn span{display:none;}@media(min-width:600px){.p-tool-btn span{display:inline;}}`;
+    document.head.appendChild(style);
+
     const colors = [
-        { c: '#1d1d1f', name: 'Negre' },
-        { c: '#3b82f6', name: 'Blau' },
-        { c: '#ef4444', name: 'Vermell' },
-        { c: '#059669', name: 'Verd' },
-        { c: '#f97316', name: 'Taronja' },
-        { c: '#8b5cf6', name: 'Lila' },
-        { c: '#ffffff', name: 'Esborrar' },
+        { c: '#1d1d1f', n: 'Negre' },
+        { c: '#3b82f6', n: 'Blau' },
+        { c: '#ef4444', n: 'Vermell' },
+        { c: '#059669', n: 'Verd' },
+        { c: '#f97316', n: 'Taronja' },
+        { c: '#8b5cf6', n: 'Lila' },
+        { c: '#ERASER', n: 'Esborrador' },
     ];
 
     function init() {
-        // Color buttons
-        const colorDiv = popup.querySelector('#pissarra-colors');
+        const cd = popup.querySelector('#p-colors');
         colors.forEach((col, i) => {
             const b = document.createElement('button');
-            b.style.cssText = `width:24px;height:24px;border-radius:50%;border:2px solid ${col.c === '#ffffff' ? '#ccc' : col.c};background:${col.c};cursor:pointer;transition:transform .15s;${i === 0 ? 'transform:scale(1.2);box-shadow:0 0 0 2px #3b82f6;' : ''}`;
-            b.title = col.name;
-            if (col.c === '#ffffff') b.innerHTML = '<span style="font-size:10px;">&#x232B;</span>';
+            const isEraser = col.c === '#ERASER';
+            b.style.cssText = `width:26px;height:26px;border-radius:50%;border:2px solid ${isEraser ? '#aaa' : col.c};background:${isEraser ? '#fff' : col.c};cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;${i === 0 ? 'box-shadow:0 0 0 2px #3b82f6;transform:scale(1.15);' : ''}`;
+            b.title = col.n;
+            if (isEraser) b.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>';
             b.onclick = () => {
-                color = col.c;
-                lineWidth = col.c === '#ffffff' ? 20 : parseInt(popup.querySelector('#pissarra-width').value);
-                colorDiv.querySelectorAll('button').forEach(x => { x.style.transform = ''; x.style.boxShadow = ''; });
-                b.style.transform = 'scale(1.2)';
+                color = isEraser ? '#ffffff' : col.c;
+                lineWidth = isEraser ? 25 : parseInt(popup.querySelector('#p-width').value);
+                cd.querySelectorAll('button').forEach(x => { x.style.boxShadow = ''; x.style.transform = ''; });
                 b.style.boxShadow = '0 0 0 2px #3b82f6';
+                b.style.transform = 'scale(1.15)';
             };
-            colorDiv.appendChild(b);
+            cd.appendChild(b);
         });
 
-        // Width slider
-        popup.querySelector('#pissarra-width').oninput = function() {
-            if (color !== '#ffffff') lineWidth = parseInt(this.value);
-        };
-
-        // Buttons
-        popup.querySelector('#pissarra-clear').onclick = clearCanvas;
-        popup.querySelector('#pissarra-undo').onclick = undo;
-        popup.querySelector('#pissarra-close').onclick = close;
-        popup.querySelector('#pissarra-grid').onclick = toggleGrid;
+        popup.querySelector('#p-width').oninput = function() { if (color !== '#ffffff') lineWidth = parseInt(this.value); };
+        popup.querySelector('#p-clear').onclick = () => { if (confirm('Esborrar tota la pissarra?')) clearCanvas(); };
+        popup.querySelector('#p-undo').onclick = undo;
+        popup.querySelector('#p-close').onclick = closePopup;
+        popup.querySelector('#p-grid').onclick = toggleGrid;
     }
 
-    let showGrid = false;
+    // Canvas height = 3x viewport (scrollable)
+    const CANVAS_PAGES = 3;
 
-    function setupCanvas() {
-        canvas = popup.querySelector('#pissarra-canvas');
-        const rect = canvas.parentElement.getBoundingClientRect();
-        const w = rect.width - 16;
-        const h = Math.min(w * 0.6, window.innerHeight * 0.6);
+    function setupCanvas(restore) {
+        canvas = popup.querySelector('#p-canvas');
+        const container = popup.querySelector('#p-scroll');
+        const w = container.clientWidth - 16;
+        const h = window.innerHeight * CANVAS_PAGES;
         canvas.width = w * 2;
         canvas.height = h * 2;
         canvas.style.height = h + 'px';
@@ -103,15 +118,30 @@
         ctx.scale(2, 2);
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        clearCanvas();
 
-        // Mouse events
+        if (restore && savedData) {
+            // Restore previous drawing
+            const img = new Image();
+            img.onload = () => {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, w, h);
+                if (showGrid) drawGrid(w, h);
+                ctx.drawImage(img, 0, 0, w, h);
+            };
+            img.src = savedData;
+        } else if (!restore) {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, w, h);
+            if (showGrid) drawGrid(w, h);
+            history = [];
+            historyIdx = -1;
+            saveState();
+        }
+
         canvas.onmousedown = startDraw;
         canvas.onmousemove = draw;
         canvas.onmouseup = endDraw;
         canvas.onmouseleave = endDraw;
-
-        // Touch events
         canvas.ontouchstart = e => { e.preventDefault(); startDraw(getTouchPos(e)); };
         canvas.ontouchmove = e => { e.preventDefault(); draw(getTouchPos(e)); };
         canvas.ontouchend = e => { e.preventDefault(); endDraw(); };
@@ -120,29 +150,27 @@
     function getTouchPos(e) {
         const rect = canvas.getBoundingClientRect();
         const t = e.touches[0];
-        return { offsetX: t.clientX - rect.left, offsetY: t.clientY - rect.top, preventDefault: () => {} };
+        return { offsetX: t.clientX - rect.left, offsetY: t.clientY - rect.top };
+    }
+
+    function getScale() {
+        return { x: (canvas.width / 2) / canvas.offsetWidth, y: (canvas.height / 2) / canvas.offsetHeight };
     }
 
     function startDraw(e) {
         isDrawing = true;
-        const scaleX = (canvas.width / 2) / canvas.offsetWidth;
-        const scaleY = (canvas.height / 2) / canvas.offsetHeight;
+        const s = getScale();
         ctx.beginPath();
-        ctx.moveTo(e.offsetX * scaleX, e.offsetY * scaleY);
+        ctx.moveTo(e.offsetX * s.x, e.offsetY * s.y);
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWidth;
-        if (color === '#ffffff') {
-            ctx.globalCompositeOperation = 'destination-out';
-        } else {
-            ctx.globalCompositeOperation = 'source-over';
-        }
+        ctx.globalCompositeOperation = color === '#ffffff' ? 'destination-out' : 'source-over';
     }
 
     function draw(e) {
         if (!isDrawing) return;
-        const scaleX = (canvas.width / 2) / canvas.offsetWidth;
-        const scaleY = (canvas.height / 2) / canvas.offsetHeight;
-        ctx.lineTo(e.offsetX * scaleX, e.offsetY * scaleY);
+        const s = getScale();
+        ctx.lineTo(e.offsetX * s.x, e.offsetY * s.y);
         ctx.stroke();
     }
 
@@ -158,70 +186,84 @@
         historyIdx++;
         history = history.slice(0, historyIdx);
         history.push(canvas.toDataURL());
+        if (history.length > 30) { history.shift(); historyIdx--; }
     }
 
     function undo() {
         if (historyIdx > 0) {
             historyIdx--;
-            const img = new Image();
-            img.onload = () => {
-                ctx.clearRect(0, 0, canvas.width / 2, canvas.height / 2);
-                if (showGrid) drawGrid();
-                ctx.drawImage(img, 0, 0, canvas.width / 2, canvas.height / 2);
-            };
-            img.src = history[historyIdx];
-        } else {
-            clearCanvas();
+            restoreState(history[historyIdx]);
         }
+    }
+
+    function restoreState(dataUrl) {
+        const w = canvas.width / 2, h = canvas.height / 2;
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0, 0, w, h);
+            ctx.drawImage(img, 0, 0, w, h);
+        };
+        img.src = dataUrl;
     }
 
     function clearCanvas() {
         if (!ctx) return;
-        ctx.clearRect(0, 0, canvas.width / 2, canvas.height / 2);
+        const w = canvas.width / 2, h = canvas.height / 2;
+        ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width / 2, canvas.height / 2);
-        if (showGrid) drawGrid();
+        ctx.fillRect(0, 0, w, h);
+        if (showGrid) drawGrid(w, h);
         history = [];
         historyIdx = -1;
+        savedData = null;
         saveState();
     }
 
-    function drawGrid() {
-        const w = canvas.width / 2;
-        const h = canvas.height / 2;
-        ctx.strokeStyle = '#e0e0e0';
+    function drawGrid(w, h) {
+        ctx.save();
+        ctx.strokeStyle = '#e8e8e8';
         ctx.lineWidth = 0.5;
-        for (let x = 0; x <= w; x += 25) {
-            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-        }
-        for (let y = 0; y <= h; y += 25) {
-            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-        }
+        const step = 25;
+        for (let x = 0; x <= w; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+        for (let y = 0; y <= h; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+        ctx.restore();
     }
 
     function toggleGrid() {
         showGrid = !showGrid;
-        const gridBtn = popup.querySelector('#pissarra-grid');
-        gridBtn.style.background = showGrid ? '#3b82f6' : '';
-        gridBtn.style.color = showGrid ? '#fff' : '';
-        clearCanvas();
+        const gb = popup.querySelector('#p-grid');
+        gb.classList.toggle('active', showGrid);
+        // Redraw with/without grid
+        if (canvas && ctx) {
+            const w = canvas.width / 2, h = canvas.height / 2;
+            const current = canvas.toDataURL();
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, w, h);
+            if (showGrid) drawGrid(w, h);
+            const img = new Image();
+            img.onload = () => { ctx.drawImage(img, 0, 0, w, h); };
+            img.src = current;
+        }
     }
 
-    function open() {
+    function openPopup() {
+        popup.style.display = 'flex';
         overlay.style.display = 'block';
-        popup.style.display = 'block';
         isOpen = true;
-        setTimeout(setupCanvas, 50);
+        setTimeout(() => setupCanvas(!!savedData), 50);
     }
 
-    function close() {
-        overlay.style.display = 'none';
+    function closePopup() {
+        // Save current state before closing
+        if (canvas) savedData = canvas.toDataURL();
         popup.style.display = 'none';
+        overlay.style.display = 'none';
         isOpen = false;
     }
 
-    btn.onclick = () => { if (isOpen) close(); else open(); };
-    overlay.onclick = close;
+    btn.onclick = () => { if (isOpen) closePopup(); else openPopup(); };
+    overlay.onclick = closePopup;
 
     document.body.appendChild(btn);
     document.body.appendChild(overlay);
