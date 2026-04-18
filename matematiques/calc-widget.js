@@ -13,12 +13,15 @@
     overlay.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9500;backdrop-filter:blur(4px);';
 
     const popup = document.createElement('div');
+    popup.id = 'cw-popup';
     popup.style.cssText = 'display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:95vw;background:var(--bg-raised,#fff);border-radius:20px;box-shadow:0 25px 80px rgba(0,0,0,0.25);z-index:9600;padding:16px;';
 
     const css = document.createElement('style');
     css.textContent = `
-.cw-close{position:absolute;top:8px;right:12px;background:none;border:none;font-size:1.4rem;color:var(--text-muted,#999);cursor:pointer;line-height:1;padding:4px;}
-.cw-close:hover{color:var(--text-primary,#333);}
+.cw-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 2px;}
+.cw-title{font-size:.78rem;font-weight:600;color:var(--text-muted,#999);text-transform:uppercase;letter-spacing:.05em;}
+.cw-close{background:none;border:none;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text-muted,#999);cursor:pointer;transition:all .15s;}
+.cw-close:hover{background:rgba(239,68,68,.1);color:#ef4444;}
 .cw-display{background:var(--bg-overlay,#f0f0f3);border-radius:12px;padding:12px 16px;margin-bottom:10px;text-align:right;min-height:70px;display:flex;flex-direction:column;justify-content:flex-end;}
 .cw-input{font-size:.82rem;color:var(--text-muted,#999);min-height:16px;word-break:break-all;font-family:'Inter',monospace;}
 .cw-result{font-size:2rem;font-weight:800;color:var(--text-primary,#1d1d1f);word-break:break-all;font-family:'Inter',monospace;line-height:1.2;}
@@ -43,7 +46,7 @@
     document.head.appendChild(css);
 
     popup.innerHTML = `
-<button class="cw-close" onclick="this.parentElement.style.display='none';document.getElementById('cw-ov').style.display='none';">&times;</button>
+<div class="cw-header"><span class="cw-title">Calculadora</span><button class="cw-close" onclick="this.closest('#cw-popup').style.display='none';document.getElementById('cw-ov').style.display='none';">&times;</button></div>
 <div class="cw-display"><div class="cw-input" id="cwI"></div><div class="cw-result" id="cwR">0</div></div>
 <div class="cw-grid">
 <button class="cw-b sci" data-v="sin(">sin</button><button class="cw-b sci" data-v="cos(">cos</button><button class="cw-b sci" data-v="tan(">tan</button><button class="cw-b sci" data-v="sqrt(">&#8730;</button><button class="cw-b sci" data-v="^2">x&#178;</button>
