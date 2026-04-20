@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falcon Shield - CrowdStrike Falcon Administrator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .shield-hero {
+            max-width: 900px;
+            margin: 30px auto 0;
+            padding: 36px 32px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(59, 130, 246, 0.08));
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            text-align: center;
+        }
+        .shield-hero .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            background: var(--purple-soft);
+            color: var(--purple);
+            border-radius: var(--radius-full);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .shield-hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+        .shield-hero h1 span {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .shield-hero p {
+            color: var(--text-secondary);
+            font-size: 1.02rem;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .shield-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .shield-section {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 28px 30px;
+            margin-bottom: 22px;
+        }
+
+        .shield-section h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shield-section h2::before {
+            content: '';
+            width: 4px;
+            height: 22px;
+            background: linear-gradient(180deg, #8b5cf6, #3b82f6);
+            border-radius: 2px;
+        }
+
+        .shield-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 18px 0 10px;
+            color: var(--text-primary);
+        }
+
+        .shield-section p {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        .shield-section p strong { color: var(--text-primary); }
+        .shield-section em {
+            background: rgba(139, 92, 246, 0.12);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-style: normal;
+            color: var(--purple);
+            font-weight: 600;
+        }
+
+        /* Analogy box */
+        .analogy {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.08), rgba(6, 182, 212, 0.08));
+            border-left: 4px solid var(--teal);
+            padding: 18px 22px;
+            border-radius: 0 12px 12px 0;
+            margin: 14px 0;
+        }
+        .analogy::before {
+            content: 'ANALOGÍA SENCILLA';
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--teal);
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        .analogy p { color: var(--text-secondary); margin-bottom: 0; }
+
+        /* Problem box */
+        .problem {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(249, 115, 22, 0.08));
+            border-left: 4px solid var(--red);
+            padding: 18px 22px;
+            border-radius: 0 12px 12px 0;
+            margin: 14px 0;
+        }
+        .problem::before {
+            content: 'EL PROBLEMA REAL';
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        .problem p { color: var(--text-secondary); margin-bottom: 0; }
+
+        /* Pillar grid */
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+        .pillar {
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 18px 18px 16px;
+            transition: all 0.2s;
+        }
+        .pillar:hover {
+            border-color: var(--purple);
+            transform: translateY(-2px);
+        }
+        .pillar .icon {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+        .pillar h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+        .pillar p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        /* Steps */
+        .steps { counter-reset: step; margin-top: 14px; }
+        .step {
+            position: relative;
+            padding: 16px 16px 16px 60px;
+            background: var(--bg-base);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--blue);
+            counter-increment: step;
+        }
+        .step::before {
+            content: counter(step);
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .step h4 { font-size: 0.98rem; margin-bottom: 4px; color: var(--text-primary); }
+        .step p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.6; }
+
+        /* Scenario */
+        .scenario {
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+        }
+        .scenario .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: var(--blue-soft);
+            color: var(--blue);
+            border-radius: var(--radius-full);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .scenario .situation {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .scenario .result {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .scenario .result strong { color: var(--green); }
+
+        /* Compare table */
+        .compare {
+            overflow-x: auto;
+            margin-top: 14px;
+        }
+        .compare table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 600px;
+        }
+        .compare th, .compare td {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 0.88rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .compare th {
+            font-weight: 700;
+            color: var(--text-primary);
+            background: var(--bg-base);
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .compare td { color: var(--text-secondary); vertical-align: top; }
+        .compare tr td:first-child { font-weight: 600; color: var(--text-primary); width: 140px; }
+
+        /* Vocab */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .vocab-item {
+            background: var(--bg-base);
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-subtle);
+        }
+        .vocab-en { color: var(--purple); font-weight: 700; font-size: 0.9rem; }
+        .vocab-es { color: var(--blue); font-size: 0.78rem; margin-bottom: 5px; }
+        .vocab-def { color: var(--text-secondary); font-size: 0.82rem; line-height: 1.5; }
+
+        /* Cheat sheet */
+        .cheat {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(249, 115, 22, 0.08));
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: 12px;
+            padding: 20px 22px;
+            margin-top: 14px;
+        }
+        .cheat::before {
+            content: 'PARA EXPLICARLO AL CLIENTE';
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--yellow);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+        .cheat ol {
+            padding-left: 20px;
+            color: var(--text-secondary);
+        }
+        .cheat ol li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .cheat ol li strong { color: var(--text-primary); }
+
+        /* Video roadmap */
+        .tldr {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(20, 184, 166, 0.08));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 22px;
+        }
+        .tldr::before {
+            content: 'SI SOLO PUEDES VER 5 VIDEOS';
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--green);
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+        .tldr ol { padding-left: 22px; color: var(--text-secondary); }
+        .tldr ol li { margin-bottom: 6px; line-height: 1.55; }
+        .tldr ol li strong { color: var(--text-primary); }
+
+        .level {
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--border-subtle);
+        }
+        .level:first-of-type { margin-top: 14px; border-top: none; padding-top: 0; }
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+        .level-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .level-header h3 {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+        }
+        .level-intro {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 2px 0 12px 46px;
+            line-height: 1.55;
+        }
+        .video-list {
+            display: grid;
+            gap: 10px;
+            margin-left: 46px;
+        }
+        .video-item {
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+        .video-item .vtitle {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .video-item .vtag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            background: var(--purple-soft);
+            color: var(--purple);
+            text-transform: uppercase;
+        }
+        .video-item .vtag.feature { background: var(--accent-soft); color: var(--accent); }
+        .video-item .vdesc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .video-item .vdesc strong { color: var(--text-primary); }
+
+        @media (max-width: 600px) {
+            .level-intro, .video-list { margin-left: 0; }
+            .level-header { margin-bottom: 12px; }
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 18px 22px;
+            margin-bottom: 22px;
+        }
+        .toc h3 {
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .toc ul li a {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            transition: all 0.2s;
+        }
+        .toc ul li a:hover {
+            border-color: var(--purple);
+            color: var(--purple);
+            background: var(--purple-soft);
+        }
+
+        @media (max-width: 600px) {
+            .shield-hero h1 { font-size: 1.6rem; }
+            .shield-section { padding: 22px 20px; }
+            .step { padding-left: 54px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="index.html" class="home" style="color:var(--accent);font-weight:600;">&#8592; Cursos</a>
+    <a href="glosario.html">Glosario</a>
+    <a href="modulos.html">Modulos</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="examen.html">Simulador Examen</a>
+    <a href="escenarios.html">Escenarios</a>
+    <a href="shield.html" class="active">Shield</a>
+</div>
+
+<div class="shield-hero">
+    <span class="badge">SSPM &middot; SaaS Security Posture Management</span>
+    <h1>Falcon <span>Shield</span></h1>
+    <p>Guía desde cero. Pensada para entenderlo sin conocimientos previos y poder explicarlo a un cliente que está a punto de desplegarlo.</p>
+</div>
+
+<div class="shield-container">
+
+    <!-- TOC -->
+    <div class="toc">
+        <h3>Contenido</h3>
+        <ul>
+            <li><a href="#que-es">¿Qué es?</a></li>
+            <li><a href="#problema">Problema que resuelve</a></li>
+            <li><a href="#analogia">Analogía</a></li>
+            <li><a href="#pilares">Qué vigila</a></li>
+            <li><a href="#funciona">Cómo funciona</a></li>
+            <li><a href="#escenarios">Escenarios reales</a></li>
+            <li><a href="#admin">Tareas del admin</a></li>
+            <li><a href="#confusion">Shield vs Identity vs Prevent</a></li>
+            <li><a href="#vocab">Glosario</a></li>
+            <li><a href="#cliente">Para el cliente</a></li>
+            <li><a href="#videos">Videos oficiales CrowdStrike</a></li>
+        </ul>
+    </div>
+
+    <!-- 1. QUE ES -->
+    <div class="shield-section" id="que-es">
+        <h2>1. ¿Qué es Falcon Shield en 30 segundos?</h2>
+        <p>Falcon Shield es el módulo de CrowdStrike que vigila tus <strong>aplicaciones SaaS</strong>: Microsoft 365, Google Workspace, Salesforce, Slack, GitHub, Okta, ServiceNow, Jira, Zoom, etc.</p>
+        <p>Comprueba, de forma continua, si esas plataformas están <em>mal configuradas</em>, si hay <em>cuentas peligrosas</em>, si un <em>tercero conectado</em> tiene demasiados permisos, o si alguien está haciendo algo raro dentro de ellas.</p>
+        <p>En una frase: <strong>es el "antivirus de configuración" para tu ecosistema SaaS.</strong> La categoría técnica se llama <em>SSPM</em> (SaaS Security Posture Management).</p>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">Viene de la empresa <strong>Adaptive Shield</strong>, que CrowdStrike compró a finales de 2024 y reempaquetó como Falcon Shield dentro de la plataforma Falcon.</p>
+    </div>
+
+    <!-- 2. PROBLEMA -->
+    <div class="shield-section" id="problema">
+        <h2>2. El problema que resuelve</h2>
+        <p>Hoy una empresa no tiene 5 aplicaciones. Tiene <strong>100, 200, 500 SaaS</strong> distintas. Y cada una:</p>
+        <ul style="padding-left: 20px; color: var(--text-secondary); line-height: 1.8; margin: 8px 0 12px;">
+            <li>Tiene <strong>su propio panel de administración</strong>, con cientos de opciones de seguridad.</li>
+            <li>Tiene <strong>usuarios, roles, permisos y MFA</strong> que se configuran distinto en cada una.</li>
+            <li>Deja que <strong>apps de terceros</strong> (extensiones, bots, integraciones) pidan acceso a datos.</li>
+            <li>Se <strong>actualiza sola</strong> y puede añadir ajustes nuevos sin que nadie lo mire.</li>
+        </ul>
+        <div class="problem">
+            <p>Nadie — ni el equipo de IT ni el de seguridad — puede entrar cada semana a 300 paneles distintos a revisar si todo está bien configurado. Los atacantes lo saben y <strong>por ahí entran</strong>: cuentas admin sin MFA, OAuth malicioso conectado, tokens viejos, permisos excesivos...</p>
+        </div>
+        <p>Falcon Shield hace <strong>ese trabajo por ti</strong>, de forma automática y continua, sobre todos los SaaS a la vez.</p>
+    </div>
+
+    <!-- 3. ANALOGIA -->
+    <div class="shield-section" id="analogia">
+        <h2>3. Analogía que siempre funciona</h2>
+        <p>Imagina que tu empresa es un <strong>edificio de oficinas gigante</strong> con 200 despachos. Cada despacho tiene:</p>
+        <ul style="padding-left: 20px; color: var(--text-secondary); line-height: 1.8; margin: 8px 0 12px;">
+            <li>Su propia cerradura distinta (cada SaaS).</li>
+            <li>Su propia lista de llaves repartidas (los usuarios).</li>
+            <li>Su propio libro de visitas (logs de actividad).</li>
+        </ul>
+        <div class="analogy">
+            <p><strong>Antivirus clásico (Falcon Prevent):</strong> es el guardia en la puerta del edificio que revisa si alguien entra con un arma (malware en un PC).</p>
+            <p style="margin-top: 8px;"><strong>Falcon Shield:</strong> es el <em>inspector que entra a cada despacho</em>, mira si la ventana está abierta, si las llaves están colgadas de la cerradura, si el becario tiene una llave maestra que no debería, y si alguien metió un duplicado por el ascensor. Y lo hace todos los días, en los 200 despachos a la vez.</p>
+        </div>
+    </div>
+
+    <!-- 4. PILARES -->
+    <div class="shield-section" id="pilares">
+        <h2>4. ¿Qué vigila exactamente? — Los 5 pilares</h2>
+        <p>Shield no es "una cosa" sino cinco capas de vigilancia simultáneas:</p>
+        <div class="pillar-grid">
+            <div class="pillar">
+                <div class="icon">&#x2699;&#xFE0F;</div>
+                <h4>Configuración (Misconfigurations)</h4>
+                <p>Revisa cada ajuste de seguridad del SaaS frente a las buenas prácticas. Ej.: "MFA obligatorio para admins", "sesión expira a las 8h".</p>
+            </div>
+            <div class="pillar">
+                <div class="icon">&#x1F464;</div>
+                <h4>Identidades y permisos</h4>
+                <p>Detecta cuentas inactivas, admins duplicados, ex-empleados que siguen dentro, o usuarios con más permisos de los que necesitan.</p>
+            </div>
+            <div class="pillar">
+                <div class="icon">&#x1F517;</div>
+                <h4>Integraciones 3rd-party (OAuth apps)</h4>
+                <p>Cuando alguien dice "conectar con Google" a una app externa, Shield ve qué permisos pidió y si es peligrosa o abandonada.</p>
+            </div>
+            <div class="pillar">
+                <div class="icon">&#x1F4BB;</div>
+                <h4>Dispositivos que tocan el SaaS</h4>
+                <p>Cruza datos con el sensor de Falcon para saber si el PC desde el que alguien accede a Salesforce está gestionado y sano.</p>
+            </div>
+            <div class="pillar">
+                <div class="icon">&#x1F6A8;</div>
+                <h4>Detección de amenazas (ITDR)</h4>
+                <p>Detecta comportamientos raros dentro del SaaS: <em>imposible travel</em>, exfiltración masiva de archivos, cambios de configuración sospechosos.</p>
+            </div>
+            <div class="pillar">
+                <div class="icon">&#x1F4CB;</div>
+                <h4>Cumplimiento normativo</h4>
+                <p>Mapea los hallazgos a marcos como <strong>ISO 27001, SOC 2, NIST, GDPR</strong>. Te da el informe ya hecho para auditoría.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. COMO FUNCIONA -->
+    <div class="shield-section" id="funciona">
+        <h2>5. Cómo funciona el día que lo despliegas</h2>
+        <div class="steps">
+            <div class="step">
+                <h4>Conectar cada SaaS</h4>
+                <p>En la consola Falcon añades cada aplicación (M365, Google, Salesforce...) con una cuenta de servicio o una API key. Shield NO instala agentes. Solo <em>lee</em> vía API.</p>
+            </div>
+            <div class="step">
+                <h4>Primera foto (baseline)</h4>
+                <p>Shield recorre cada SaaS y saca un inventario completo: usuarios, roles, ajustes, apps conectadas, permisos. En horas, no semanas.</p>
+            </div>
+            <div class="step">
+                <h4>Comparar con el estándar</h4>
+                <p>Cruza lo que encontró con <strong>cientos de reglas predefinidas</strong> (CIS Benchmark, mejores prácticas CrowdStrike, normativa). Cada desviación se convierte en un <em>finding</em>.</p>
+            </div>
+            <div class="step">
+                <h4>Priorizar y avisar</h4>
+                <p>Cada finding lleva un <strong>nivel de riesgo</strong> (crítico, alto, medio, bajo), una explicación en texto plano y el paso exacto para arreglarlo en esa SaaS concreta.</p>
+            </div>
+            <div class="step">
+                <h4>Vigilancia continua</h4>
+                <p>A partir de ahí, monitoriza 24/7. Si mañana alguien desactiva MFA en un admin de Salesforce, salta una alerta <em>al momento</em>.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. ESCENARIOS -->
+    <div class="shield-section" id="escenarios">
+        <h2>6. Escenarios reales del día a día</h2>
+        <p>Así es como se ve esto en la práctica, con ejemplos que vas a encontrar en un cliente:</p>
+
+        <div class="scenario">
+            <span class="tag">M365 &middot; Misconfiguración</span>
+            <div class="situation">Un admin de Microsoft 365 quita el MFA a su propia cuenta "solo un ratito".</div>
+            <p class="result">Shield detecta el cambio en minutos, lo marca como <strong>crítico</strong>, avisa en la consola y al SOC. El admin tendría que haber encontrado esto él mismo en 6 meses; ahora sale en el acto.</p>
+        </div>
+
+        <div class="scenario">
+            <span class="tag">OAuth &middot; 3rd-party app</span>
+            <div class="situation">Un empleado conecta una extensión gratuita de IA a su Google Workspace. La extensión pide <em>leer todos los correos</em>.</div>
+            <p class="result">Shield ve la nueva integración, puntúa la reputación de esa app (abandonada, pocos usuarios, permisos excesivos) y avisa. Puedes <strong>revocar el acceso desde la consola</strong> sin tocar Google.</p>
+        </div>
+
+        <div class="scenario">
+            <span class="tag">Identidades</span>
+            <div class="situation">Una empleada se marcha. En la lista de bajas de RRHH consta. En Salesforce sigue activa 2 meses después.</div>
+            <p class="result">Shield cruza datos de Okta / Entra ID con Salesforce y te muestra todas las cuentas <em>huérfanas</em>. Antes de Shield nadie lo habría visto hasta la auditoría.</p>
+        </div>
+
+        <div class="scenario">
+            <span class="tag">ITDR &middot; Comportamiento</span>
+            <div class="situation">Un usuario inicia sesión en Slack desde Madrid a las 10:00 y desde Brasil a las 10:03.</div>
+            <p class="result">Shield detecta el <em>impossible travel</em>, correlaciona con otros SaaS (¿también pasó en M365?) y genera una detección. El equipo SOC investiga como si fuera una alerta de Falcon Insight.</p>
+        </div>
+
+        <div class="scenario">
+            <span class="tag">Cumplimiento</span>
+            <div class="situation">Toca auditoría ISO 27001 la semana que viene y nadie sabe por dónde empezar.</div>
+            <p class="result">Shield tiene ya un <strong>dashboard ISO 27001</strong>. Exporta el informe, marca los controles OK, los KO y la evidencia de cada uno. Trabajo de semanas → una tarde.</p>
+        </div>
+    </div>
+
+    <!-- 7. TAREAS DEL ADMIN -->
+    <div class="shield-section" id="admin">
+        <h2>7. Lo que haces tú, como administrador de Shield</h2>
+        <p>En el día a día, tu trabajo en Falcon Shield se reduce a 4 rutinas:</p>
+        <ul style="padding-left: 20px; color: var(--text-secondary); line-height: 1.9; margin: 8px 0;">
+            <li><strong>Conectar nuevos SaaS</strong> cuando la empresa contrata uno nuevo. Suele ser un wizard de 5 minutos por aplicación.</li>
+            <li><strong>Revisar los findings de la semana</strong> priorizando los críticos. Cada uno tiene una ficha "qué es, por qué importa, cómo arreglarlo".</li>
+            <li><strong>Aceptar o descartar excepciones</strong>: a veces una regla no aplica a tu empresa; marcas esa configuración como <em>accepted risk</em> con justificación.</li>
+            <li><strong>Responder a las alertas ITDR</strong> (las que detectan comportamiento malicioso), igual que respondes a una detección de Falcon Insight.</li>
+        </ul>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">No se instala ningún agente nuevo. Todo se gestiona desde la misma consola Falcon que ya conoces.</p>
+    </div>
+
+    <!-- 8. CONFUSION -->
+    <div class="shield-section" id="confusion">
+        <h2>8. No confundir: Shield vs Identity Protection vs Prevent</h2>
+        <p>Tres módulos con nombres parecidos. Esta es la diferencia rápida:</p>
+        <div class="compare">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Módulo</th>
+                        <th>Qué protege</th>
+                        <th>Dónde vive</th>
+                        <th>Ejemplo de ataque que para</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Falcon Prevent</td>
+                        <td>El PC / servidor</td>
+                        <td>Endpoint (agente)</td>
+                        <td>Un ransomware en un portátil</td>
+                    </tr>
+                    <tr>
+                        <td>Falcon Identity Protection</td>
+                        <td>Active Directory on-premises e híbrido</td>
+                        <td>Sensor en DC + integraciones</td>
+                        <td>Kerberoasting, Pass-the-Hash en AD</td>
+                    </tr>
+                    <tr>
+                        <td>Falcon Shield</td>
+                        <td>Las apps SaaS en la nube (M365, Google, Salesforce...)</td>
+                        <td>API, sin agente</td>
+                        <td>OAuth malicioso, admin sin MFA en Salesforce</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="margin-top: 14px;"><strong>Regla mnemotécnica:</strong> Prevent mira <em>el dispositivo</em>, Identity mira <em>las identidades en AD</em>, Shield mira <em>las aplicaciones SaaS</em>. Los tres juntos cubren los tres caminos típicos de un ataque moderno.</p>
+    </div>
+
+    <!-- 9. VOCAB -->
+    <div class="shield-section" id="vocab">
+        <h2>9. Glosario mínimo de Shield</h2>
+        <div class="vocab-grid">
+            <div class="vocab-item">
+                <div class="vocab-en">SSPM</div>
+                <div class="vocab-es">SaaS Security Posture Management</div>
+                <div class="vocab-def">Categoría de Gartner. Herramientas que auditan la seguridad de aplicaciones SaaS.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">ITDR</div>
+                <div class="vocab-es">Identity Threat Detection &amp; Response</div>
+                <div class="vocab-def">Detección de amenazas basadas en identidad (sesiones, logins, cambios raros).</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">Finding</div>
+                <div class="vocab-es">Hallazgo</div>
+                <div class="vocab-def">Cada desviación detectada. Lleva severidad, descripción y pasos de remediación.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">Misconfiguration</div>
+                <div class="vocab-es">Mala configuración</div>
+                <div class="vocab-def">Ajuste que contradice una buena práctica (p.ej. compartir "cualquiera con el enlace").</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">OAuth app / 3rd-party</div>
+                <div class="vocab-es">App conectada</div>
+                <div class="vocab-def">Aplicación externa que obtuvo acceso a un SaaS vía consentimiento OAuth.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">Impossible travel</div>
+                <div class="vocab-es">Viaje imposible</div>
+                <div class="vocab-def">Dos logins desde lugares que son físicamente inalcanzables en ese tiempo.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">Baseline</div>
+                <div class="vocab-es">Foto inicial</div>
+                <div class="vocab-def">Estado "limpio" de referencia con el que se comparan los cambios futuros.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">Accepted risk</div>
+                <div class="vocab-es">Riesgo aceptado</div>
+                <div class="vocab-def">Finding que decides no arreglar porque tiene justificación de negocio.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">Posture score</div>
+                <div class="vocab-es">Puntuación de postura</div>
+                <div class="vocab-def">Nota de 0 a 100 sobre lo seguro que está un SaaS. Se usa para comparar y medir mejora.</div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-en">Adaptive Shield</div>
+                <div class="vocab-es">—</div>
+                <div class="vocab-def">Empresa original comprada por CrowdStrike en 2024. Base técnica de Falcon Shield.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. CHEAT SHEET CLIENTE -->
+    <div class="shield-section" id="cliente">
+        <h2>10. Chuleta: cómo se lo explicas al cliente</h2>
+        <p>Si mañana entras a reunión con el cliente que va a desplegarlo, lleva estos <strong>5 puntos</strong> en la cabeza. Responden al 90% de sus dudas:</p>
+        <div class="cheat">
+            <ol>
+                <li><strong>Qué es, en una frase:</strong> "Es el módulo de CrowdStrike que audita la seguridad de vuestras apps SaaS (M365, Google, Salesforce...) sin instalar nada, usando APIs."</li>
+                <li><strong>Por qué lo necesitan:</strong> "El 70% de las brechas modernas empiezan en una SaaS mal configurada o un OAuth malicioso. Vuestro EDR clásico no ve eso porque no vive en los portátiles."</li>
+                <li><strong>Qué verán el primer día:</strong> "Un dashboard con la puntuación de cada SaaS y una lista de findings priorizados. Normalmente al conectar M365 salen entre 50 y 200 hallazgos; no es alarma, es trabajo acumulado que no se había mirado."</li>
+                <li><strong>Qué esfuerzo supone:</strong> "Conexión de 5-10 min por SaaS. Sin agentes, sin ventanas de mantenimiento. Una persona a media jornada puede revisar los findings de toda la empresa."</li>
+                <li><strong>Cómo encaja con lo que ya tienen:</strong> "Usa la misma consola Falcon. Las detecciones ITDR aparecen junto a las del EDR. Si ya tienen Falcon Fusion, se pueden automatizar respuestas (p.ej. revocar OAuth sospechoso)."</li>
+            </ol>
+        </div>
+        <p style="margin-top: 18px; font-size: 0.88rem; color: var(--text-muted);">Tip: evita acrónimos en la primera reunión. Si te preguntan "¿qué es SSPM?", di "es la categoría de Gartner; el nombre comercial es Falcon Shield y ya está".</p>
+    </div>
+
+    <!-- 11. VIDEOS OFICIALES -->
+    <div class="shield-section" id="videos">
+        <h2>11. Ruta oficial de videos CrowdStrike</h2>
+        <p>Soporte de CrowdStrike publica 20 videos cortos "Getting Started" + "Feature Focus" sobre Shield. En vez de mirarlos en cualquier orden, esta es la <strong>secuencia ideal</strong> agrupada en 6 niveles que van de lo básico a lo estratégico.</p>
+
+        <div class="tldr">
+            <p style="color: var(--text-secondary); margin-bottom: 10px;">Si tu tiempo es limitado, estos 5 videos te dejan operativo:</p>
+            <ol>
+                <li><strong>Anatomy of a Security Check</strong> — entiendes qué es un "finding" y cómo leerlo.</li>
+                <li><strong>Integration Library</strong> — ves qué SaaS puedes conectar y cómo.</li>
+                <li><strong>Threat Center Overview</strong> — el panel de detecciones en tiempo real.</li>
+                <li><strong>Dashboard, Landscape and Compliance reports</strong> — los 3 dashboards principales.</li>
+                <li><strong>Building a SaaS Security Program</strong> — el playbook oficial para arrancar.</li>
+            </ol>
+        </div>
+
+        <!-- NIVEL 1 -->
+        <div class="level">
+            <div class="level-header">
+                <span class="level-num">1</span>
+                <h3>Fundamentos: qué estás mirando</h3>
+            </div>
+            <p class="level-intro">Antes de tocar nada, entiende las 5 vistas principales de la consola: apps, permisos, checks, anatomía de un check y qué es una integración.</p>
+            <div class="video-list">
+                <div class="video-item">
+                    <div class="vtitle">Apps Inventory Overview <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Shield mantiene un <strong>catálogo automático de todas las SaaS conectadas</strong> y también detecta <em>shadow IT</em> (apps que usan empleados sin que IT lo sepa). Esta es tu lista maestra de "qué SaaS tenemos".</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Permissions Inventory Overview <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Inventario <strong>por usuario y por app</strong> de qué permisos tiene cada uno en cada SaaS. Te permite responder "¿quién puede borrar datos en Salesforce?" en 2 clics.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Navigating the Security Checks section <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Tour de la sección más importante: la <strong>lista de findings</strong>. Filtros por severidad, por SaaS, por control. Aquí vivirás el 80% del tiempo.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Anatomy of a Security Check <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Cada check tiene <strong>nombre, severidad, descripción, impacto y pasos de remediación</strong>. Aprende a leer la ficha y sabrás actuar sobre cualquier finding.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Introduction to Integrations <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">"Integración" = una SaaS conectada a Shield vía API. Aquí se explica el concepto y cómo las integraciones son el <strong>combustible de todo el producto</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NIVEL 2 -->
+        <div class="level">
+            <div class="level-header">
+                <span class="level-num">2</span>
+                <h3>Operativa diaria con security checks</h3>
+            </div>
+            <p class="level-intro">Ahora que sabes leer un check, aprende qué hacer con él: descartarlo, convertirlo en ticket, o usarlo para encontrar problemas de permisos.</p>
+            <div class="video-list">
+                <div class="video-item">
+                    <div class="vtitle">Dismissing a Security Check <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Cuando un check <strong>no aplica a tu empresa</strong>, lo marcas como <em>accepted risk</em> con justificación. Queda registrado para auditoría. Evita que tu lista se llene de ruido.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Opening a Security Check as a Ticket <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Convierte un finding en <strong>ticket de Jira / ServiceNow</strong> automáticamente para que lo arregle el equipo propietario del SaaS. Así Shield se integra con tu flujo existente.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Permissions Inventory Use Cases <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Ejemplos reales: encontrar <strong>admins inactivos</strong>, cuentas de ex-empleados con permisos, usuarios con roles excesivos... El uso más potente del inventario.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NIVEL 3 -->
+        <div class="level">
+            <div class="level-header">
+                <span class="level-num">3</span>
+                <h3>Integraciones: conectar tus SaaS</h3>
+            </div>
+            <p class="level-intro">Sin integraciones, Shield no ve nada. Estos 4 videos te enseñan a conectar, diagnosticar y elegir el método de autenticación correcto.</p>
+            <div class="video-list">
+                <div class="video-item">
+                    <div class="vtitle">Integration Library <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">El <strong>catálogo de +150 SaaS</strong> integrables: M365, Google, Salesforce, GitHub, Okta, ServiceNow, Slack, Jira, Zoom, AWS... Busca aquí antes de asumir que algo no se integra.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Integration Statuses <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Estados posibles: <strong>conectado, error de credenciales, permisos insuficientes, desactualizado</strong>. Saber diagnosticar evita que un SaaS se quede "ciego" sin que nadie lo note.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Different Types of Integration Authentication Methods <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">OAuth, API key, cuenta de servicio, certificado. Cuándo usar cada uno y <strong>los permisos mínimos</strong> que pide cada método. Clave para pasar revisiones de seguridad internas.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Google Workspace Integration <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Ejemplo <strong>paso a paso</strong> integrando Google Workspace. Sirve como plantilla mental para otras SaaS: el flujo es muy parecido en todas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NIVEL 4 -->
+        <div class="level">
+            <div class="level-header">
+                <span class="level-num">4</span>
+                <h3>Detección de amenazas (ITDR)</h3>
+            </div>
+            <p class="level-intro">Shield no solo audita configuración: también <em>detecta ataques en vivo</em>. Esta es la parte "SOC" del producto.</p>
+            <div class="video-list">
+                <div class="video-item">
+                    <div class="vtitle">Threat Center Overview <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">El <strong>panel de detecciones en tiempo real</strong> dentro de tus SaaS: login sospechoso, exfiltración, cambios peligrosos. Funciona como el "Activity" de Falcon EDR pero para aplicaciones.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Reviewing a Threat Detection <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Cómo investigar una alerta: <strong>usuario, evento, contexto, impacto y recomendación</strong>. Cierre típico: contener cuenta, revocar sesión o escalar a Fusion.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Creating a Custom Threat Detection <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Puedes crear <strong>reglas propias</strong> para amenazas específicas de tu negocio: ej. "alerta si alguien de finanzas descarga &gt;500 archivos en 1 hora". Aquí está la flexibilidad avanzada.</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Falcon Shield + Next-Gen SIEM: SaaS Threat &amp; IOC Analysis <span class="vtag feature">Feature focus</span></div>
+                    <p class="vdesc">Las detecciones de Shield se envían al <strong>Next-Gen SIEM</strong> de CrowdStrike para correlar con el resto (endpoints, identidades, red). Así una alerta de SaaS no queda aislada.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NIVEL 5 -->
+        <div class="level">
+            <div class="level-header">
+                <span class="level-num">5</span>
+                <h3>Reportes y cumplimiento normativo</h3>
+            </div>
+            <p class="level-intro">La parte que enseñas a dirección, auditoría y cliente. Aquí se demuestra que Shield aporta valor.</p>
+            <div class="video-list">
+                <div class="video-item">
+                    <div class="vtitle">Overview of Reports <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Mapa general: qué <strong>tipos de informe</strong> existen y cuándo usar cada uno (ejecutivo, técnico, auditoría, incidente).</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Dashboard, Landscape and Compliance Reports <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Los <strong>3 dashboards centrales</strong>: <em>Dashboard</em> (salud general), <em>Landscape</em> (panorama de todas las SaaS) y <em>Compliance</em> (ISO 27001, SOC 2, NIST, GDPR ya mapeados).</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Over Time Report <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">Evolución de la <em>postura de seguridad</em> a lo largo del tiempo. Imprescindible para <strong>mostrar progreso</strong> a dirección: "empezamos en 42, hoy estamos en 78".</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NIVEL 6 -->
+        <div class="level">
+            <div class="level-header">
+                <span class="level-num">6</span>
+                <h3>Estrategia y funciones avanzadas</h3>
+            </div>
+            <p class="level-intro">Para cuando ya tienes el producto rodando y quieres madurar el programa.</p>
+            <div class="video-list">
+                <div class="video-item">
+                    <div class="vtitle">IAM Integrations for Identity Protection <span class="vtag feature">Feature focus</span></div>
+                    <p class="vdesc">Shield se conecta con <strong>Okta / Entra ID / Ping</strong> para correlar identidades entre SaaS y el IdP. Te permite ver cuentas que existen en una SaaS pero no en el IdP (cuentas huérfanas).</p>
+                </div>
+                <div class="video-item">
+                    <div class="vtitle">Building a SaaS Security Program <span class="vtag">Getting started</span></div>
+                    <p class="vdesc">El <strong>playbook oficial</strong> de CrowdStrike para arrancar un programa completo de seguridad SaaS. Roadmap típico a 90 días: inventario → checks críticos → remediación → automatización → métricas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="exam-tip" style="margin-top: 28px;">
+            <p style="color: var(--text-secondary); margin: 0;">Complementa estos videos con el curso formal <strong>CLOUD 151: Implementing SaaS Security with Falcon Shield</strong> en CrowdStrike University. Aparece como "related content" en casi todos los videos y es la ruta larga oficial (~4-6h). Los 20 videos de arriba son el resumen ejecutivo de ese curso.</p>
+        </div>
+    </div>
+
+</div>
+
+<script src="theme.js"></script>
+</body>
+</html>

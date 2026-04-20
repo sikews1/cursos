@@ -7,7 +7,7 @@
 const UI_TRANSLATIONS = {
     // Nav
     'Glosario': 'Glossary', 'Modulos': 'Modules', 'Quiz': 'Quiz', 'Flashcards': 'Flashcards',
-    'Simulador Examen': 'Exam Simulator', 'Escenarios': 'Scenarios',
+    'Simulador Examen': 'Exam Simulator', 'Escenarios': 'Scenarios', 'Shield': 'Shield',
 
     // Buttons
     'Siguiente': 'Next', 'Anterior': 'Previous', 'Repetir': 'Retry',
