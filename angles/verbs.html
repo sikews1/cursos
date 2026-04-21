@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verbs - Anglès</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ang-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ang-nav { background: rgba(9, 9, 11, 0.75); }
+        .ang-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ang-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ang-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ang-nav a.home { color: #dc2626; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .mode-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .mode-btn { padding: 8px 16px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
+        .mode-btn:hover { border-color: #2563eb; color: #2563eb; }
+        .mode-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+        .section { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 16px; }
+        .info-box { background: rgba(37, 99, 235, 0.06); border-left: 3px solid #2563eb; padding: 14px 18px; border-radius: 0 12px 12px 0; margin-bottom: 16px; font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary); }
+        .info-box strong { color: var(--text-primary); }
+
+        table.verbs-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        table.verbs-table th, table.verbs-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border-subtle); font-size: 0.88rem; }
+        table.verbs-table th { background: var(--bg-hover); font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.04em; color: var(--text-secondary); }
+        table.verbs-table td.base { font-weight: 700; color: #2563eb; }
+
+        .exercise { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .exercise h2 { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 14px; }
+        .prompt-box { background: var(--bg-base); padding: 18px; border-radius: 12px; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 14px; text-align: center; }
+        .prompt-box em { color: #2563eb; font-style: normal; font-weight: 700; background: rgba(37, 99, 235, 0.1); padding: 2px 8px; border-radius: 4px; }
+        .blank { display: inline-block; min-width: 100px; padding: 4px 12px; background: #fff; border: 2px solid #2563eb; border-radius: 8px; margin: 0 4px; }
+
+        .input-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
+        .input-row input { padding: 10px 16px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-primary); font-size: 0.95rem; flex: 1; min-width: 180px; max-width: 280px; font-weight: 600; }
+        .input-row input:focus { outline: none; border-color: #2563eb; }
+
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+        .btn-check { background: #2563eb; color: #fff; }
+        .btn-check:hover { background: #3b82f6; }
+        .btn-new { background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { border-color: #2563eb; color: #2563eb; }
+
+        .feedback { text-align: center; padding: 12px; border-radius: 12px; margin-top: 14px; font-weight: 600; display: none; }
+        .feedback.ok { background: rgba(34, 197, 94, 0.15); color: #16a34a; display: block; }
+        .feedback.ko { background: rgba(239, 68, 68, 0.15); color: #dc2626; display: block; }
+
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="ang-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="vocab.html">Vocabulari</a>
+    <a href="verbs.html" class="active">Verbs</a>
+    <a href="reading.html">Lectura</a>
+    <a href="grammar.html">Gramàtica</a>
+</div>
+
+<div class="container">
+    <h1><span>Verbs</span> d'anglès</h1>
+    <p class="subtitle">Aprèn els verbs més importants. Practica amb exercicis infinits.</p>
+
+    <div class="mode-picker">
+        <button class="mode-btn active" onclick="setMode('regular')">Verbs regulars</button>
+        <button class="mode-btn" onclick="setMode('irregular')">Verbs irregulars</button>
+        <button class="mode-btn" onclick="setMode('tobe')">To be / To have</button>
+    </div>
+
+    <div id="modeContent"></div>
+
+    <div class="exercise">
+        <h2>&#x1F3AF; Exercici infinit</h2>
+        <div class="prompt-box" id="exercisePrompt">Prem "Nou exercici" per començar.</div>
+        <div class="input-row">
+            <input type="text" id="answerInput" placeholder="Escriu la resposta..." onkeyup="if(event.key==='Enter') checkAnswer()">
+            <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+            <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <div class="score" id="score">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const REGULAR = [
+    { base: 'play', past: 'played', pp: 'played', ca: 'jugar' },
+    { base: 'work', past: 'worked', pp: 'worked', ca: 'treballar' },
+    { base: 'walk', past: 'walked', pp: 'walked', ca: 'caminar' },
+    { base: 'talk', past: 'talked', pp: 'talked', ca: 'parlar' },
+    { base: 'listen', past: 'listened', pp: 'listened', ca: 'escoltar' },
+    { base: 'watch', past: 'watched', pp: 'watched', ca: 'mirar' },
+    { base: 'want', past: 'wanted', pp: 'wanted', ca: 'voler' },
+    { base: 'study', past: 'studied', pp: 'studied', ca: 'estudiar' },
+    { base: 'live', past: 'lived', pp: 'lived', ca: 'viure' },
+    { base: 'love', past: 'loved', pp: 'loved', ca: 'estimar' },
+    { base: 'cook', past: 'cooked', pp: 'cooked', ca: 'cuinar' },
+    { base: 'help', past: 'helped', pp: 'helped', ca: 'ajudar' }
+];
+
+const IRREGULAR = [
+    { base: 'be', past: 'was/were', pp: 'been', ca: 'ser/estar' },
+    { base: 'have', past: 'had', pp: 'had', ca: 'tenir' },
+    { base: 'do', past: 'did', pp: 'done', ca: 'fer' },
+    { base: 'go', past: 'went', pp: 'gone', ca: 'anar' },
+    { base: 'see', past: 'saw', pp: 'seen', ca: 'veure' },
+    { base: 'eat', past: 'ate', pp: 'eaten', ca: 'menjar' },
+    { base: 'drink', past: 'drank', pp: 'drunk', ca: 'beure' },
+    { base: 'sleep', past: 'slept', pp: 'slept', ca: 'dormir' },
+    { base: 'come', past: 'came', pp: 'come', ca: 'venir' },
+    { base: 'give', past: 'gave', pp: 'given', ca: 'donar' },
+    { base: 'take', past: 'took', pp: 'taken', ca: 'prendre' },
+    { base: 'make', past: 'made', pp: 'made', ca: 'fer (crear)' },
+    { base: 'write', past: 'wrote', pp: 'written', ca: 'escriure' },
+    { base: 'read', past: 'read', pp: 'read', ca: 'llegir' },
+    { base: 'speak', past: 'spoke', pp: 'spoken', ca: 'parlar' },
+    { base: 'think', past: 'thought', pp: 'thought', ca: 'pensar' },
+    { base: 'know', past: 'knew', pp: 'known', ca: 'saber' },
+    { base: 'find', past: 'found', pp: 'found', ca: 'trobar' },
+    { base: 'buy', past: 'bought', pp: 'bought', ca: 'comprar' },
+    { base: 'bring', past: 'brought', pp: 'brought', ca: 'portar' },
+    { base: 'run', past: 'ran', pp: 'run', ca: 'córrer' },
+    { base: 'swim', past: 'swam', pp: 'swum', ca: 'nedar' },
+    { base: 'fly', past: 'flew', pp: 'flown', ca: 'volar' },
+    { base: 'drive', past: 'drove', pp: 'driven', ca: 'conduir' }
+];
+
+const TOBE = [
+    { subj: 'I', be: 'am', have: 'have' },
+    { subj: 'You', be: 'are', have: 'have' },
+    { subj: 'He', be: 'is', have: 'has' },
+    { subj: 'She', be: 'is', have: 'has' },
+    { subj: 'It', be: 'is', have: 'has' },
+    { subj: 'We', be: 'are', have: 'have' },
+    { subj: 'They', be: 'are', have: 'have' }
+];
+
+let mode = 'regular';
+let correct = 0, wrong = 0;
+let currentExercise = null;
+
+function setMode(m) {
+    mode = m;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderMode();
+    newExercise();
+}
+
+function renderMode() {
+    const c = document.getElementById('modeContent');
+    if (mode === 'regular') {
+        c.innerHTML = `
+            <div class="section">
+                <div class="info-box"><strong>Verbs regulars:</strong> afegeixen <strong>-ed</strong> al passat i al past participle. Si acaben en <strong>-y</strong> després de consonant, la <strong>y</strong> es canvia a <strong>i</strong> (study → studied).</div>
+                <table class="verbs-table">
+                    <tr><th>Infinitiu</th><th>Past simple</th><th>Past participle</th><th>Català</th></tr>
+                    ${REGULAR.map(v => `<tr><td class="base">${v.base}</td><td>${v.past}</td><td>${v.pp}</td><td>${v.ca}</td></tr>`).join('')}
+                </table>
+            </div>`;
+    } else if (mode === 'irregular') {
+        c.innerHTML = `
+            <div class="section">
+                <div class="info-box"><strong>Verbs irregulars:</strong> cada verb té la seva pròpia forma de passat i past participle. Les <strong>has de memoritzar</strong>. Són els més usats i cal saber-los de cor.</div>
+                <table class="verbs-table">
+                    <tr><th>Infinitiu</th><th>Past simple</th><th>Past participle</th><th>Català</th></tr>
+                    ${IRREGULAR.map(v => `<tr><td class="base">${v.base}</td><td>${v.past}</td><td>${v.pp}</td><td>${v.ca}</td></tr>`).join('')}
+                </table>
+            </div>`;
+    } else {
+        c.innerHTML = `
+            <div class="section">
+                <div class="info-box"><strong>To be</strong> (ser/estar) i <strong>to have</strong> (tenir) són els verbs més importants. Es conjuguen de forma diferent segons el subjecte.</div>
+                <table class="verbs-table">
+                    <tr><th>Subjecte</th><th>To be (present)</th><th>To have (present)</th></tr>
+                    ${TOBE.map(t => `<tr><td class="base">${t.subj}</td><td>${t.be}</td><td>${t.have}</td></tr>`).join('')}
+                </table>
+            </div>`;
+    }
+}
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function newExercise() {
+    document.getElementById('feedback').className = 'feedback';
+    document.getElementById('answerInput').value = '';
+    document.getElementById('answerInput').focus();
+
+    if (mode === 'regular' || mode === 'irregular') {
+        const list = mode === 'regular' ? REGULAR : IRREGULAR;
+        const v = pick(list);
+        const askType = Math.random() < 0.5 ? 'past' : 'pp';
+        const label = askType === 'past' ? 'past simple' : 'past participle';
+        currentExercise = { answer: v[askType], base: v.base };
+        document.getElementById('exercisePrompt').innerHTML = `Quina és la forma <em>${label}</em> de <strong>${v.base}</strong> (${v.ca})?`;
+    } else {
+        const t = pick(TOBE);
+        const verb = Math.random() < 0.5 ? 'be' : 'have';
+        currentExercise = { answer: t[verb], base: t.subj };
+        document.getElementById('exercisePrompt').innerHTML = `Completa: <strong>${t.subj}</strong> <em>${verb === 'be' ? '(to be)' : '(to have)'}</em> <span class="blank">?</span> happy today.`;
+    }
+}
+
+function checkAnswer() {
+    const input = document.getElementById('answerInput').value.trim().toLowerCase();
+    const correct_ans = currentExercise.answer.toLowerCase();
+    const fb = document.getElementById('feedback');
+
+    // Accept alternate spelling for "was/were"
+    const valid = correct_ans.split('/').includes(input) || input === correct_ans;
+
+    if (valid) {
+        fb.className = 'feedback ok';
+        fb.textContent = '✓ Correcte! Molt bé.';
+        correct++;
+        setTimeout(newExercise, 1200);
+    } else {
+        fb.className = 'feedback ko';
+        fb.textContent = `✗ Incorrecte. La resposta era: ${currentExercise.answer}`;
+        wrong++;
+    }
+    document.getElementById('score').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+}
+
+renderMode();
+newExercise();
+</script>
+</body>
+</html>

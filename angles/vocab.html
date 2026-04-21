@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulari - Anglès</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ang-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ang-nav { background: rgba(9, 9, 11, 0.75); }
+        .ang-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ang-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ang-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ang-nav a.home { color: #dc2626; font-weight: 600; }
+
+        .container { max-width: 700px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .theme-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .theme-btn {
+            padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle);
+            background: var(--bg-raised); color: var(--text-secondary); font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .theme-btn:hover { border-color: #dc2626; color: #dc2626; }
+        .theme-btn.active { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+        .card-container { perspective: 1000px; margin: 0 auto 20px; max-width: 520px; }
+        .flashcard {
+            position: relative;
+            width: 100%; min-height: 220px;
+            background: var(--bg-raised);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .flashcard-face {
+            position: absolute; inset: 0;
+            backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 30px 24px; text-align: center;
+        }
+        .flashcard-back { transform: rotateY(180deg); }
+        .flashcard-emoji { font-size: 3.5rem; margin-bottom: 10px; }
+        .flashcard-word { font-size: 1.8rem; font-weight: 800; color: #dc2626; margin-bottom: 6px; }
+        .flashcard-translation { font-size: 1.4rem; font-weight: 700; color: #2563eb; margin-bottom: 8px; }
+        .flashcard-example { font-size: 0.9rem; color: var(--text-secondary); font-style: italic; max-width: 380px; }
+        .flashcard-tap { margin-top: 14px; font-size: 0.72rem; color: var(--text-muted); }
+
+        .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 600; cursor: pointer; font-size: 0.88rem; transition: all 0.2s; }
+        .btn-prev, .btn-next { background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-prev:hover, .btn-next:hover { border-color: #dc2626; }
+        .btn-flip { background: #dc2626; color: #fff; }
+        .btn-flip:hover { background: #ef4444; }
+        .btn-speak { background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-speak:hover { border-color: #2563eb; color: #2563eb; }
+
+        .progress { text-align: center; color: var(--text-muted); font-size: 0.82rem; margin-bottom: 14px; }
+        .progress-bar { width: 100%; height: 4px; background: var(--bg-hover); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #dc2626, #2563eb); transition: width 0.3s; }
+
+        .quiz-mode { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+        .quiz-title { text-align: center; font-weight: 700; margin-bottom: 14px; color: var(--text-primary); }
+        .quiz-question { background: var(--bg-raised); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); text-align: center; margin-bottom: 14px; }
+        .quiz-question .emoji { font-size: 3rem; margin-bottom: 8px; }
+        .quiz-question .prompt { font-size: 1rem; color: var(--text-secondary); }
+        .quiz-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .quiz-opt { padding: 14px; border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-raised); cursor: pointer; font-weight: 600; transition: all 0.2s; color: var(--text-primary); font-size: 0.95rem; }
+        .quiz-opt:hover { border-color: #dc2626; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #22c55e; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #ef4444; }
+        .quiz-score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="ang-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="vocab.html" class="active">Vocabulari</a>
+    <a href="verbs.html">Verbs</a>
+    <a href="reading.html">Lectura</a>
+    <a href="grammar.html">Gramàtica</a>
+</div>
+
+<div class="container">
+    <h1><span>Vocabulari</span> d'anglès</h1>
+    <p class="subtitle">Flashcards amb pronunciació i quiz al final. Clica la targeta per girar-la.</p>
+
+    <div class="theme-picker" id="themePicker"></div>
+
+    <div class="progress" id="progress">Carta 1 de 10</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+
+    <div class="card-container">
+        <div class="flashcard" id="card" onclick="flipCard()">
+            <div class="flashcard-face flashcard-front">
+                <div class="flashcard-emoji" id="frontEmoji">&#x1F431;</div>
+                <div class="flashcard-word" id="frontWord">cat</div>
+                <div class="flashcard-tap">clica per veure la traducció</div>
+            </div>
+            <div class="flashcard-face flashcard-back">
+                <div class="flashcard-emoji" id="backEmoji">&#x1F431;</div>
+                <div class="flashcard-translation" id="backTranslation">gat</div>
+                <div class="flashcard-example" id="backExample">The cat is on the chair. (El gat és a la cadira.)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-prev" onclick="prevCard()">&#8592; Anterior</button>
+        <button class="btn btn-speak" onclick="speakWord()">&#x1F509; Escoltar</button>
+        <button class="btn btn-flip" onclick="flipCard()">Girar targeta</button>
+        <button class="btn btn-next" onclick="nextCard()">Següent &#8594;</button>
+    </div>
+
+    <div class="quiz-mode">
+        <div class="quiz-title">Quiz ràpid &mdash; Què vol dir aquesta imatge?</div>
+        <div class="quiz-question">
+            <div class="emoji" id="quizEmoji">&#x1F436;</div>
+            <div class="prompt" id="quizPrompt">Tria la paraula correcta en anglès:</div>
+        </div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-score" id="quizScore">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const VOCAB = {
+    animals: {
+        label: 'Animals',
+        icon: '🐱',
+        words: [
+            { emoji: '🐱', en: 'cat', ca: 'gat', ex: 'The cat is on the chair.' },
+            { emoji: '🐶', en: 'dog', ca: 'gos', ex: 'My dog likes to play.' },
+            { emoji: '🐰', en: 'rabbit', ca: 'conill', ex: 'The rabbit is white.' },
+            { emoji: '🐴', en: 'horse', ca: 'cavall', ex: 'She rides a horse.' },
+            { emoji: '🐮', en: 'cow', ca: 'vaca', ex: 'Cows give us milk.' },
+            { emoji: '🐷', en: 'pig', ca: 'porc', ex: 'The pig is pink.' },
+            { emoji: '🐔', en: 'chicken', ca: 'pollastre', ex: 'The chicken lays eggs.' },
+            { emoji: '🐦', en: 'bird', ca: 'ocell', ex: 'Birds can fly.' },
+            { emoji: '🐟', en: 'fish', ca: 'peix', ex: 'Fish live in water.' },
+            { emoji: '🦁', en: 'lion', ca: 'lleó', ex: 'The lion is the king of the jungle.' },
+            { emoji: '🐘', en: 'elephant', ca: 'elefant', ex: 'Elephants are very big.' },
+            { emoji: '🐒', en: 'monkey', ca: 'mico', ex: 'Monkeys climb trees.' }
+        ]
+    },
+    colors: {
+        label: 'Colors',
+        icon: '🎨',
+        words: [
+            { emoji: '🔴', en: 'red', ca: 'vermell', ex: 'The apple is red.' },
+            { emoji: '🔵', en: 'blue', ca: 'blau', ex: 'The sky is blue.' },
+            { emoji: '🟢', en: 'green', ca: 'verd', ex: 'The grass is green.' },
+            { emoji: '🟡', en: 'yellow', ca: 'groc', ex: 'The sun is yellow.' },
+            { emoji: '🟠', en: 'orange', ca: 'taronja', ex: 'Oranges are orange.' },
+            { emoji: '🟣', en: 'purple', ca: 'lila', ex: 'I like purple flowers.' },
+            { emoji: '⚫', en: 'black', ca: 'negre', ex: 'The cat is black.' },
+            { emoji: '⚪', en: 'white', ca: 'blanc', ex: 'Snow is white.' },
+            { emoji: '🟤', en: 'brown', ca: 'marró', ex: 'The chocolate is brown.' },
+            { emoji: '🩷', en: 'pink', ca: 'rosa', ex: 'She wears a pink dress.' }
+        ]
+    },
+    food: {
+        label: 'Menjar',
+        icon: '🍎',
+        words: [
+            { emoji: '🍎', en: 'apple', ca: 'poma', ex: 'I eat an apple every day.' },
+            { emoji: '🍌', en: 'banana', ca: 'plàtan', ex: 'Monkeys love bananas.' },
+            { emoji: '🍞', en: 'bread', ca: 'pa', ex: 'I like fresh bread.' },
+            { emoji: '🧀', en: 'cheese', ca: 'formatge', ex: 'Cheese is made from milk.' },
+            { emoji: '🍕', en: 'pizza', ca: 'pizza', ex: 'Pizza is my favorite food.' },
+            { emoji: '🍔', en: 'burger', ca: 'hamburguesa', ex: 'We ate a big burger.' },
+            { emoji: '🍟', en: 'fries', ca: 'patates fregides', ex: 'I want fries with that.' },
+            { emoji: '🥛', en: 'milk', ca: 'llet', ex: 'I drink milk for breakfast.' },
+            { emoji: '🍫', en: 'chocolate', ca: 'xocolata', ex: 'Chocolate is sweet.' },
+            { emoji: '🍰', en: 'cake', ca: 'pastís', ex: 'The birthday cake is delicious.' },
+            { emoji: '🥕', en: 'carrot', ca: 'pastanaga', ex: 'Rabbits eat carrots.' },
+            { emoji: '🥚', en: 'egg', ca: 'ou', ex: 'Chickens lay eggs.' }
+        ]
+    },
+    family: {
+        label: 'Família',
+        icon: '👨‍👩‍👧',
+        words: [
+            { emoji: '👨', en: 'father', ca: 'pare', ex: 'My father works in a bank.' },
+            { emoji: '👩', en: 'mother', ca: 'mare', ex: 'My mother is a teacher.' },
+            { emoji: '👦', en: 'brother', ca: 'germà', ex: 'I have one brother.' },
+            { emoji: '👧', en: 'sister', ca: 'germana', ex: 'My sister is younger.' },
+            { emoji: '👴', en: 'grandfather', ca: 'avi', ex: 'My grandfather is funny.' },
+            { emoji: '👵', en: 'grandmother', ca: 'àvia', ex: 'My grandmother cooks well.' },
+            { emoji: '👶', en: 'baby', ca: 'nadó', ex: 'The baby is sleeping.' },
+            { emoji: '🧒', en: 'child', ca: 'nen/a', ex: 'The child is playing.' }
+        ]
+    },
+    body: {
+        label: 'Cos',
+        icon: '👀',
+        words: [
+            { emoji: '👀', en: 'eyes', ca: 'ulls', ex: 'Her eyes are green.' },
+            { emoji: '👄', en: 'mouth', ca: 'boca', ex: 'Open your mouth!' },
+            { emoji: '👃', en: 'nose', ca: 'nas', ex: 'I smell with my nose.' },
+            { emoji: '👂', en: 'ear', ca: 'orella', ex: 'I hear with my ears.' },
+            { emoji: '✋', en: 'hand', ca: 'mà', ex: 'Wash your hands!' },
+            { emoji: '🦶', en: 'foot', ca: 'peu', ex: 'My foot hurts.' },
+            { emoji: '🦵', en: 'leg', ca: 'cama', ex: 'I broke my leg.' },
+            { emoji: '💪', en: 'arm', ca: 'braç', ex: 'Strong arms!' },
+            { emoji: '🧠', en: 'brain', ca: 'cervell', ex: 'The brain thinks.' },
+            { emoji: '❤️', en: 'heart', ca: 'cor', ex: 'The heart pumps blood.' }
+        ]
+    },
+    city: {
+        label: 'Ciutat',
+        icon: '🏫',
+        words: [
+            { emoji: '🏫', en: 'school', ca: 'escola', ex: 'I go to school every morning.' },
+            { emoji: '🏥', en: 'hospital', ca: 'hospital', ex: 'Doctors work at the hospital.' },
+            { emoji: '🏪', en: 'shop', ca: 'botiga', ex: 'Let\'s go to the shop.' },
+            { emoji: '🏦', en: 'bank', ca: 'banc', ex: 'I need to go to the bank.' },
+            { emoji: '🏛️', en: 'museum', ca: 'museu', ex: 'The museum is free on Sundays.' },
+            { emoji: '🏰', en: 'castle', ca: 'castell', ex: 'Kings lived in castles.' },
+            { emoji: '🚉', en: 'station', ca: 'estació', ex: 'The train station is big.' },
+            { emoji: '🏟️', en: 'stadium', ca: 'estadi', ex: 'We watched football at the stadium.' },
+            { emoji: '🌳', en: 'park', ca: 'parc', ex: 'Kids play at the park.' },
+            { emoji: '🛣️', en: 'street', ca: 'carrer', ex: 'I live on Main Street.' }
+        ]
+    },
+    tech: {
+        label: 'Tecnologia',
+        icon: '💻',
+        words: [
+            { emoji: '💻', en: 'computer', ca: 'ordinador', ex: 'I use my computer every day.' },
+            { emoji: '📱', en: 'phone', ca: 'telèfon', ex: 'She talks on the phone.' },
+            { emoji: '⌨️', en: 'keyboard', ca: 'teclat', ex: 'Type on the keyboard.' },
+            { emoji: '🖱️', en: 'mouse', ca: 'ratolí', ex: 'Click with the mouse.' },
+            { emoji: '🔌', en: 'plug', ca: 'endoll', ex: 'The plug is broken.' },
+            { emoji: '📺', en: 'TV', ca: 'televisió', ex: 'We watch TV at night.' },
+            { emoji: '🎧', en: 'headphones', ca: 'auriculars', ex: 'I listen with headphones.' },
+            { emoji: '📷', en: 'camera', ca: 'càmera', ex: 'Take a picture with the camera.' },
+            { emoji: '💾', en: 'file', ca: 'arxiu', ex: 'Save the file.' },
+            { emoji: '🔋', en: 'battery', ca: 'bateria', ex: 'The battery is low.' }
+        ]
+    }
+};
+
+let currentTheme = 'animals';
+let currentIdx = 0;
+let correct = 0, wrong = 0;
+
+function renderThemePicker() {
+    const picker = document.getElementById('themePicker');
+    picker.innerHTML = '';
+    Object.keys(VOCAB).forEach(key => {
+        const btn = document.createElement('button');
+        btn.className = 'theme-btn' + (key === currentTheme ? ' active' : '');
+        btn.textContent = VOCAB[key].icon + ' ' + VOCAB[key].label;
+        btn.onclick = () => selectTheme(key);
+        picker.appendChild(btn);
+    });
+}
+
+function selectTheme(key) {
+    currentTheme = key;
+    currentIdx = 0;
+    renderThemePicker();
+    showCard();
+    nextQuiz();
+}
+
+function showCard() {
+    const list = VOCAB[currentTheme].words;
+    const w = list[currentIdx];
+    document.getElementById('frontEmoji').textContent = w.emoji;
+    document.getElementById('frontWord').textContent = w.en;
+    document.getElementById('backEmoji').textContent = w.emoji;
+    document.getElementById('backTranslation').textContent = w.ca;
+    document.getElementById('backExample').textContent = w.ex;
+    document.getElementById('card').classList.remove('flipped');
+    document.getElementById('progress').textContent = `Carta ${currentIdx + 1} de ${list.length}`;
+    document.getElementById('progressFill').style.width = `${((currentIdx + 1) / list.length) * 100}%`;
+}
+
+function flipCard() { document.getElementById('card').classList.toggle('flipped'); }
+function nextCard() { const list = VOCAB[currentTheme].words; currentIdx = (currentIdx + 1) % list.length; showCard(); }
+function prevCard() { const list = VOCAB[currentTheme].words; currentIdx = (currentIdx - 1 + list.length) % list.length; showCard(); }
+
+function speakWord() {
+    const w = VOCAB[currentTheme].words[currentIdx];
+    if ('speechSynthesis' in window) {
+        const u = new SpeechSynthesisUtterance(w.en);
+        u.lang = 'en-US';
+        u.rate = 0.8;
+        speechSynthesis.speak(u);
+    } else {
+        alert('El teu navegador no suporta pronunciació automàtica.');
+    }
+}
+
+function nextQuiz() {
+    const list = VOCAB[currentTheme].words;
+    const correctWord = list[Math.floor(Math.random() * list.length)];
+    const others = list.filter(w => w.en !== correctWord.en).sort(() => Math.random() - 0.5).slice(0, 3);
+    const options = [...others, correctWord].sort(() => Math.random() - 0.5);
+
+    document.getElementById('quizEmoji').textContent = correctWord.emoji;
+    const optsDiv = document.getElementById('quizOptions');
+    optsDiv.innerHTML = '';
+    options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt.en;
+        btn.onclick = () => {
+            if (opt.en === correctWord.en) {
+                btn.classList.add('correct');
+                correct++;
+                setTimeout(nextQuiz, 700);
+            } else {
+                btn.classList.add('wrong');
+                wrong++;
+                setTimeout(() => { btn.classList.remove('wrong'); }, 1000);
+            }
+            document.getElementById('quizScore').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        optsDiv.appendChild(btn);
+    });
+}
+
+renderThemePicker();
+showCard();
+nextQuiz();
+</script>
+</body>
+</html>

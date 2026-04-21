@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lectura - Anglès</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ang-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ang-nav { background: rgba(9, 9, 11, 0.75); }
+        .ang-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ang-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ang-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ang-nav a.home { color: #dc2626; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .level-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .level-btn { padding: 8px 16px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.85rem; }
+        .level-btn:hover { border-color: #059669; color: #059669; }
+        .level-btn.active { background: #059669; color: #fff; border-color: #059669; }
+
+        .text-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px 28px; margin-bottom: 16px; line-height: 1.8; }
+        .text-card h2 { font-size: 1.15rem; color: #059669; margin-bottom: 10px; }
+        .text-card p { color: var(--text-primary); font-size: 1rem; margin-bottom: 12px; }
+        .text-card .translate-btn { padding: 6px 14px; border-radius: var(--radius-full); background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-secondary); cursor: pointer; font-size: 0.78rem; font-weight: 600; margin-top: 6px; }
+        .text-card .translate-btn:hover { border-color: #059669; color: #059669; }
+        .text-translation { display: none; margin-top: 12px; padding: 14px; background: rgba(5, 150, 105, 0.06); border-radius: 10px; font-size: 0.92rem; color: var(--text-secondary); font-style: italic; line-height: 1.7; }
+        .text-translation.show { display: block; }
+
+        .question-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 20px 24px; margin-bottom: 12px; }
+        .question-card .q-label { font-size: 0.72rem; font-weight: 700; color: #059669; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+        .question-card .q-text { font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
+        .q-options { display: grid; gap: 8px; }
+        .q-opt { padding: 12px 14px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 500; transition: all 0.2s; color: var(--text-primary); font-size: 0.9rem; text-align: left; }
+        .q-opt:hover { border-color: #059669; }
+        .q-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; font-weight: 600; }
+        .q-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; font-weight: 600; }
+
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 600; cursor: pointer; font-size: 0.88rem; }
+        .btn-primary { background: #059669; color: #fff; }
+        .btn-primary:hover { background: #10b981; }
+        .actions { text-align: center; margin-top: 16px; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="ang-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="vocab.html">Vocabulari</a>
+    <a href="verbs.html">Verbs</a>
+    <a href="reading.html" class="active">Lectura</a>
+    <a href="grammar.html">Gramàtica</a>
+</div>
+
+<div class="container">
+    <h1><span>Lectura</span> en anglès</h1>
+    <p class="subtitle">Llegeix el text, respon les preguntes, i comprova la traducció si cal.</p>
+
+    <div class="level-picker">
+        <button class="level-btn active" onclick="setLevel('easy')">Fàcil (primària)</button>
+        <button class="level-btn" onclick="setLevel('medium')">Mitjà (ESO)</button>
+        <button class="level-btn" onclick="setLevel('hard')">Difícil (batx)</button>
+    </div>
+
+    <div id="readingContent"></div>
+
+    <div class="actions">
+        <button class="btn btn-primary" onclick="loadText()">&#x1F504; Nou text</button>
+    </div>
+    <div class="score" id="score">Encerts: 0 &bull; Errors: 0</div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const TEXTS = {
+    easy: [
+        {
+            title: 'My cat',
+            en: `I have a cat. His name is Milo. He is black and white. He likes to sleep on my bed. In the morning, he drinks milk and eats fish. Milo plays with a small ball. He is my best friend.`,
+            ca: `Tinc un gat. Es diu Milo. És blanc i negre. Li agrada dormir al meu llit. Al matí, beu llet i menja peix. En Milo juga amb una pilota petita. És el meu millor amic.`,
+            q: [
+                { q: 'What color is Milo?', opts: ['Black and white', 'All black', 'All white', 'Brown'], a: 0 },
+                { q: 'What does Milo eat?', opts: ['Bread', 'Fish and milk', 'Apples', 'Cheese'], a: 1 },
+                { q: 'Where does Milo sleep?', opts: ['In the garden', 'On the chair', 'On my bed', 'In a box'], a: 2 }
+            ]
+        },
+        {
+            title: 'At the park',
+            en: `On Saturdays, I go to the park with my family. My little brother plays with a red ball. My sister rides her bicycle. My father reads a book on the bench. My mother brings sandwiches and juice. We are very happy.`,
+            ca: `Els dissabtes, vaig al parc amb la meva família. El meu germà petit juga amb una pilota vermella. La meva germana va amb bicicleta. El meu pare llegeix un llibre al banc. La meva mare porta entrepans i suc. Som molt feliços.`,
+            q: [
+                { q: 'When do they go to the park?', opts: ['Mondays', 'Saturdays', 'Every day', 'Sundays'], a: 1 },
+                { q: 'What does the father do?', opts: ['Plays football', 'Reads a book', 'Sleeps', 'Cooks'], a: 1 },
+                { q: 'What does mother bring?', opts: ['Cookies', 'Pizza', 'Sandwiches and juice', 'Nothing'], a: 2 }
+            ]
+        },
+        {
+            title: 'My school day',
+            en: `I wake up at seven o'clock. I eat cereal and drink milk. At eight, I go to school. I have five classes every day. I like English and maths. At lunchtime, I eat with my friends. I come home at five. I do my homework and watch TV.`,
+            ca: `Em llevo a les set. Menjo cereals i bec llet. A les vuit, vaig a l'escola. Tinc cinc classes cada dia. M'agrada l'anglès i les mates. A l'hora de dinar, dino amb els meus amics. Arribo a casa a les cinc. Faig els deures i miro la tele.`,
+            q: [
+                { q: 'What time does the student wake up?', opts: ['6am', '7am', '8am', '9am'], a: 1 },
+                { q: 'How many classes per day?', opts: ['Three', 'Four', 'Five', 'Six'], a: 2 },
+                { q: 'What subjects does she like?', opts: ['Science and art', 'English and maths', 'Music and PE', 'History only'], a: 1 }
+            ]
+        }
+    ],
+    medium: [
+        {
+            title: 'A weekend trip',
+            en: `Last weekend, we went to Barcelona by train. The journey took two hours and the weather was sunny. First, we visited the Sagrada Familia, which is an amazing church. Then we walked along Las Ramblas and bought souvenirs. We had lunch at a small restaurant near the port. I tried paella for the first time — it was delicious! In the afternoon, we went to the beach and swam for an hour. We came back home tired but happy.`,
+            ca: `El cap de setmana passat vam anar a Barcelona en tren. El viatge va durar dues hores i feia sol. Primer vam visitar la Sagrada Família, que és una església impressionant. Després vam passejar per les Rambles i vam comprar records. Vam dinar en un restaurant petit prop del port. Vaig provar la paella per primera vegada — estava deliciosa! A la tarda vam anar a la platja i vam nedar una hora. Vam tornar a casa cansats però feliços.`,
+            q: [
+                { q: 'How did they travel to Barcelona?', opts: ['By plane', 'By car', 'By train', 'By bus'], a: 2 },
+                { q: 'Where did they have lunch?', opts: ['At home', 'Near the port', 'At Sagrada Familia', 'On the beach'], a: 1 },
+                { q: 'How did they feel at the end?', opts: ['Bored', 'Tired but happy', 'Angry', 'Hungry'], a: 1 }
+            ]
+        },
+        {
+            title: 'The missing dog',
+            en: `Yesterday, my neighbour Sarah lost her dog. His name is Rex and he is a small brown dog. She was crying because she couldn't find him anywhere. My brother and I decided to help her. We searched the park, the streets, and even the supermarket. Finally, we heard a bark coming from under a car. It was Rex! He was hiding because he was scared of the fireworks. Sarah was so happy that she gave us each a box of chocolates.`,
+            ca: `Ahir, la meva veïna Sarah va perdre el seu gos. Es diu Rex i és un gos petit marró. Plorava perquè no el trobava enlloc. El meu germà i jo vam decidir ajudar-la. Vam buscar al parc, als carrers i fins i tot al supermercat. Per fi vam sentir un lladruc sota un cotxe. Era en Rex! S'amagava perquè tenia por dels focs artificials. La Sarah estava tan contenta que ens va donar a cadascun una caixa de bombons.`,
+            q: [
+                { q: 'Why was Sarah crying?', opts: ['She hurt herself', 'She couldn\'t find her dog', 'She failed a test', 'She was afraid'], a: 1 },
+                { q: 'Where was Rex hiding?', opts: ['In the garden', 'Under a bed', 'Under a car', 'In the supermarket'], a: 2 },
+                { q: 'Why was Rex hiding?', opts: ['He was sick', 'He was playing', 'He was tired', 'Fireworks scared him'], a: 3 }
+            ]
+        }
+    ],
+    hard: [
+        {
+            title: 'The power of habits',
+            en: `According to recent studies in neuroscience, nearly 40% of our daily actions are habits rather than conscious decisions. The brain creates neural patterns to save energy — once a behaviour is repeated enough times, it becomes automatic. This is efficient, but it also means that bad habits are difficult to break. Psychologists suggest that instead of trying to eliminate a bad habit entirely, it is more effective to replace it with a better one. For example, someone who snacks when stressed could take a short walk instead. The cue (stress) and reward (relief) stay the same, only the routine changes. Small, consistent changes compound over time and can transform one's life.`,
+            ca: `Segons estudis recents en neurociència, gairebé el 40% de les nostres accions diàries són hàbits, no decisions conscients. El cervell crea patrons neuronals per estalviar energia — quan un comportament es repeteix prou vegades, es torna automàtic. Això és eficient, però també vol dir que els mals hàbits són difícils de trencar. Els psicòlegs suggereixen que, en lloc d'intentar eliminar un mal hàbit del tot, és més efectiu substituir-lo per un de millor. Per exemple, algú que menja compulsivament quan està estressat podria fer una passejada curta en comptes. La senyal (estrès) i la recompensa (alleujament) són iguals, només canvia la rutina. Els canvis petits i consistents s'acumulen amb el temps i poden transformar una vida.`,
+            q: [
+                { q: 'What percentage of daily actions are habits?', opts: ['About 10%', 'About 25%', 'About 40%', 'About 70%'], a: 2 },
+                { q: 'Why does the brain create habits?', opts: ['To save energy', 'To be creative', 'To feel happy', 'To sleep better'], a: 0 },
+                { q: 'What do psychologists recommend?', opts: ['Eliminate the habit', 'Replace the routine, keep the cue and reward', 'Ignore the habit', 'Change everything at once'], a: 1 }
+            ]
+        }
+    ]
+};
+
+let currentLevel = 'easy';
+let correct = 0, wrong = 0;
+
+function setLevel(l) {
+    currentLevel = l;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    loadText();
+}
+
+function loadText() {
+    const list = TEXTS[currentLevel];
+    const t = list[Math.floor(Math.random() * list.length)];
+    const c = document.getElementById('readingContent');
+    c.innerHTML = `
+        <div class="text-card">
+            <h2>${t.title}</h2>
+            <p>${t.en}</p>
+            <button class="translate-btn" onclick="this.nextElementSibling.classList.toggle('show')">Veure traducció</button>
+            <div class="text-translation">${t.ca}</div>
+        </div>
+        <div id="questions"></div>
+    `;
+    const qDiv = document.getElementById('questions');
+    t.q.forEach((q, i) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="q-label">Pregunta ${i + 1}</div>
+            <div class="q-text">${q.q}</div>
+            <div class="q-options">
+                ${q.opts.map((o, j) => `<button class="q-opt" data-correct="${j === q.a}">${o}</button>`).join('')}
+            </div>
+        `;
+        qDiv.appendChild(card);
+    });
+    document.querySelectorAll('.q-opt').forEach(btn => {
+        btn.onclick = () => {
+            const isOk = btn.dataset.correct === 'true';
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.q-opt').forEach(b => b.disabled = true);
+            if (isOk) {
+                btn.classList.add('correct');
+                correct++;
+            } else {
+                btn.classList.add('wrong');
+                parent.querySelector('[data-correct="true"]').classList.add('correct');
+                wrong++;
+            }
+            document.getElementById('score').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+    });
+}
+
+loadText();
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anglès - Exercicis Interactius</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ang-nav {
+            background: rgba(240,240,243, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        [data-theme="dark"] .ang-nav { background: rgba(9, 9, 11, 0.75); }
+        .ang-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+        }
+        .ang-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ang-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ang-nav a.home { color: #dc2626; font-weight: 600; }
+        .ang-nav a.home:hover { background: rgba(220, 38, 38, 0.1); }
+
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(220, 38, 38, 0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span {
+            background: linear-gradient(135deg, #dc2626, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+        .hero .badge-ang {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            background: rgba(220, 38, 38, 0.1);
+            color: #dc2626;
+            font-size: 0.8rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .course-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.25s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .course-card:hover { border-color: var(--border-default); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        .course-card .card-icon {
+            width: 40px; height: 40px; border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; margin-bottom: 12px; color: #fff;
+        }
+        .course-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .course-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+        .card-red::before { background: linear-gradient(90deg, #dc2626, #ef4444); }
+        .card-red .card-icon { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .card-red:hover { border-color: #ef4444; }
+
+        .card-blue::before { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+        .card-blue .card-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .card-blue:hover { border-color: #3b82f6; }
+
+        .card-purple::before { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+        .card-purple .card-icon { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+        .card-purple:hover { border-color: #8b5cf6; }
+
+        .card-green::before { background: linear-gradient(90deg, #059669, #10b981); }
+        .card-green .card-icon { background: linear-gradient(135deg, #059669, #10b981); }
+        .card-green:hover { border-color: #10b981; }
+
+        .level-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 4px 0; margin-top: 28px;
+        }
+        .level-badge span { padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; color: #fff; }
+        .level-primaria span { background: #22c55e; }
+        .level-eso span { background: #3b82f6; }
+        .level-batx span { background: #8b5cf6; }
+        .level-label { color: var(--text-secondary); font-size: 0.88rem; }
+
+        .footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.8rem; }
+
+        @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<div class="ang-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="vocab.html">Vocabulari</a>
+    <a href="verbs.html">Verbs</a>
+    <a href="reading.html">Lectura</a>
+    <a href="grammar.html">Gramàtica</a>
+</div>
+
+<div class="hero">
+    <h1><span>Anglès</span></h1>
+    <p>Exercicis interactius d'anglès &mdash; Primària, ESO i Batxillerat</p>
+    <div class="badge-ang">&#x1F1EC;&#x1F1E7; Practica cada dia</div>
+</div>
+
+<div class="container">
+
+    <div class="level-badge level-primaria"><span>PRIMÀRIA</span><span class="level-label" style="background:transparent;color:var(--text-secondary);padding:0;">6 - 12 anys</span></div>
+    <div class="courses-grid">
+        <a href="vocab.html?level=easy" class="course-card card-red">
+            <div class="card-icon">&#x1F4D6;</div>
+            <h3>Vocabulari bàsic</h3>
+            <p>Colors, animals, menjar, família, cos &mdash; flashcards amb pronunciació</p>
+        </a>
+        <a href="verbs.html?level=easy" class="course-card card-blue">
+            <div class="card-icon">&#x1F504;</div>
+            <h3>Verbs simples</h3>
+            <p>To be, to have, verbs regulars en present &mdash; amb exercicis</p>
+        </a>
+        <a href="reading.html?level=easy" class="course-card card-green">
+            <div class="card-icon">&#x1F4DA;</div>
+            <h3>Lectura fàcil</h3>
+            <p>Textos curts amb preguntes &mdash; vocabulari quotidià</p>
+        </a>
+        <a href="grammar.html?level=easy" class="course-card card-purple">
+            <div class="card-icon">&#x270F;&#xFE0F;</div>
+            <h3>Gramàtica bàsica</h3>
+            <p>Articles, plurals, pronoms personals &mdash; regles + quiz</p>
+        </a>
+    </div>
+
+    <div class="level-badge level-eso"><span>ESO</span><span class="level-label" style="background:transparent;color:var(--text-secondary);padding:0;">12 - 16 anys</span></div>
+    <div class="courses-grid">
+        <a href="vocab.html?level=medium" class="course-card card-red">
+            <div class="card-icon">&#x1F4D6;</div>
+            <h3>Vocabulari ampliat</h3>
+            <p>Ciutat, viatges, feina, emocions, tecnologia</p>
+        </a>
+        <a href="verbs.html?level=medium" class="course-card card-blue">
+            <div class="card-icon">&#x1F504;</div>
+            <h3>Verbs irregulars</h3>
+            <p>Past simple, past participle &mdash; els 80 més comuns</p>
+        </a>
+        <a href="reading.html?level=medium" class="course-card card-green">
+            <div class="card-icon">&#x1F4DA;</div>
+            <h3>Lectura intermèdia</h3>
+            <p>Notícies curtes, històries, diàlegs</p>
+        </a>
+        <a href="grammar.html?level=medium" class="course-card card-purple">
+            <div class="card-icon">&#x270F;&#xFE0F;</div>
+            <h3>Temps verbals</h3>
+            <p>Present perfect, past continuous, condicionals</p>
+        </a>
+    </div>
+
+    <div class="level-badge level-batx"><span>BATXILLERAT</span><span class="level-label" style="background:transparent;color:var(--text-secondary);padding:0;">16 - 18 anys</span></div>
+    <div class="courses-grid">
+        <a href="vocab.html?level=hard" class="course-card card-red">
+            <div class="card-icon">&#x1F4D6;</div>
+            <h3>Vocabulari avançat</h3>
+            <p>Idioms, phrasal verbs, collocations, formal vs informal</p>
+        </a>
+        <a href="reading.html?level=hard" class="course-card card-green">
+            <div class="card-icon">&#x1F4DA;</div>
+            <h3>Lectura avançada</h3>
+            <p>Assajos, articles d'opinió, comprensió crítica</p>
+        </a>
+        <a href="grammar.html?level=hard" class="course-card card-purple">
+            <div class="card-icon">&#x270F;&#xFE0F;</div>
+            <h3>Gramàtica avançada</h3>
+            <p>Reported speech, passive voice, inversion, modals</p>
+        </a>
+    </div>
+
+</div>
+
+<div class="footer">Anglès &mdash; Vocabulari, verbs, lectura i gramàtica per a tots els nivells</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

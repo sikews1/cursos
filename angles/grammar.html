@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gramàtica - Anglès</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ang-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ang-nav { background: rgba(9, 9, 11, 0.75); }
+        .ang-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ang-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ang-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ang-nav a.home { color: #dc2626; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #7c3aed, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .topic-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .topic-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.78rem; }
+        .topic-btn:hover { border-color: #8b5cf6; color: #8b5cf6; }
+        .topic-btn.active { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
+
+        .rule-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 16px; }
+        .rule-card h2 { font-size: 1.1rem; color: #8b5cf6; margin-bottom: 14px; }
+        .rule-card .explanation { color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px; font-size: 0.95rem; }
+        .rule-card .explanation strong { color: var(--text-primary); }
+        .rule-card .examples { background: var(--bg-base); border-radius: 10px; padding: 14px 18px; font-family: 'Courier New', monospace; font-size: 0.88rem; line-height: 1.8; color: var(--text-primary); }
+        .rule-card .examples .en { color: #dc2626; font-weight: 600; }
+        .rule-card .examples .ca { color: var(--text-muted); font-style: italic; margin-left: 8px; }
+
+        .exercise { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .exercise h2 { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 14px; }
+
+        .prompt-box { background: var(--bg-base); padding: 18px; border-radius: 12px; font-size: 1rem; color: var(--text-primary); margin-bottom: 14px; text-align: center; line-height: 1.8; }
+        .blank-inline { display: inline-block; min-width: 80px; padding: 2px 10px; background: #fff; border: 2px dashed #8b5cf6; border-radius: 8px; margin: 0 4px; text-align: center; color: transparent; }
+
+        .q-options { display: grid; gap: 8px; }
+        .q-opt { padding: 12px 16px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; transition: all 0.2s; color: var(--text-primary); font-size: 0.95rem; }
+        .q-opt:hover { border-color: #8b5cf6; }
+        .q-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .q-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 600; cursor: pointer; font-size: 0.88rem; }
+        .btn-new { background: #8b5cf6; color: #fff; }
+        .btn-new:hover { background: #a78bfa; }
+        .actions { text-align: center; margin-top: 14px; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="ang-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="vocab.html">Vocabulari</a>
+    <a href="verbs.html">Verbs</a>
+    <a href="reading.html">Lectura</a>
+    <a href="grammar.html" class="active">Gramàtica</a>
+</div>
+
+<div class="container">
+    <h1><span>Gramàtica</span> d'anglès</h1>
+    <p class="subtitle">Regles principals explicades i exercicis infinits de cada tema.</p>
+
+    <div class="topic-picker" id="topicPicker"></div>
+    <div id="ruleContent"></div>
+
+    <div class="exercise">
+        <h2>&#x1F3AF; Exercici infinit</h2>
+        <div class="prompt-box" id="prompt">Tria un tema a dalt.</div>
+        <div class="q-options" id="options"></div>
+        <div class="actions"><button class="btn btn-new" onclick="newExercise()">Nou exercici</button></div>
+        <div class="score" id="score">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const TOPICS = {
+    articles: {
+        label: 'Articles a/an/the',
+        rule: `
+            <h2>Articles: a, an, the</h2>
+            <div class="explanation">
+                <strong>A</strong> s'utilitza davant consonants: <em>a dog, a book</em>.<br>
+                <strong>An</strong> davant vocals (a, e, i, o, u): <em>an apple, an elephant</em>.<br>
+                <strong>The</strong> és l'article definit (el, la, els, les) per a coses específiques: <em>the sun, the book I bought</em>.<br>
+                No s'utilitza article amb noms de països, idiomes o àpats: <em>I live in Spain. I speak English. I eat breakfast.</em>
+            </div>
+            <div class="examples">
+                <div><span class="en">I have a cat.</span><span class="ca">(Tinc un gat.)</span></div>
+                <div><span class="en">She is an artist.</span><span class="ca">(Ella és una artista.)</span></div>
+                <div><span class="en">The sun is bright today.</span><span class="ca">(El sol és brillant avui.)</span></div>
+            </div>
+        `,
+        exercises: [
+            { q: 'I want ___ apple.', opts: ['a', 'an', 'the', '—'], a: 1 },
+            { q: '___ moon is beautiful tonight.', opts: ['A', 'An', 'The', '—'], a: 2 },
+            { q: 'She is ___ doctor.', opts: ['a', 'an', 'the', '—'], a: 0 },
+            { q: 'I love ___ English.', opts: ['a', 'an', 'the', '—'], a: 3 },
+            { q: 'He has ___ umbrella.', opts: ['a', 'an', 'the', '—'], a: 1 },
+            { q: 'We live in ___ France.', opts: ['a', 'an', 'the', '—'], a: 3 },
+            { q: '___ book on the table is mine.', opts: ['A', 'An', 'The', '—'], a: 2 },
+            { q: 'I saw ___ elephant at the zoo.', opts: ['a', 'an', 'the', '—'], a: 1 }
+        ]
+    },
+    plurals: {
+        label: 'Plurals',
+        rule: `
+            <h2>Formació del plural</h2>
+            <div class="explanation">
+                Regla general: afegir <strong>-s</strong>: <em>cat → cats, book → books</em>.<br>
+                Paraules acabades en <strong>-s, -ss, -sh, -ch, -x</strong>: afegir <strong>-es</strong>: <em>bus → buses, box → boxes</em>.<br>
+                Acabades en consonant + <strong>-y</strong>: canviar la y per <strong>-ies</strong>: <em>baby → babies, city → cities</em>.<br>
+                Acabades en vocal + <strong>-y</strong>: només <strong>-s</strong>: <em>boy → boys, day → days</em>.<br>
+                Irregulars comuns: <em>man → men, woman → women, child → children, foot → feet, tooth → teeth, mouse → mice</em>.
+            </div>
+            <div class="examples">
+                <div><span class="en">One child, two children.</span><span class="ca">(Un nen, dos nens.)</span></div>
+                <div><span class="en">This city has three libraries.</span><span class="ca">(Aquesta ciutat té tres biblioteques.)</span></div>
+            </div>
+        `,
+        exercises: [
+            { q: 'Plural de "man":', opts: ['mans', 'men', 'mens', 'manes'], a: 1 },
+            { q: 'Plural de "city":', opts: ['citys', 'cityes', 'cities', 'city\'s'], a: 2 },
+            { q: 'Plural de "box":', opts: ['boxs', 'boxes', 'boxies', 'boxies'], a: 1 },
+            { q: 'Plural de "baby":', opts: ['babys', 'babyes', 'babies', 'babis'], a: 2 },
+            { q: 'Plural de "day":', opts: ['daies', 'days', 'dayes', 'daiss'], a: 1 },
+            { q: 'Plural de "foot":', opts: ['foots', 'feet', 'footes', 'feets'], a: 1 },
+            { q: 'Plural de "mouse":', opts: ['mouses', 'mice', 'mouseys', 'mices'], a: 1 },
+            { q: 'Plural de "tooth":', opts: ['tooths', 'toothes', 'teeth', 'teeths'], a: 2 }
+        ]
+    },
+    pronouns: {
+        label: 'Pronoms personals',
+        rule: `
+            <h2>Pronoms personals i possessius</h2>
+            <div class="explanation">
+                <strong>Subjecte:</strong> I, you, he, she, it, we, you, they.<br>
+                <strong>Objecte:</strong> me, you, him, her, it, us, you, them.<br>
+                <strong>Possessius adjectius:</strong> my, your, his, her, its, our, your, their.<br>
+                <strong>Possessius pronoms:</strong> mine, yours, his, hers, its, ours, yours, theirs.
+            </div>
+            <div class="examples">
+                <div><span class="en">She loves him.</span><span class="ca">(Ella l'estima.)</span></div>
+                <div><span class="en">This is my book. It's mine.</span><span class="ca">(Aquest és el meu llibre. És meu.)</span></div>
+                <div><span class="en">Their house is bigger than ours.</span><span class="ca">(La seva casa és més gran que la nostra.)</span></div>
+            </div>
+        `,
+        exercises: [
+            { q: '___ is my sister.', opts: ['Her', 'She', 'Hers', 'Him'], a: 1 },
+            { q: 'I gave the book to ___.', opts: ['he', 'him', 'his', 'he\'s'], a: 1 },
+            { q: 'This bag is ___.', opts: ['my', 'me', 'mine', 'I'], a: 2 },
+            { q: '___ dog is very cute.', opts: ['They', 'Them', 'Their', 'Theirs'], a: 2 },
+            { q: 'Give ___ the keys, please.', opts: ['she', 'her', 'hers', 'herself'], a: 1 },
+            { q: 'The red car is ___.', opts: ['us', 'our', 'ours', 'ourselves'], a: 2 },
+            { q: '___ and John are friends.', opts: ['Me', 'I', 'My', 'Mine'], a: 1 },
+            { q: 'Is this pencil ___?', opts: ['you', 'your', 'yours', 'you\'re'], a: 2 }
+        ]
+    },
+    tenses: {
+        label: 'Temps verbals',
+        rule: `
+            <h2>Temps verbals bàsics</h2>
+            <div class="explanation">
+                <strong>Present simple:</strong> accions habituals. <em>I work every day.</em><br>
+                <strong>Present continuous:</strong> passa ara. <em>I am working now.</em><br>
+                <strong>Past simple:</strong> acció acabada al passat. <em>I worked yesterday.</em><br>
+                <strong>Present perfect:</strong> passat amb efecte al present. <em>I have worked here for 3 years.</em><br>
+                Paraules clau: <em>every day, usually</em> → present; <em>now, at the moment</em> → continuous; <em>yesterday, last week</em> → past; <em>ever, never, already, yet, since, for</em> → present perfect.
+            </div>
+            <div class="examples">
+                <div><span class="en">She usually drinks coffee.</span><span class="ca">(normalment beu cafè)</span></div>
+                <div><span class="en">She is drinking coffee now.</span><span class="ca">(està bevent ara)</span></div>
+                <div><span class="en">She drank coffee yesterday.</span><span class="ca">(va beure ahir)</span></div>
+                <div><span class="en">She has drunk three coffees today.</span><span class="ca">(ha begut tres cafès avui)</span></div>
+            </div>
+        `,
+        exercises: [
+            { q: 'I ___ to the gym every Monday.', opts: ['go', 'going', 'went', 'gone'], a: 0 },
+            { q: 'Look! She ___ a cake right now.', opts: ['bakes', 'is baking', 'baked', 'has baked'], a: 1 },
+            { q: 'We ___ Paris last summer.', opts: ['visit', 'are visiting', 'visited', 'have visited'], a: 2 },
+            { q: 'I ___ never ___ sushi before.', opts: ['am / eating', 'was / ate', 'have / eaten', 'do / eat'], a: 2 },
+            { q: 'Listen! The baby ___.', opts: ['cries', 'is crying', 'cried', 'has cried'], a: 1 },
+            { q: 'He ___ in London for five years.', opts: ['lives', 'is living', 'lived', 'has lived'], a: 3 },
+            { q: 'What ___ yesterday evening?', opts: ['do you do', 'are you doing', 'did you do', 'have you done'], a: 2 },
+            { q: 'They usually ___ dinner at 8pm.', opts: ['have', 'are having', 'had', 'have had'], a: 0 }
+        ]
+    },
+    prepositions: {
+        label: 'Preposicions',
+        rule: `
+            <h2>Preposicions de lloc i temps</h2>
+            <div class="explanation">
+                <strong>Lloc:</strong> <em>in</em> (dins), <em>on</em> (sobre), <em>under</em> (sota), <em>next to</em> (al costat), <em>between</em> (entre), <em>behind</em> (darrere), <em>in front of</em> (davant).<br>
+                <strong>Temps:</strong> <em>at</em> + hores/moments concrets (at 5, at night); <em>on</em> + dies/dates (on Monday, on July 4); <em>in</em> + mesos/anys/estacions/parts del dia (in March, in 2024, in the morning).
+            </div>
+            <div class="examples">
+                <div><span class="en">The cat is on the table.</span><span class="ca">(sobre la taula)</span></div>
+                <div><span class="en">I was born in March.</span><span class="ca">(al març)</span></div>
+                <div><span class="en">The meeting starts at 9am on Monday.</span><span class="ca">(a les 9 del dilluns)</span></div>
+            </div>
+        `,
+        exercises: [
+            { q: 'The book is ___ the table.', opts: ['in', 'on', 'at', 'by'], a: 1 },
+            { q: 'We meet ___ 7pm.', opts: ['in', 'on', 'at', 'by'], a: 2 },
+            { q: 'I was born ___ 2010.', opts: ['in', 'on', 'at', 'by'], a: 0 },
+            { q: 'The keys are ___ the drawer.', opts: ['in', 'on', 'at', 'over'], a: 0 },
+            { q: 'My birthday is ___ May.', opts: ['in', 'on', 'at', 'by'], a: 0 },
+            { q: 'School starts ___ Monday.', opts: ['in', 'on', 'at', 'by'], a: 1 },
+            { q: 'The shoes are ___ the bed.', opts: ['in', 'on', 'under', 'at'], a: 2 },
+            { q: 'We eat lunch ___ noon.', opts: ['in', 'on', 'at', 'by'], a: 2 }
+        ]
+    }
+};
+
+let currentTopic = 'articles';
+let correct = 0, wrong = 0;
+
+function renderTopicPicker() {
+    const p = document.getElementById('topicPicker');
+    p.innerHTML = '';
+    Object.keys(TOPICS).forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'topic-btn' + (k === currentTopic ? ' active' : '');
+        b.textContent = TOPICS[k].label;
+        b.onclick = () => { currentTopic = k; render(); newExercise(); };
+        p.appendChild(b);
+    });
+}
+
+function render() {
+    document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+    const idx = Object.keys(TOPICS).indexOf(currentTopic);
+    document.querySelectorAll('.topic-btn')[idx].classList.add('active');
+    document.getElementById('ruleContent').innerHTML = `<div class="rule-card">${TOPICS[currentTopic].rule}</div>`;
+}
+
+function newExercise() {
+    const list = TOPICS[currentTopic].exercises;
+    const ex = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('prompt').innerHTML = ex.q.replace('___', '<span class="blank-inline">___</span>');
+    const optsDiv = document.getElementById('options');
+    optsDiv.innerHTML = '';
+    ex.opts.forEach((o, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'q-opt';
+        btn.textContent = o;
+        btn.onclick = () => {
+            if (i === ex.a) {
+                btn.classList.add('correct');
+                correct++;
+                setTimeout(newExercise, 900);
+            } else {
+                btn.classList.add('wrong');
+                document.querySelectorAll('.q-opt')[ex.a].classList.add('correct');
+                wrong++;
+            }
+            document.getElementById('score').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        optsDiv.appendChild(btn);
+    });
+}
+
+renderTopicPicker();
+render();
+newExercise();
+</script>
+</body>
+</html>

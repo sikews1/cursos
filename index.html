@@ -135,6 +135,69 @@
         .card-mates .course-icon { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
         .card-mates:hover { border-color: #10b981; }
 
+        /* Angles card */
+        .card-angles::before { background: linear-gradient(90deg, #dc2626, #2563eb); }
+        .card-angles .course-icon { background: linear-gradient(135deg, #dc2626, #2563eb); color: #fff; }
+        .card-angles:hover { border-color: #dc2626; }
+
+        /* Naturals card */
+        .card-naturals::before { background: linear-gradient(90deg, #16a34a, #84cc16); }
+        .card-naturals .course-icon { background: linear-gradient(135deg, #16a34a, #84cc16); color: #fff; }
+        .card-naturals:hover { border-color: #16a34a; }
+
+        /* Geografia card */
+        .card-geografia::before { background: linear-gradient(90deg, #0891b2, #06b6d4); }
+        .card-geografia .course-icon { background: linear-gradient(135deg, #0891b2, #06b6d4); color: #fff; }
+        .card-geografia:hover { border-color: #0891b2; }
+
+        /* Historia card */
+        .card-historia::before { background: linear-gradient(90deg, #92400e, #d97706); }
+        .card-historia .course-icon { background: linear-gradient(135deg, #92400e, #d97706); color: #fff; }
+        .card-historia:hover { border-color: #92400e; }
+
+        /* Finances card */
+        .card-finances::before { background: linear-gradient(90deg, #ca8a04, #facc15); }
+        .card-finances .course-icon { background: linear-gradient(135deg, #ca8a04, #facc15); color: #fff; }
+        .card-finances:hover { border-color: #ca8a04; }
+
+        /* Llengua card */
+        .card-llengua::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+        .card-llengua .course-icon { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff; }
+        .card-llengua:hover { border-color: #7c3aed; }
+
+        /* Programacio card */
+        .card-programacio::before { background: linear-gradient(90deg, #4338ca, #6366f1); }
+        .card-programacio .course-icon { background: linear-gradient(135deg, #4338ca, #6366f1); color: #fff; }
+        .card-programacio:hover { border-color: #4338ca; }
+
+        /* FisicaQuimica card */
+        .card-fisicaquimica::before { background: linear-gradient(90deg, #be185d, #ec4899); }
+        .card-fisicaquimica .course-icon { background: linear-gradient(135deg, #be185d, #ec4899); color: #fff; }
+        .card-fisicaquimica:hover { border-color: #be185d; }
+
+        /* Section header */
+        .section-header {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0 -4px;
+        }
+        .section-header h2 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 0;
+        }
+        .section-header::before, .section-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-subtle);
+        }
+
         /* Coming soon badge */
         .coming-soon {
             display: inline-block;
@@ -207,15 +270,29 @@
             </div>
         </a>
 
+        <div class="section-header"><h2>Aprenentatge escolar &middot; Primària, ESO i Batxillerat</h2></div>
+
         <a href="matematiques/index.html" class="course-card card-mates">
             <div class="course-icon">&#x1F4D0;</div>
             <h2>Matemàtiques</h2>
             <div class="course-subtitle">Exercicis interactius de matemàtiques. Des d'operacions bàsiques fins a trigonometria i estadística. Exercicis infinits amb correcció automàtica.</div>
             <div class="course-stats">
-                <div class="stat"><strong>12</strong> temes</div>
+                <div class="stat"><strong>27</strong> temes</div>
                 <div class="stat"><strong>Infinits</strong> exercicis</div>
-                <div class="stat"><strong>Aleatoris</strong> generats</div>
-                <div class="stat"><strong>6-16</strong> anys</div>
+                <div class="stat"><strong>Calculadora</strong> inclosa</div>
+                <div class="stat"><strong>6-18</strong> anys</div>
+            </div>
+        </a>
+
+        <a href="angles/index.html" class="course-card card-angles">
+            <div class="course-icon">&#x1F1EC;&#x1F1E7;</div>
+            <h2>Anglès</h2>
+            <div class="course-subtitle">Vocabulari per temes amb flashcards i pronunciació, verbs regulars i irregulars, lectura amb comprensió, gramàtica amb exercicis infinits.</div>
+            <div class="course-stats">
+                <div class="stat"><strong>4</strong> seccions</div>
+                <div class="stat"><strong>Flashcards</strong> amb àudio</div>
+                <div class="stat"><strong>Quiz</strong> infinit</div>
+                <div class="stat"><strong>6-18</strong> anys</div>
             </div>
         </a>
     </div>
