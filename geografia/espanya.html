@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espanya - Geografia</title>
+    <title>Espanya - Mapa interactiu</title>
     <link rel="stylesheet" href="../styles.css">
     <style>
         .geo-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
@@ -13,35 +13,198 @@
         .geo-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
         .geo-nav a.home { color: #0891b2; font-weight: 600; }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
-        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
-        h1 span { background: linear-gradient(135deg, #dc2626, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 24px 20px 40px; }
+        .hero { text-align: center; margin-bottom: 24px; }
+        .hero h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+        .hero h1 span { background: linear-gradient(135deg, #dc2626, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-secondary); font-size: 0.92rem; }
 
-        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
-        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
-        .tab-btn:hover { border-color: #dc2626; color: #dc2626; }
-        .tab-btn.active { background: #dc2626; color: #fff; border-color: #dc2626; }
+        /* Game mode tabs */
+        .mode-tabs {
+            display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .mode-tab {
+            padding: 10px 20px; border-radius: var(--radius-full);
+            border: 2px solid var(--border-subtle);
+            background: var(--bg-raised); color: var(--text-secondary);
+            cursor: pointer; font-weight: 700; font-size: 0.88rem;
+            transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .mode-tab:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .mode-tab.active { background: linear-gradient(135deg, #dc2626, #f59e0b); color: #fff; border-color: transparent; }
 
-        .ccaa-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-bottom: 20px; }
-        .ccaa-card { background: var(--bg-raised); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--border-subtle); transition: all 0.2s; }
-        .ccaa-card h4 { font-size: 0.9rem; color: #dc2626; margin-bottom: 4px; font-weight: 700; }
-        .ccaa-card .capital { color: var(--text-secondary); font-size: 0.82rem; }
-        .ccaa-card .capital::before { content: '🏛️ '; }
+        /* Score bar */
+        .score-bar {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 14px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+        .score-stat { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .score-stat .big { font-size: 1.35rem; font-weight: 900; color: var(--text-primary); font-family: 'Courier New', monospace; }
+        .score-stat.correct .big { color: #16a34a; }
+        .score-stat.wrong .big { color: #dc2626; }
+        .score-stat.time .big { color: #f59e0b; }
+        .progress-ring {
+            width: 60px; height: 60px; position: relative;
+        }
+        .progress-ring svg { transform: rotate(-90deg); }
+        .progress-ring .bg { fill: none; stroke: var(--border-subtle); stroke-width: 6; }
+        .progress-ring .fill { fill: none; stroke: #16a34a; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.4s; }
+        .progress-ring .text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.88rem; color: var(--text-primary); }
 
-        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
-        .quiz-box h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; text-align: center; }
-        .quiz-mode { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; }
-        .mode-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-base); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.78rem; }
-        .mode-btn.active { background: #dc2626; color: #fff; border-color: #dc2626; }
+        /* Question bar (for identify mode) */
+        .question-bar {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: var(--radius-lg);
+            padding: 16px 22px;
+            margin-bottom: 16px;
+            text-align: center;
+            color: #78350f;
+            font-size: 1.05rem;
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+        [data-theme="dark"] .question-bar { background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1)); color: #fde68a; }
+        .question-bar .label { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #92400e; margin-bottom: 4px; }
+        [data-theme="dark"] .question-bar .label { color: #fbbf24; }
+        .question-bar .target { font-size: 1.4rem; color: #dc2626; }
+        [data-theme="dark"] .question-bar .target { color: #fca5a5; }
 
-        .quiz-prompt { text-align: center; padding: 14px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; color: var(--text-primary); font-weight: 600; font-size: 1.05rem; }
-        .quiz-opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; transition: all 0.2s; }
-        .quiz-opt:hover { border-color: #dc2626; }
-        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
-        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
-        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+        /* Map grid */
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 18px;
+            align-items: start;
+        }
+        @media (max-width: 820px) { .game-area { grid-template-columns: 1fr; } }
+
+        .map-box {
+            background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 18px;
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+        [data-theme="dark"] .map-box { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); }
+
+        .map-box svg { width: 100%; height: auto; max-height: 540px; display: block; }
+
+        .region { stroke: #fff; stroke-width: 2; cursor: pointer; transition: all 0.2s; }
+        .region:hover { opacity: 0.75; filter: brightness(1.1); }
+        .region.selected { stroke: #000; stroke-width: 4; }
+        .region.correct { fill: #16a34a !important; }
+        .region.wrong { fill: #dc2626 !important; animation: shake 0.5s; }
+        .region.highlighted { stroke: #eab308; stroke-width: 4; filter: drop-shadow(0 0 8px #eab308); }
+        .region.labeled { cursor: default; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+        .region-label {
+            font-size: 10px; font-weight: 700; fill: #fff; pointer-events: none;
+            text-shadow: 0 0 3px rgba(0,0,0,0.8);
+            text-anchor: middle;
+        }
+        .region-label.hidden { display: none; }
+
+        /* Island callout */
+        .islands-box {
+            fill: rgba(255, 255, 255, 0.6);
+            stroke: var(--border-subtle);
+            stroke-width: 1;
+            stroke-dasharray: 4;
+        }
+        [data-theme="dark"] .islands-box { fill: rgba(0, 0, 0, 0.3); }
+
+        /* Side panel */
+        .side-panel {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+            max-height: 540px;
+            overflow-y: auto;
+        }
+        .side-panel h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 10px; font-weight: 800; }
+
+        .options-list { display: grid; gap: 8px; }
+        .option-btn {
+            padding: 12px 14px; border-radius: 10px;
+            border: 2px solid var(--border-subtle);
+            background: var(--bg-base); color: var(--text-primary);
+            text-align: left; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.15s;
+        }
+        .option-btn:hover:not(:disabled) { border-color: #dc2626; transform: translateX(3px); }
+        .option-btn.correct { background: rgba(34,197,94,0.15); border-color: #22c55e; color: #16a34a; }
+        .option-btn.wrong { background: rgba(239,68,68,0.15); border-color: #ef4444; color: #dc2626; }
+        .option-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .drag-chip {
+            padding: 8px 12px; border-radius: var(--radius-full);
+            background: linear-gradient(135deg, #fff, #f3f4f6);
+            border: 2px solid var(--border-default);
+            font-size: 0.82rem; font-weight: 700; color: var(--text-primary);
+            cursor: grab; user-select: none;
+            transition: all 0.15s;
+            box-shadow: var(--shadow-sm);
+        }
+        [data-theme="dark"] .drag-chip { background: linear-gradient(135deg, #262626, #171717); }
+        .drag-chip:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .drag-chip:active { cursor: grabbing; }
+        .drag-chip.dragging { opacity: 0.4; }
+        .drag-chip.placed { display: none; }
+        .chips-cloud { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px; }
+
+        /* Final message */
+        .final-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            text-align: center;
+            margin-top: 16px;
+            display: none;
+        }
+        .final-box.show { display: block; }
+        [data-theme="dark"] .final-box { background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.08)); }
+        .final-box .trophy { font-size: 3rem; margin-bottom: 6px; }
+        .final-box h3 { font-size: 1.3rem; color: #78350f; margin-bottom: 8px; }
+        [data-theme="dark"] .final-box h3 { color: #fde68a; }
+        .final-box p { color: #92400e; font-weight: 600; margin-bottom: 14px; }
+        [data-theme="dark"] .final-box p { color: #fbbf24; }
+        .btn-restart { padding: 12px 26px; border-radius: var(--radius-full); background: #dc2626; color: #fff; border: none; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
+        .btn-restart:hover { background: #ef4444; }
+
+        /* Glossary */
+        .glossary-box {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .glossary-box h2 { font-size: 1.05rem; margin-bottom: 12px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+        .glossary-item {
+            background: var(--bg-base); padding: 12px 14px;
+            border-radius: 10px; border: 1px solid var(--border-subtle);
+            transition: all 0.15s;
+        }
+        .glossary-item:hover { border-color: #dc2626; }
+        .glossary-item h4 { font-size: 0.9rem; color: #dc2626; margin-bottom: 3px; }
+        .glossary-item .cap { color: var(--text-secondary); font-size: 0.82rem; }
+        .glossary-item .cap::before { content: '🏛️ '; }
+        .glossary-item .extra { font-size: 0.74rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -56,124 +219,411 @@
 </div>
 
 <div class="container">
-    <h1><span>Espanya</span></h1>
-    <p class="subtitle">Les 17 comunitats autònomes i les 2 ciutats autònomes amb les seves capitals</p>
-
-    <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('list')">Llista de CCAA</button>
-        <button class="tab-btn" onclick="showTab('quiz')">Quiz de capitals</button>
+    <div class="hero">
+        <h1><span>Espanya</span> · Mapa interactiu</h1>
+        <p>Aprèn les 17 comunitats autònomes i les seves capitals jugant</p>
     </div>
 
-    <div id="content"></div>
+    <div class="mode-tabs">
+        <button class="mode-tab active" onclick="setMode('explore')">🔍 Exploració lliure</button>
+        <button class="mode-tab" onclick="setMode('drag')">🎯 Arrossega noms</button>
+        <button class="mode-tab" onclick="setMode('click')">👆 Identifica CCAA</button>
+        <button class="mode-tab" onclick="setMode('capital')">🏛️ Capitals</button>
+    </div>
+
+    <div class="score-bar">
+        <div class="score-stat correct">✓ Encerts: <span class="big" id="scCorrect">0</span></div>
+        <div class="score-stat wrong">✗ Errors: <span class="big" id="scWrong">0</span></div>
+        <div class="progress-ring" id="ring">
+            <svg width="60" height="60"><circle class="bg" cx="30" cy="30" r="25"/><circle class="fill" cx="30" cy="30" r="25" stroke-dasharray="157" stroke-dashoffset="157" id="ringFill"/></svg>
+            <div class="text" id="ringText">0/17</div>
+        </div>
+    </div>
+
+    <div class="question-bar" id="qBar" style="display:none;">
+        <span class="label">Busca a:</span>
+        <span class="target" id="qTarget">—</span>
+    </div>
+
+    <div class="game-area">
+        <div class="map-box">
+            <svg viewBox="0 0 700 500" id="map">
+                <!-- Islands callout boxes -->
+                <rect class="islands-box" x="10" y="380" width="150" height="110" rx="8"/>
+                <text x="85" y="398" class="region-label" style="fill:#475569;font-size:9px;">Illes Canàries</text>
+                <rect class="islands-box" x="580" y="260" width="110" height="70" rx="8"/>
+                <text x="635" y="278" class="region-label" style="fill:#475569;font-size:9px;">Illes Balears</text>
+
+                <!-- Peninsula regions (simplified polygons, geographically positioned) -->
+                <!-- 1 Galicia - NW -->
+                <path class="region" data-id="galicia" d="M 30 130 Q 40 110 70 105 L 150 115 L 165 180 L 155 215 L 40 215 L 20 170 Z"/>
+                <text class="region-label" x="85" y="165" data-label="galicia">GALICIA</text>
+
+                <!-- 2 Asturias -->
+                <path class="region" data-id="asturies" d="M 155 112 L 245 118 L 240 170 L 160 165 Z"/>
+                <text class="region-label" x="197" y="145" data-label="asturies">ASTÚRIES</text>
+
+                <!-- 3 Cantabria -->
+                <path class="region" data-id="cantabria" d="M 245 118 L 320 120 L 318 158 L 240 155 Z"/>
+                <text class="region-label" x="280" y="142" data-label="cantabria">CANTÀBRIA</text>
+
+                <!-- 4 Pais Basc -->
+                <path class="region" data-id="paisbasc" d="M 320 120 L 395 120 L 400 165 L 320 162 Z"/>
+                <text class="region-label" x="358" y="145" data-label="paisbasc">PAÍS BASC</text>
+
+                <!-- 5 Navarra -->
+                <path class="region" data-id="navarra" d="M 380 162 L 435 162 L 445 215 L 380 218 Z"/>
+                <text class="region-label" x="410" y="192" data-label="navarra">NAVARRA</text>
+
+                <!-- 6 La Rioja -->
+                <path class="region" data-id="larioja" d="M 325 170 L 380 168 L 378 213 L 320 210 Z"/>
+                <text class="region-label" x="350" y="195" data-label="larioja">LA RIOJA</text>
+
+                <!-- 7 Catalunya -->
+                <path class="region" data-id="catalunya" d="M 480 140 L 605 145 L 635 235 L 550 265 L 490 250 Z"/>
+                <text class="region-label" x="550" y="200" data-label="catalunya">CATALUNYA</text>
+
+                <!-- 8 Aragon -->
+                <path class="region" data-id="arago" d="M 395 165 L 480 140 L 490 250 L 400 310 L 395 220 Z"/>
+                <text class="region-label" x="440" y="230" data-label="arago">ARAGÓ</text>
+
+                <!-- 9 Castella i Lleó -->
+                <path class="region" data-id="castellalleo" d="M 155 165 L 320 165 L 325 215 L 330 295 L 160 285 Z"/>
+                <text class="region-label" x="240" y="235" data-label="castellalleo">CASTELLA I LLEÓ</text>
+
+                <!-- 10 Madrid -->
+                <path class="region" data-id="madrid" d="M 265 275 L 335 275 L 340 330 L 270 330 Z"/>
+                <text class="region-label" x="302" y="307" data-label="madrid">MADRID</text>
+
+                <!-- 11 Extremadura -->
+                <path class="region" data-id="extremadura" d="M 100 270 L 260 275 L 265 400 L 110 405 Z"/>
+                <text class="region-label" x="180" y="340" data-label="extremadura">EXTREMADURA</text>
+
+                <!-- 12 Castella-la Manxa -->
+                <path class="region" data-id="castellamanxa" d="M 265 275 L 475 275 L 480 395 L 270 410 Z"/>
+                <text class="region-label" x="368" y="348" data-label="castellamanxa">CASTELLA-LA MANXA</text>
+
+                <!-- 13 Comunitat Valenciana -->
+                <path class="region" data-id="valencia" d="M 475 250 L 545 260 L 560 420 L 480 410 Z"/>
+                <text class="region-label" x="518" y="340" data-label="valencia">VALÈNCIA</text>
+
+                <!-- 14 Murcia -->
+                <path class="region" data-id="murcia" d="M 395 395 L 500 395 L 520 450 L 430 460 Z"/>
+                <text class="region-label" x="460" y="428" data-label="murcia">MÚRCIA</text>
+
+                <!-- 15 Andalusia -->
+                <path class="region" data-id="andalusia" d="M 110 390 L 490 395 L 515 450 L 400 470 L 160 470 L 110 435 Z"/>
+                <text class="region-label" x="310" y="440" data-label="andalusia">ANDALUSIA</text>
+
+                <!-- 16 Balears -->
+                <circle class="region" data-id="balears" cx="612" cy="298" r="13"/>
+                <circle class="region" data-id="balears-m" cx="640" cy="290" r="8" style="pointer-events:none;"/>
+                <circle class="region" data-id="balears-e" cx="665" cy="305" r="7" style="pointer-events:none;"/>
+                <text class="region-label" x="625" y="302" data-label="balears" style="font-size:8px;">BALEARS</text>
+
+                <!-- 17 Canàries -->
+                <g>
+                    <circle class="region" data-id="canaries" cx="50" cy="435" r="11"/>
+                    <circle class="region" data-id="canaries-2" cx="75" cy="442" r="10" style="pointer-events:none;"/>
+                    <circle class="region" data-id="canaries-3" cx="98" cy="450" r="8" style="pointer-events:none;"/>
+                    <circle class="region" data-id="canaries-4" cx="120" cy="455" r="7" style="pointer-events:none;"/>
+                    <circle class="region" data-id="canaries-5" cx="140" cy="462" r="6" style="pointer-events:none;"/>
+                </g>
+                <text class="region-label" x="85" y="480" data-label="canaries" style="font-size:8px;">CANÀRIES</text>
+
+                <!-- Ceuta & Melilla markers -->
+                <circle class="region" data-id="ceuta" cx="215" cy="487" r="6"/>
+                <circle class="region" data-id="melilla" cx="290" cy="490" r="6"/>
+                <text class="region-label" x="215" y="478" style="font-size:7px;" data-label="ceuta">Ceuta</text>
+                <text class="region-label" x="290" y="481" style="font-size:7px;" data-label="melilla">Melilla</text>
+            </svg>
+        </div>
+
+        <div class="side-panel" id="sidePanel">
+            <h3 id="panelTitle">Mode exploració</h3>
+            <div id="panelContent"></div>
+        </div>
+    </div>
+
+    <div class="final-box" id="final">
+        <div class="trophy" id="trophyIcon">🏆</div>
+        <h3 id="finalTitle">Felicitats!</h3>
+        <p id="finalMsg"></p>
+        <button class="btn-restart" onclick="startMode(currentMode)">Tornar a jugar</button>
+    </div>
+
+    <div class="glossary-box">
+        <h2>📖 Glossari de les 17 CCAA</h2>
+        <div class="glossary-grid" id="glossaryGrid"></div>
+    </div>
 </div>
 
 <script src="../theme.js"></script>
 <script src="../auth.js"></script>
 <script>
-const CCAA = [
-    { name: 'Andalusia', cap: 'Sevilla' },
-    { name: 'Aragó', cap: 'Saragossa' },
-    { name: 'Astúries', cap: 'Oviedo' },
-    { name: 'Illes Balears', cap: 'Palma' },
-    { name: 'Canàries', cap: 'Santa Cruz de Tenerife / Las Palmas' },
-    { name: 'Cantàbria', cap: 'Santander' },
-    { name: 'Castella i Lleó', cap: 'Valladolid' },
-    { name: 'Castella-la Manxa', cap: 'Toledo' },
-    { name: 'Catalunya', cap: 'Barcelona' },
-    { name: 'País Valencià', cap: 'València' },
-    { name: 'Extremadura', cap: 'Mèrida' },
-    { name: 'Galícia', cap: 'Santiago de Compostel·la' },
-    { name: 'La Rioja', cap: 'Logronyo' },
-    { name: 'Madrid', cap: 'Madrid' },
-    { name: 'Múrcia', cap: 'Múrcia' },
-    { name: 'Navarra', cap: 'Pamplona' },
-    { name: 'País Basc', cap: 'Vitòria' },
-    { name: 'Ceuta', cap: 'Ceuta (ciutat autònoma)' },
-    { name: 'Melilla', cap: 'Melilla (ciutat autònoma)' }
-];
+const REGIONS = {
+    galicia: { name: 'Galícia', cap: 'Santiago de Compostel·la', fill: '#f97316', fact: '4 províncies: A Coruña, Lugo, Ourense, Pontevedra. Es parla gallec.' },
+    asturies: { name: 'Astúries', cap: 'Oviedo', fill: '#fbbf24', fact: 'Principat d\'Astúries. L\'única uniprovincial del nord.' },
+    cantabria: { name: 'Cantàbria', cap: 'Santander', fill: '#a3e635', fact: 'Uniprovincial. Famosa per les coves d\'Altamira.' },
+    paisbasc: { name: 'País Basc', cap: 'Vitòria', fill: '#22c55e', fact: 'Euskadi. Es parla basc (euskera) i castellà. 3 províncies.' },
+    navarra: { name: 'Navarra', cap: 'Pamplona', fill: '#14b8a6', fact: 'Uniprovincial. Famoses les festes de Sant Fermí.' },
+    larioja: { name: 'La Rioja', cap: 'Logronyo', fill: '#06b6d4', fact: 'Uniprovincial. Vi famós mundialment.' },
+    catalunya: { name: 'Catalunya', cap: 'Barcelona', fill: '#dc2626', fact: '4 províncies: Barcelona, Girona, Lleida, Tarragona. Es parla català.' },
+    arago: { name: 'Aragó', cap: 'Saragossa', fill: '#f43f5e', fact: '3 províncies. Els Pirineus aragonesos són espectaculars.' },
+    castellalleo: { name: 'Castella i Lleó', cap: 'Valladolid', fill: '#eab308', fact: 'La CCAA més gran d\'Espanya. 9 províncies!' },
+    madrid: { name: 'Madrid', cap: 'Madrid', fill: '#ef4444', fact: 'Uniprovincial. Capital d\'Espanya.' },
+    extremadura: { name: 'Extremadura', cap: 'Mèrida', fill: '#84cc16', fact: '2 províncies: Badajoz i Càceres. Molts monuments romans.' },
+    castellamanxa: { name: 'Castella-la Manxa', cap: 'Toledo', fill: '#f59e0b', fact: 'Terra de Don Quixot. 5 províncies.' },
+    valencia: { name: 'Comunitat Valenciana', cap: 'València', fill: '#3b82f6', fact: 'Es parla valencià (català). 3 províncies. Paella i Falles.' },
+    murcia: { name: 'Múrcia', cap: 'Múrcia', fill: '#8b5cf6', fact: 'Uniprovincial. Horta famosa per verdures i fruites.' },
+    andalusia: { name: 'Andalusia', cap: 'Sevilla', fill: '#ea580c', fact: '8 províncies. La més poblada d\'Espanya.' },
+    balears: { name: 'Illes Balears', cap: 'Palma', fill: '#0891b2', fact: 'Mallorca, Menorca, Eivissa i Formentera. Es parla català.' },
+    canaries: { name: 'Canàries', cap: 'Santa Cruz / Las Palmas', fill: '#7c3aed', fact: '7 illes principals. Tenen DOS capitals (es comparteixen).' },
+    ceuta: { name: 'Ceuta', cap: 'Ceuta', fill: '#64748b', fact: 'Ciutat autònoma al nord d\'Àfrica.' },
+    melilla: { name: 'Melilla', cap: 'Melilla', fill: '#94a3b8', fact: 'Ciutat autònoma al nord d\'Àfrica.' }
+};
 
-let mode = 'ca->cap';
-let correct = 0, wrong = 0;
+// Shared regions are sub-shapes that also highlight with main
+const ALIASES = { 'balears-m': 'balears', 'balears-e': 'balears', 'canaries-2': 'canaries', 'canaries-3': 'canaries', 'canaries-4': 'canaries', 'canaries-5': 'canaries' };
 
-function showTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+// Paint initial colors
+Object.keys(REGIONS).forEach(id => {
+    document.querySelectorAll(`[data-id="${id}"]`).forEach(el => el.setAttribute('fill', REGIONS[id].fill));
+});
+Object.keys(ALIASES).forEach(id => {
+    document.querySelectorAll(`[data-id="${id}"]`).forEach(el => el.setAttribute('fill', REGIONS[ALIASES[id]].fill));
+});
+
+let currentMode = 'explore';
+let score = { correct: 0, wrong: 0, done: 0, total: 17 };
+let currentTarget = null;
+let pending = [];
+
+function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
     event?.target?.classList?.add('active');
-    const c = document.getElementById('content');
-    if (tab === 'list') {
-        c.innerHTML = `
-            <div class="ccaa-list">
-                ${CCAA.map(cc => `
-                    <div class="ccaa-card">
-                        <h4>${cc.name}</h4>
-                        <div class="capital">${cc.cap}</div>
-                    </div>
-                `).join('')}
-            </div>
-            <p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-top:14px;">Espanya té <strong>17 comunitats autònomes</strong> i <strong>2 ciutats autònomes</strong> (Ceuta i Melilla). La capital de l'estat és <strong>Madrid</strong>.</p>
-        `;
-    } else {
-        c.innerHTML = `
-            <div class="quiz-box">
-                <h2>&#x1F3AF; Quiz infinit de capitals</h2>
-                <div class="quiz-mode">
-                    <button class="mode-btn active" onclick="setMode('ca->cap')">Comunitat → Capital</button>
-                    <button class="mode-btn" onclick="setMode('cap->ca')">Capital → Comunitat</button>
-                </div>
-                <div class="quiz-prompt" id="qP">...</div>
-                <div class="quiz-opts" id="qO"></div>
-                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
-            </div>
-        `;
-        newQuiz();
+    startMode(mode);
+}
+
+function startMode(mode) {
+    // Reset state
+    score = { correct: 0, wrong: 0, done: 0, total: 17 };
+    document.querySelectorAll('.region').forEach(r => { r.classList.remove('correct', 'wrong', 'selected', 'highlighted'); });
+    document.querySelectorAll('.region-label').forEach(l => l.classList.remove('hidden'));
+    document.getElementById('final').classList.remove('show');
+    pending = Object.keys(REGIONS).filter(k => !['balears-m','balears-e','canaries-2','canaries-3','canaries-4','canaries-5'].includes(k));
+    pending = pending.sort(() => Math.random() - 0.5);
+    updateScore();
+    setRegionClicks();
+
+    if (mode === 'explore') setupExplore();
+    else if (mode === 'drag') setupDrag();
+    else if (mode === 'click') setupClick();
+    else if (mode === 'capital') setupCapital();
+}
+
+function updateScore() {
+    document.getElementById('scCorrect').textContent = score.correct;
+    document.getElementById('scWrong').textContent = score.wrong;
+    const circ = 157;
+    document.getElementById('ringFill').setAttribute('stroke-dashoffset', circ - (circ * score.done / score.total));
+    document.getElementById('ringText').textContent = `${score.done}/${score.total}`;
+
+    if (score.done >= score.total) {
+        setTimeout(showFinal, 500);
     }
 }
 
-function setMode(m) {
-    mode = m;
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    newQuiz();
+function showFinal() {
+    const pct = Math.round((score.correct / score.total) * 100);
+    let trophy, title, msg;
+    if (pct >= 90) { trophy = '🏆'; title = 'Perfecte!'; msg = `Has fet ${score.correct} de ${score.total} ben fets (${pct}%). Geni de la geografia!`; }
+    else if (pct >= 70) { trophy = '🥈'; title = 'Molt bé!'; msg = `${score.correct} de ${score.total} (${pct}%). Gairebé perfecte — pots millorar jugant de nou.`; }
+    else if (pct >= 50) { trophy = '🥉'; title = 'Aprovat!'; msg = `${score.correct} de ${score.total} (${pct}%). Torna-ho a provar per millorar.`; }
+    else { trophy = '📚'; title = 'A estudiar!'; msg = `${score.correct} de ${score.total} (${pct}%). Mira el glossari de sota i torna-ho a provar.`; }
+    document.getElementById('trophyIcon').textContent = trophy;
+    document.getElementById('finalTitle').textContent = title;
+    document.getElementById('finalMsg').textContent = msg;
+    document.getElementById('final').classList.add('show');
 }
 
-function newQuiz() {
-    const correctItem = CCAA[Math.floor(Math.random() * CCAA.length)];
-    const others = CCAA.filter(c => c.name !== correctItem.name).sort(() => Math.random() - 0.5).slice(0, 3);
-    const pool = [...others, correctItem].sort(() => Math.random() - 0.5);
-
-    if (mode === 'ca->cap') {
-        document.getElementById('qP').textContent = `Quina és la capital de ${correctItem.name}?`;
-        const o = document.getElementById('qO');
-        o.innerHTML = '';
-        pool.forEach(c => {
-            const btn = document.createElement('button');
-            btn.className = 'quiz-opt';
-            btn.textContent = c.cap;
-            btn.onclick = () => {
-                if (c.name === correctItem.name) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
-                else { btn.classList.add('wrong'); wrong++; }
-                document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
-            };
-            o.appendChild(btn);
-        });
-    } else {
-        document.getElementById('qP').textContent = `De quina comunitat és capital ${correctItem.cap.split('/')[0].trim()}?`;
-        const o = document.getElementById('qO');
-        o.innerHTML = '';
-        pool.forEach(c => {
-            const btn = document.createElement('button');
-            btn.className = 'quiz-opt';
-            btn.textContent = c.name;
-            btn.onclick = () => {
-                if (c.name === correctItem.name) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
-                else { btn.classList.add('wrong'); wrong++; }
-                document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
-            };
-            o.appendChild(btn);
-        });
-    }
+// --- MODE 1: Explore ---
+function setupExplore() {
+    document.getElementById('qBar').style.display = 'none';
+    document.querySelectorAll('.region-label').forEach(l => l.classList.remove('hidden'));
+    document.querySelectorAll('.region').forEach(r => r.classList.add('labeled'));
+    document.getElementById('panelTitle').textContent = '🔍 Exploració';
+    document.getElementById('panelContent').innerHTML = `
+        <p style="color:var(--text-secondary);font-size:0.88rem;line-height:1.6;margin-bottom:10px;">Clica qualsevol CCAA del mapa per veure'n el nom, capital i una curiositat.</p>
+        <div id="infoBox" style="background:var(--bg-base);padding:14px;border-radius:10px;border:1px solid var(--border-subtle);">
+            <p style="color:var(--text-muted);font-style:italic;font-size:0.85rem;">👆 Clica una CCAA al mapa</p>
+        </div>
+    `;
+    document.querySelectorAll('.region[data-id]').forEach(r => {
+        r.onclick = () => {
+            const id = ALIASES[r.dataset.id] || r.dataset.id;
+            const info = REGIONS[id];
+            if (!info) return;
+            document.querySelectorAll('.region').forEach(x => x.classList.remove('selected'));
+            document.querySelectorAll(`[data-id="${id}"]`).forEach(x => x.classList.add('selected'));
+            document.getElementById('infoBox').innerHTML = `
+                <h4 style="color:${info.fill};font-size:1.1rem;margin-bottom:6px;">${info.name}</h4>
+                <div style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:8px;">🏛️ Capital: <strong style="color:var(--text-primary);">${info.cap}</strong></div>
+                <div style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;background:var(--bg-raised);padding:10px;border-radius:8px;border-left:3px solid ${info.fill};">💡 ${info.fact}</div>
+            `;
+        };
+    });
+    // Hide score bar elements that don't apply
+    document.getElementById('ring').style.opacity = '0.3';
 }
 
-showTab('list');
+// --- MODE 2: Drag name onto region ---
+function setupDrag() {
+    document.getElementById('qBar').style.display = 'none';
+    document.querySelectorAll('.region-label').forEach(l => l.classList.add('hidden'));
+    document.querySelectorAll('.region').forEach(r => r.classList.remove('labeled'));
+    document.getElementById('ring').style.opacity = '1';
+    document.getElementById('panelTitle').textContent = '🎯 Arrossega cada nom a la seva CCAA';
+
+    const chips = pending.map(id => `<div class="drag-chip" draggable="true" data-id="${id}">${REGIONS[id].name}</div>`).join('');
+    document.getElementById('panelContent').innerHTML = `
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:12px;">Arrossega cada nom sobre la comunitat correcta del mapa.</p>
+        <div class="chips-cloud" id="chipsCloud">${chips}</div>
+    `;
+
+    document.querySelectorAll('.drag-chip').forEach(chip => {
+        chip.ondragstart = e => { chip.classList.add('dragging'); e.dataTransfer.setData('text/plain', chip.dataset.id); e.dataTransfer.effectAllowed = 'move'; };
+        chip.ondragend = () => chip.classList.remove('dragging');
+    });
+    document.querySelectorAll('.region[data-id]').forEach(r => {
+        r.onclick = null;
+        r.ondragover = e => e.preventDefault();
+        r.ondrop = e => {
+            e.preventDefault();
+            const dragId = e.dataTransfer.getData('text/plain');
+            const targetId = ALIASES[r.dataset.id] || r.dataset.id;
+            if (targetId === dragId) {
+                r.classList.add('correct');
+                document.querySelectorAll(`[data-id="${targetId}"]`).forEach(el => el.classList.add('correct'));
+                document.querySelector(`.region-label[data-label="${targetId}"]`)?.classList.remove('hidden');
+                document.querySelector(`.drag-chip[data-id="${dragId}"]`)?.classList.add('placed');
+                score.correct++; score.done++;
+            } else {
+                r.classList.add('wrong');
+                setTimeout(() => r.classList.remove('wrong'), 700);
+                score.wrong++;
+            }
+            updateScore();
+        };
+    });
+}
+
+// --- MODE 3: Click to identify ---
+function setupClick() {
+    document.querySelectorAll('.region-label').forEach(l => l.classList.add('hidden'));
+    document.querySelectorAll('.region').forEach(r => r.classList.remove('labeled'));
+    document.getElementById('ring').style.opacity = '1';
+    document.getElementById('qBar').style.display = 'block';
+    document.getElementById('panelTitle').textContent = '👆 Clica la CCAA';
+    document.getElementById('panelContent').innerHTML = `
+        <p style="color:var(--text-secondary);font-size:0.88rem;line-height:1.6;">Et diem el nom d'una comunitat i tu has de clicar-la al mapa. Ràpid!</p>
+    `;
+    nextClickQuestion();
+}
+
+function nextClickQuestion() {
+    if (pending.length === 0) return;
+    currentTarget = pending.shift();
+    document.getElementById('qTarget').textContent = REGIONS[currentTarget].name;
+}
+
+// --- MODE 4: Capital match ---
+function setupCapital() {
+    document.querySelectorAll('.region-label').forEach(l => l.classList.add('hidden'));
+    document.querySelectorAll('.region').forEach(r => r.classList.remove('labeled'));
+    document.getElementById('ring').style.opacity = '1';
+    document.getElementById('qBar').style.display = 'block';
+    document.getElementById('panelTitle').textContent = '🏛️ Tria la capital';
+    nextCapitalQuestion();
+}
+
+function nextCapitalQuestion() {
+    if (pending.length === 0) return;
+    currentTarget = pending.shift();
+    const info = REGIONS[currentTarget];
+    document.getElementById('qTarget').textContent = info.name;
+    document.querySelectorAll(`[data-id="${currentTarget}"]`).forEach(el => el.classList.add('highlighted'));
+
+    const wrong3 = Object.keys(REGIONS).filter(k => k !== currentTarget && !['balears-m','balears-e','canaries-2','canaries-3','canaries-4','canaries-5'].includes(k)).sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts = [currentTarget, ...wrong3].sort(() => Math.random() - 0.5);
+
+    document.getElementById('panelContent').innerHTML = `
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:10px;">Quina és la capital de <strong>${info.name}</strong>?</p>
+        <div class="options-list">
+            ${opts.map(id => `<button class="option-btn" data-id="${id}">${REGIONS[id].cap}</button>`).join('')}
+        </div>
+    `;
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.onclick = () => {
+            if (btn.dataset.id === currentTarget) { btn.classList.add('correct'); score.correct++; }
+            else {
+                btn.classList.add('wrong');
+                document.querySelector(`.option-btn[data-id="${currentTarget}"]`).classList.add('correct');
+                score.wrong++;
+            }
+            document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            document.querySelectorAll(`[data-id="${currentTarget}"]`).forEach(el => { el.classList.remove('highlighted'); el.classList.add('correct'); });
+            document.querySelector(`.region-label[data-label="${currentTarget}"]`)?.classList.remove('hidden');
+            score.done++;
+            updateScore();
+            setTimeout(nextCapitalQuestion, 900);
+        };
+    });
+}
+
+// Region click handler for click mode
+function setRegionClicks() {
+    document.querySelectorAll('.region[data-id]').forEach(r => {
+        if (currentMode === 'click') {
+            r.onclick = () => {
+                if (!currentTarget) return;
+                const targetId = ALIASES[r.dataset.id] || r.dataset.id;
+                if (targetId === currentTarget) {
+                    r.classList.add('correct');
+                    document.querySelectorAll(`[data-id="${currentTarget}"]`).forEach(el => el.classList.add('correct'));
+                    document.querySelector(`.region-label[data-label="${currentTarget}"]`)?.classList.remove('hidden');
+                    score.correct++;
+                } else {
+                    r.classList.add('wrong');
+                    setTimeout(() => r.classList.remove('wrong'), 700);
+                    document.querySelectorAll(`[data-id="${currentTarget}"]`).forEach(el => el.classList.add('highlighted'));
+                    setTimeout(() => {
+                        document.querySelectorAll(`[data-id="${currentTarget}"]`).forEach(el => { el.classList.remove('highlighted'); el.classList.add('correct'); });
+                        document.querySelector(`.region-label[data-label="${currentTarget}"]`)?.classList.remove('hidden');
+                    }, 700);
+                    score.wrong++;
+                }
+                score.done++;
+                updateScore();
+                setTimeout(nextClickQuestion, 900);
+            };
+        }
+    });
+}
+
+// Glossary
+function renderGlossary() {
+    const grid = document.getElementById('glossaryGrid');
+    const ids = Object.keys(REGIONS).filter(k => !['balears-m','balears-e','canaries-2','canaries-3','canaries-4','canaries-5','ceuta','melilla'].includes(k));
+    grid.innerHTML = ids.map(id => {
+        const r = REGIONS[id];
+        return `<div class="glossary-item" style="border-left:4px solid ${r.fill};"><h4>${r.name}</h4><div class="cap">${r.cap}</div><div class="extra">${r.fact}</div></div>`;
+    }).join('');
+}
+
+renderGlossary();
+startMode('explore');
 </script>
 </body>
 </html>
