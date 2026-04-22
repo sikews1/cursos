@@ -237,7 +237,7 @@ let score = { correct: 0, wrong: 0, done: 0, total: 17 };
 let currentTarget = null;
 let questionPool = [];
 
-// Initialize map with CCAA-colored provinces
+// Initialize map — we manage fills and highlights via direct DOM (no dependency on map.series internals)
 const provColors = buildProvinceColors();
 const map = new jsVectorMap({
     selector: '#map',
@@ -245,27 +245,23 @@ const map = new jsVectorMap({
     backgroundColor: 'transparent',
     zoomOnScroll: true,
     zoomButtons: true,
+    zoomMax: 8,
+    zoomMin: 1,
+    focusOn: { scale: 1.15, lat: 40, lng: -3.5, animate: false },
     regionStyle: {
-        initial: { stroke: '#fff', strokeWidth: 0.8, fill: '#cbd5e1' },
-        hover: { fillOpacity: 0.75, cursor: 'pointer' },
-        selected: { fill: '#16a34a' }
+        initial: { stroke: '#fff', strokeWidth: 0.6, fill: '#cbd5e1' },
+        hover: { fillOpacity: 0.8, cursor: 'pointer' },
+        selected: { }  // no auto fill — we paint ourselves
     },
     regionsSelectable: true,
     regionsSelectableOne: false,
-    series: {
-        regions: [{
-            attribute: 'fill',
-            values: provColors,
-            scale: null
-        }]
-    },
     onRegionTooltipShow(event, tooltip, code) {
         const prov = PROV_DETAILS[code];
         if (!prov) { tooltip.text(code); return; }
         if (currentScale === 'ccaa') {
             tooltip.text(CCAA_PROVINCES[prov.ccaa].name);
         } else {
-            tooltip.text(`${prov.name} (${CCAA_PROVINCES[prov.ccaa].name})`);
+            tooltip.text(`${prov.name} · ${CCAA_PROVINCES[prov.ccaa].name}`);
         }
     },
     onRegionClick(event, code) {
@@ -276,52 +272,96 @@ const map = new jsVectorMap({
         } else if (currentMode === 'locate') {
             if (currentScale === 'ccaa') handleLocateCCAA(prov.ccaa);
             else handleLocateProvince(code);
+        } else if (currentMode === 'capital') {
+            // Capital mode uses the side panel options — clicking map does nothing
         }
     }
 });
 
-function setScale(scale) {
+// ---- Direct DOM helpers for fill color ----
+function pathByCode(code) { return document.querySelector(`#map svg [data-code="${code}"]`); }
+
+function paintAllRegions(withColors) {
+    // Reset jsvectormap's own selection visuals first
+    try { map.clearSelectedRegions(); } catch(e){}
+    Object.keys(PROV_DETAILS).forEach(code => {
+        const el = pathByCode(code);
+        if (!el) return;
+        if (withColors) {
+            const ccaa = PROV_DETAILS[code].ccaa;
+            el.style.fill = CCAA_PROVINCES[ccaa].color;
+        } else {
+            el.style.fill = '#cbd5e1';
+        }
+        el.style.opacity = '1';
+    });
+}
+
+function highlightCCAA(ccaaKey, color) {
+    const provs = CCAA_PROVINCES[ccaaKey].provinces;
+    provs.forEach(code => {
+        const el = pathByCode(code);
+        if (el) { el.style.fill = color || CCAA_PROVINCES[ccaaKey].color; }
+    });
+}
+
+function highlightProvince(code, color) {
+    const el = pathByCode(code);
+    if (el) el.style.fill = color || '#16a34a';
+}
+
+// Reposition Canàries visually next to the peninsula (bottom-left inset style).
+// The spain.js data has them geographically correct but far from the main view.
+function repositionCanaries() {
+    const svg = document.querySelector('#map svg');
+    if (!svg) return;
+    const canaryCodes = ['ES-GC', 'ES-TF'];
+    canaryCodes.forEach(code => {
+        const el = pathByCode(code);
+        if (!el || el.dataset.moved === '1') return;
+        el.setAttribute('transform', 'translate(330, -290) scale(1.8)');
+        el.dataset.moved = '1';
+    });
+}
+
+// Call paint + reposition after map has rendered
+function applyPaint(withColors) {
+    // Wait a tick for jsvectormap to finish rendering if needed
+    requestAnimationFrame(() => {
+        paintAllRegions(withColors);
+        repositionCanaries();
+    });
+}
+
+function setScale(scale, btn) {
     currentScale = scale;
     document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    (btn || event.target).classList.add('active');
     score.total = scale === 'ccaa' ? 17 : 50;
     startMode(currentMode);
 }
 
-function setMode(mode) {
+function setMode(mode, btn) {
     currentMode = mode;
     document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    (btn || event.target).classList.add('active');
     startMode(mode);
 }
 
 function startMode(mode) {
     score = { correct: 0, wrong: 0, done: 0, total: currentScale === 'ccaa' ? 17 : 50 };
-    map.clearSelectedRegions();
+    currentTarget = null;
+    try { map.clearSelectedRegions(); } catch(e){}
     document.getElementById('final').classList.remove('show');
     updateScore();
     buildQuestionPool();
 
-    // In explore mode, each CCAA keeps its color. In quiz modes, all regions
-    // are grey so the user can't cheat by color matching.
-    applyRegionColors(mode === 'explore');
+    // In explore: show CCAA colors. In quiz modes: all grey to force real knowledge.
+    applyPaint(mode === 'explore');
 
     if (mode === 'explore') setupExplore();
     else if (mode === 'locate') setupLocate();
     else if (mode === 'capital') setupCapital();
-}
-
-function applyRegionColors(withColors) {
-    if (withColors) {
-        Object.keys(provColors).forEach(code => {
-            map.series.regions[0].setValues({ [code]: provColors[code] });
-        });
-    } else {
-        // Paint all regions grey
-        const grey = {};
-        Object.keys(provColors).forEach(code => { grey[code] = '#cbd5e1'; });
-        map.series.regions[0].setValues(grey);
-    }
 }
 
 function buildQuestionPool() {
@@ -370,13 +410,31 @@ function handleExploreClick(ccaaKey, provCode) {
     const ccaa = CCAA_PROVINCES[ccaaKey];
     const prov = PROV_DETAILS[provCode];
 
-    // Highlight all provinces of this CCAA
-    map.clearSelectedRegions();
-    map.setSelected('regions', ccaa.provinces);
+    // Restore all CCAA colors (in case prev highlight changed something), then darken the active CCAA
+    paintAllRegions(true);
+    repositionCanaries();
+    // Brighten the selected CCAA (set a darker outline-look via filter or a brighter saturated fill)
+    ccaa.provinces.forEach(c => {
+        const el = pathByCode(c);
+        if (el) {
+            el.style.fill = ccaa.color;
+            el.style.stroke = '#000';
+            el.style.strokeWidth = '2';
+        }
+    });
+    // Reset stroke on others
+    Object.keys(PROV_DETAILS).forEach(c => {
+        if (!ccaa.provinces.includes(c)) {
+            const el = pathByCode(c);
+            if (el) { el.style.stroke = '#fff'; el.style.strokeWidth = '0.6'; }
+        }
+    });
 
-    document.getElementById('infoBox').style.textAlign = 'left';
-    document.getElementById('infoBox').style.border = '1px solid var(--border-subtle)';
-    document.getElementById('infoBox').innerHTML = `
+    const ib = document.getElementById('infoBox');
+    if (!ib) return;
+    ib.style.textAlign = 'left';
+    ib.style.border = '1px solid var(--border-subtle)';
+    ib.innerHTML = `
         <div class="info-card" style="border-left:4px solid ${ccaa.color};">
             <h4 style="color:${ccaa.color};">${ccaa.name}</h4>
             <div class="meta">
@@ -400,8 +458,10 @@ function nextLocate() {
     if (questionPool.length === 0) { updateScore(); return; }
     currentTarget = questionPool.shift();
     const label = currentScale === 'ccaa' ? CCAA_PROVINCES[currentTarget].name : `${PROV_DETAILS[currentTarget].name} (província)`;
-    map.clearSelectedRegions();
-    document.getElementById('panelContent').innerHTML = `
+    paintAllRegions(false);
+    repositionCanaries();
+    const pc = document.getElementById('panelContent');
+    if (pc) pc.innerHTML = `
         <div class="question-box">
             <span class="label">Clica al mapa</span>
             <span class="target">${label}</span>
@@ -412,31 +472,30 @@ function nextLocate() {
 
 function handleLocateCCAA(clickedCcaa) {
     if (!currentTarget) return;
-    const targetProvinces = CCAA_PROVINCES[currentTarget].provinces;
     if (clickedCcaa === currentTarget) {
-        map.setSelected('regions', targetProvinces);
+        highlightCCAA(currentTarget, '#16a34a'); // green
         score.correct++;
     } else {
-        map.setSelected('regions', CCAA_PROVINCES[clickedCcaa].provinces);
-        setTimeout(() => { map.setSelected('regions', targetProvinces); }, 700);
+        highlightCCAA(clickedCcaa, '#dc2626'); // red — wrong click
+        setTimeout(() => { highlightCCAA(currentTarget, '#16a34a'); }, 700); // show correct in green
         score.wrong++;
     }
     score.done++; updateScore();
-    setTimeout(() => { map.clearSelectedRegions(); nextLocate(); }, 1400);
+    setTimeout(() => { paintAllRegions(false); repositionCanaries(); nextLocate(); }, 1500);
 }
 
 function handleLocateProvince(code) {
     if (!currentTarget) return;
     if (code === currentTarget) {
-        map.setSelected('regions', [code]);
+        highlightProvince(code, '#16a34a');
         score.correct++;
     } else {
-        map.setSelected('regions', [code]);
-        setTimeout(() => { map.setSelected('regions', [currentTarget]); }, 700);
+        highlightProvince(code, '#dc2626');
+        setTimeout(() => { highlightProvince(currentTarget, '#16a34a'); }, 700);
         score.wrong++;
     }
     score.done++; updateScore();
-    setTimeout(() => { map.clearSelectedRegions(); nextLocate(); }, 1400);
+    setTimeout(() => { paintAllRegions(false); repositionCanaries(); nextLocate(); }, 1500);
 }
 
 // --- CAPITAL MODE ---
@@ -454,16 +513,19 @@ function nextCapital() {
     if (questionPool.length === 0) { updateScore(); return; }
     currentTarget = questionPool.shift();
     const ccaa = CCAA_PROVINCES[currentTarget];
-    map.clearSelectedRegions();
-    map.setSelected('regions', ccaa.provinces);
+    paintAllRegions(false);
+    repositionCanaries();
+    highlightCCAA(currentTarget, '#facc15'); // yellow highlight on the asked CCAA
 
     const allKeys = Object.keys(CCAA_PROVINCES).filter(k => !['ceuta','melilla'].includes(k));
     const others = allKeys.filter(k => k !== currentTarget).sort(() => Math.random() - 0.5).slice(0, 3);
     const opts = [currentTarget, ...others].sort(() => Math.random() - 0.5);
 
-    document.getElementById('panelContent').innerHTML = `
+    const pc = document.getElementById('panelContent');
+    if (!pc) return;
+    pc.innerHTML = `
         <div class="question-box">
-            <span class="label">Quina és la capital de</span>
+            <span class="label">Quina és la capital de la zona <span style="background:#facc15;color:#78350f;padding:1px 8px;border-radius:6px;">groga</span> al mapa?</span>
             <span class="target">${ccaa.name}</span>
         </div>
         <div class="options-list">
@@ -473,15 +535,16 @@ function nextCapital() {
     document.querySelectorAll('.option-btn').forEach(btn => {
         btn.onclick = () => {
             const ok = btn.dataset.k === currentTarget;
-            if (ok) { btn.classList.add('correct'); score.correct++; }
+            if (ok) { btn.classList.add('correct'); highlightCCAA(currentTarget, '#16a34a'); score.correct++; }
             else {
                 btn.classList.add('wrong');
                 document.querySelector(`.option-btn[data-k="${currentTarget}"]`).classList.add('correct');
+                highlightCCAA(currentTarget, '#dc2626');
                 score.wrong++;
             }
             document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
             score.done++; updateScore();
-            setTimeout(() => { map.clearSelectedRegions(); nextCapital(); }, 1100);
+            setTimeout(() => { paintAllRegions(false); repositionCanaries(); nextCapital(); }, 1300);
         };
     });
 }
